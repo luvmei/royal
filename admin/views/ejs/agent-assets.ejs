@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<%- include('head.ejs') %>
+
+<body class="sb-nav-fixed">
+  <% if (user.type === 9) { %>
+  <%- include('navBar-admin.ejs') %>
+  <% } else { %>
+  <%- include('navBar-agent.ejs') %>
+  <% } %>
+  <%- include('modals.ejs', {user: user}) %>
+  <div id="layoutSidenav">
+    <% if (user.type === 9) { %>
+    <%- include('sideBar-admin.ejs') %>
+    <% } else { %>
+    <%- include('sideBar-agent.ejs') %>
+    <% } %> <div id="layoutSidenav_content">
+      <main>
+        <div class="container-fluid px-4">
+          <h2 class="my-4">에이전트 머니정보</h2>
+          <div class="card mb-4">
+            <div class="card-body">
+              <table id="agentAsset" class="cell-border hover"" style=" width: 100%">
+                <thead>
+                  <tr>
+                    <th rowspan="2"></th>
+                    <th rowspan="2">node-id</th>
+                    <th rowspan="2">node-pid</th>
+                    <th rowspan="2">타입</th>
+                    <th rowspan="2">아이디</th>
+                    <th rowspan="2">닉네임</th>
+                    <th rowspan="2">보유금</th>
+                    <th rowspan="2">포인트</th>
+                    <th colspan="6" class="text-center d-none d-lg-table-cell">당일</th>
+                    <th colspan="6" class="text-center d-none d-lg-table-cell">전체</th>
+                    <th rowspan="2">지급 보유금</th>
+                    <th rowspan="2">지급 포인트</th>
+                    <th rowspan="2">플래티넘</th>
+                    <th rowspan="2">골드</th>
+                    <th rowspan="2">실버</th>
+                    <th rowspan="2">브론즈</th>
+                  </tr>
+                  <tr>
+                    <th>입금</th>
+                    <th>출금</th>
+                    <th>입출금</th>
+                    <th>입금</th>
+                    <th>출금</th>
+                    <th>입출금</th>
+                    <th>입금</th>
+                    <th>출금</th>
+                    <th>입출금</th>
+                    <th>입금</th>
+                    <th>출금</th>
+                    <th>입출금</th>
+                  </tr>
+                </thead>
+              </table>
+            </div>
+          </div>
+        </div>
+      </main>
+    </div>
+  </div>
+  <%- include('foot.ejs') %>
+  <script src="/public/js/agent.js"></script>
+  <script src="/public/js/plugin/jquery-simple-tree-table.js"></script>
+</body>
+
+</html>

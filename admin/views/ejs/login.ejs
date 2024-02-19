@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html lang="en">
+<%- include('head.ejs') %>
+
+<body class="bg-black">
+  <div id="layoutAuthentication">
+    <div id="layoutAuthentication_content">
+      <main>
+        <div class="container">
+          <div class="row justify-content-center">
+            <div class="col-lg-4">
+              <div class="card shadow-lg border-0 rounded-lg mt-5" style="background-color: #1e2833">
+                <div class="card-header login">
+                  <h3 class="text-center text-white fw-bolder my-4">ROYAL</h3>
+                </div>
+                <div class="card-body">
+                  <form id="login-data">
+                    <div class="form-floating mb-3">
+                      <input class="form-control border-0 border-bottom text-white-50" id="inputId" type="id" name="id"
+                        lang="en" placeholder="Adamin ID" style="background-color: #1e2833; ime-mode: disabled" />
+                      <label for=" inputId" class="text-white-50">Admin ID</label>
+                    </div>
+                    <div class="form-floating mb-3">
+                      <input class="form-control border-0 border-bottom text-white-50" id=" inputPassword" name="pw"
+                        type="password" placeholder="Password" style="background-color: #1e2833" />
+                      <label for="inputPassword" class="text-white-50">Password</label>
+                    </div>
+                    <!-- <div class="form-check mb-3">
+                      <input class="form-check-input" id="inputRememberPassword" type="checkbox" value="" />
+                      <label class="form-check-label" for="inputRememberPassword">Remember Password</label>
+                    </div> -->
+                    <div class="d-flex align-items-center justify-content-between mt-4 mb-3">
+                      <div class="text-warning d-none" id="login-alert" style="font-size: 1.05rem">
+                        <i class="bi bi-exclamation-octagon-fill"></i><span class="ms-2">비정상적인 접속입니다</span>
+                      </div>
+                      <button class="btn btn-primary ms-auto" type="submit" id="login-btn">
+                        Login
+                      </button>
+                    </div>
+                  </form>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </main>
+    </div>
+  </div>
+  <script src="/public/js/plugin/bootstrap.bundle.min.js" crossorigin="anonymous"></script>
+  ;
+  <script src="/public/js/plugin/jquery-3.6.1.min.js"></script>
+  <script src="/public/js/auth.js"></script>
+</body>
+
+</html>

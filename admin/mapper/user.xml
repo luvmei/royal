@@ -1,0 +1,661 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="user">  
+// 회원관리 테이블 뷰
+  <select id="userInfoTotal">
+    SELECT
+      *
+    FROM
+      user_info_view          
+      <if test="node_id != undefined">
+        WHERE node_id LIKE CONCAT(#{node_id},'%')
+      </if>
+  </select>
+
+  <select id="userInfoOnline">
+    SELECT
+      *
+    FROM
+      user_info_view
+    WHERE
+      가입코드 != ''
+      <if test="node_id != undefined">
+        AND node_id LIKE CONCAT(#{node_id},'%')
+      </if>
+  </select>
+  
+  <select id="userInfoLocal">
+    SELECT
+      *
+    FROM
+      user_info_view
+    WHERE
+      가입코드 = ''
+      <if test="node_id != undefined">
+        AND node_id LIKE CONCAT(#{node_id},'%')
+      </if>
+  </select>
+
+  <select id="userInfoDate">
+    CALL getUserInfoDateView(#{startDate}, #{endDate}, #{nodeId});    
+  </select>  
+
+  <select id='userAsset'>
+    SELECT 
+      * 
+    FROM 
+      user_asset_view
+    <where>
+      <if test="node_id != undefined">
+        AND node_id LIKE CONCAT(#{node_id},'%')
+      </if>
+    </where>;
+  </select>
+
+  <select id='userCommission'>
+    SELECT
+      *
+    FROM
+      user_commission_view
+    <where>
+      <if test="node_id != undefined">
+        AND node_id LIKE CONCAT(#{node_id},'%')
+      </if>
+    </where>;
+  </select>
+  
+  <select id='userBetting'>
+    SELECT
+      *
+    FROM
+      user_betting_view
+    <where>
+      <if test="node_id != undefined">
+        AND node_id LIKE CONCAT(#{node_id},'%')
+      </if>
+    </where>;
+  </select>
+
+  <select id='userConnect'>
+    SELECT
+      *
+    FROM 
+      user_connect_view    
+    <where>
+      SUBSTRING(접속일시, 1, 10) 
+      BETWEEN #{startDate} AND #{endDate}
+      <if test="node_id != undefined">
+        AND node_id LIKE CONCAT(#{node_id},'%')
+      </if>
+    </where>;
+  </select>
+  
+  <select id='userBlock'>
+    SELECT
+      *
+    FROM
+      user_block_view
+    <where>      
+    <!-- SUBSTRING(차단일시, 1, 10) 
+      BETWEEN #{startDate} AND #{endDate} -->
+      <if test="node_id != undefined">
+        AND node_id LIKE CONCAT(#{node_id},'%')
+      </if>
+    </where>;
+  </select>
+
+  <select id='insertUserHierarchy'>
+    INSERT INTO hierarchy
+      (
+        user_id,
+        p_id,
+        g_id,
+        s_id,
+        b_id,
+        p_nick,
+        g_nick,
+        s_nick,
+        b_nick
+      )
+    VALUES 
+      (
+        #{u_id},
+        #{p_id},
+        #{g_id},
+        #{s_id},
+        #{b_id},
+        #{p_nick},
+        #{g_nick},
+        #{s_nick},
+        #{b_nick}
+      )
+  </select>
+
+
+// 승인관련
+  <select id='userConfirm'>
+    SELECT 
+      u.user_id           AS 'IDX',
+      u.type              AS '타입',
+      u.id                AS '아이디',
+      u.name              AS '이름',
+      u.nickname          AS '닉네임',
+      u.phone             AS '전화번호',
+      u.bank              AS '은행',
+      u.bank_num          AS '계좌번호',
+      u.bank_owner        AS '예금주',
+      u.bank_pw           AS '출금 비밀번호',
+      a.nickname          AS '상위 에이전트',
+      a.reg_domain        AS '전용 도메인',       
+      u.join_domain       AS '가입 도메인',
+      u.join_ip           AS '가입IP',
+      u.join_date         AS '가입일자',
+      u.state             AS '상태',
+      h.p_nick            AS 플래티넘,
+      h.g_nick            AS 골드,
+	    h.s_nick            AS 실버,
+      h.b_nick            AS 브론즈,
+      (SELECT COUNT(*) FROM user WHERE join_ip = u.join_ip) AS 'IPCount'
+    FROM user             AS u
+    LEFT JOIN user        AS a
+    ON u.upper_agt = a.user_id
+    JOIN user 			  AS u2
+    ON u.upper_agt = u2.user_id 
+    JOIN hierarchy        AS h
+    ON u2.user_id = h.user_id 
+    WHERE
+      u.state = '승인대기'    
+  </select>  
+
+  <select id='confirmUserJoin'>
+    UPDATE user
+    SET state = '정상'
+    WHERE user_id = ${IDX};
+  </select>
+
+  <select id='insertJoinMemo'>
+    UPDATE user
+    SET join_memo = #{join_memo}
+    WHERE  user_id = ${IDX};
+  </select>
+
+  <select id='insertUniqueAccount'>
+    UPDATE user
+    SET unique_id = #{unique_id}
+    WHERE id = #{unique_id};
+  </select>
+
+  <select id='insertSdAccount'>
+    UPDATE user
+    SET sd_usercode = #{usercode}, sd_token = #{token}
+    WHERE id = #{id};
+  </select>
+
+  <select id='insertHlAccount'>
+    UPDATE user
+    SET hl_id = #{id}
+    WHERE id = #{username};
+  </select>
+
+// 차단관련
+  <select id='changeBlockState'>
+    UPDATE user
+      SET state = CASE
+                    WHEN state = '승인대기' THEN '승인차단'
+                    WHEN state = '승인차단' THEN '정상'
+                    WHEN state = '정상' THEN '차단'
+                    WHEN state = '차단' THEN '정상'
+                  END
+      WHERE  id = #{id}; 
+  </select>
+
+  <select id='insertBlockInfo'>
+    INSERT INTO user_block_history 
+      (
+    	  user_id,
+    		time,
+        type,		
+    		reason
+    	)
+    VALUES
+      (
+    	  (SELECT user_id
+        FROM user
+        WHERE id = #{id}),
+    		#{time},
+        #{block_type},
+    		#{block_reason}
+    	);
+  </select>
+
+  <select id='addBlackList'>
+    INSERT IGNORE INTO blacklist
+      (
+        ip,
+        pattern,
+        path,
+        confirm
+      )
+    VALUES
+      (
+        #{ip},
+        #{pattern},
+        'admin',
+        0
+      );
+  </select>
+
+  <update id='confirmBlackList'>
+    UPDATE blacklist
+    SET confirm = 1
+    WHERE ip = #{ip};
+  </update>
+
+  <select id='getBlackList'>
+    SELECT ip
+    FROM blacklist
+    WHERE confirm = 1;
+  </select>
+
+// 유저가입관련
+  <select id='checkUserId'>
+    SELECT id
+    FROM user
+    WHERE REGEXP_REPLACE(id, '[0-9]+', '') = #{id};
+  </select>
+
+  <select id='checkUserNick'>
+    SELECT nickname
+    FROM user
+    WHERE REGEXP_REPLACE(nickname, '[0-9]+', '') = #{nickname};
+  </select>
+
+  <select id='getUpperInfo'>
+    SELECT
+      user_id,
+      reg_code,
+      reg_domain
+    FROM user
+    WHERE id = #{upper_id}
+  </select>
+
+  <select id='insertUserInfo'>
+    INSERT INTO user
+      (
+        id,
+        pw,
+        nickname,
+        phone,
+        bank,
+        bank_num, 
+        bank_owner, 
+        bank_pw,
+        state, 
+        type,
+        upper_agt,
+        join_code,
+        join_domain,
+        join_ip,
+        join_date
+      )
+    VALUES
+      (
+        #{new_id},
+        #{pw},
+        #{new_nickname},
+        #{phone},
+        #{bank},
+        #{bank_num},
+        #{bank_owner},
+        #{bank_pw},
+        '정상',
+        #{type},
+        #{upper_agt},
+        '',
+        #{join_domain},
+        #{join_ip},
+        #{join_date}
+      )
+  </select>
+
+  <select id='insertAssetInfo'>
+    INSERT INTO user_asset_info
+      (
+        user_id
+      )
+    VALUES
+      (
+        (SELECT user_id
+        FROM user 
+        ORDER BY user_id DESC 
+        LIMIT 1)
+      );
+  </select>
+  
+  <select id='insertCommisionInfo'>
+    INSERT INTO user_commission_info
+      (
+        user_id
+      )
+    VALUES
+      (
+        (SELECT user_id
+        FROM user 
+        ORDER BY user_id DESC 
+        LIMIT 1)
+      );
+  </select>
+
+  <select id='insertBettingInfo'>
+    INSERT INTO user_betting_info
+      (
+        user_id
+      )
+    VALUES
+      (
+        (SELECT user_id
+        FROM user 
+        ORDER BY user_id DESC 
+        LIMIT 1)
+      );
+  </select> 
+
+// 상세보기관련
+  <select id='userDetail'>
+    SELECT 
+      u.*, 
+      a.balance,
+      a.point,
+      c.c_roll_rate,
+      c.s_roll_rate,
+      c.lose_rate,
+      c.c_bet_margin_rate,
+      c.s_bet_margin_rate,
+      c.c_roll_margin_rate,
+      c.s_roll_margin_rate,
+      DATEDIFF(CURDATE(), modify_date) AS days_passed,
+      (SELECT count(*)
+        FROM user 
+        WHERE recommend_id = #{id}) AS recommend_count
+    FROM
+      user AS u
+    JOIN
+      user_asset_info AS a
+      ON u.user_id = a.user_id
+    JOIN
+      user_commission_info AS c
+      ON u.user_id = c.user_id
+    WHERE
+      id = #{id};
+  </select>
+
+  <select id='agentHierarchy'>
+    call agent_Hierarchy(#{id});
+  </select>
+
+  <select id='lowerMaxRate'>
+    call getLowerMaxRate(#{id});
+  </select>
+
+  <select id='beforeUserNickname'>
+    SELECT nickname
+    FROM user
+    WHERE user_id = #{user_id};
+  </select>  
+
+  <update id='userInfoModify'>
+    UPDATE user
+    SET
+      level = #{level},
+      nickname = #{nickname},
+      name = #{name},
+      phone = #{phone},
+      bank = #{bank},
+      bank_num = #{bank_num},
+      bank_owner = #{bank_owner},
+      join_memo = #{join_memo},
+      modify_date = CURRENT_DATE
+    WHERE
+      user_id = #{user_id};
+  </update>
+
+  <update id='userHierarchyModify'>
+    UPDATE hierarchy
+    <if test="type == '0'">
+      SET p_nick = #{nickname}
+      WHERE p_nick = #{beforeUserNickname};
+    </if>
+    <if test="type == '1'">
+      SET g_nick = #{nickname}
+      WHERE g_nick = #{beforeUserNickname};
+    </if>
+    <if test="type == '2'">
+      SET s_nick = #{nickname}
+      WHERE s_nick = #{beforeUserNickname};
+    </if>
+    <if test="type == '3'">
+      SET b_nick = #{nickname}
+      WHERE b_nick = #{beforeUserNickname};
+    </if>
+  </update>
+
+  <update id='rateModify'>
+    UPDATE user_commission_info
+    SET
+      c_roll_rate = #{c_roll_rate},
+      s_roll_rate = #{s_roll_rate},
+      lose_rate = #{lose_rate},
+      c_bet_margin_rate = #{c_bet_margin_rate},
+      s_bet_margin_rate = #{s_bet_margin_rate},
+      c_roll_margin_rate = #{c_roll_margin_rate},
+      s_roll_margin_rate = #{s_roll_margin_rate}
+    WHERE
+      user_id = #{user_id};
+  </update>
+
+  <update id='changeTotalMarginRate'>
+    UPDATE user_commission_info
+    SET c_roll_margin_rate = #{c_roll_margin_rate},
+        s_roll_margin_rate = #{s_roll_margin_rate}
+    WHERE user_id IN (SELECT s.user_id
+                      FROM system_tree s
+                      WHERE s.node_id LIKE CONCAT(#{node_id},'%'));
+  </update>
+
+  <select id='resetUserPassword'>
+    UPDATE user
+    SET
+      pw = #{pw}
+    WHERE
+      user_id = (SELECT user_id 
+                  FROM user 
+                  WHERE id = #{id});
+  </select>
+
+  <select id='resetUserWithdrawPassword'>
+    UPDATE user
+    SET
+      bank_pw = ${newWithdrawPw}
+    WHERE
+      user_id = (SELECT user_id 
+                  FROM user 
+                  WHERE id = #{id});
+  </select>
+
+  <delete id='forceUserLogout'>
+    DELETE FROM sessions
+    WHERE session_id = #{session_id};
+
+  </delete>
+
+  <select id='getSessionData'>
+    SELECT
+      *
+    FROM
+      sessions
+  </select>
+
+  <select id='checkUserPassword'>
+    SELECT
+      pw
+    FROM
+      user
+    WHERE
+      user_id = (SELECT user_id 
+                  FROM user 
+                  WHERE id = #{id});
+  </select>
+
+// 기타 API관련
+  <select id='getUserCodeToken'>
+    select sd_usercode, sd_token
+    from user
+    where id = #{id};
+  </select>
+
+  <select id='getUserBetMarginRate'>
+    select 
+      c_bet_margin_rate,
+      s_bet_margin_rate
+    from user_commission_info
+    where user_id = (select upper_agt from user where id = #{id});
+  </select>
+
+  <select id='getUserInfo'>
+    SELECT
+      nickname
+    FROM
+      user
+    WHERE
+      id = #{id};
+  </select>
+
+  <select id='getUserAsset'>
+    SELECT
+      balance,
+      point
+    FROM
+      user_asset_info
+    WHERE
+      user_id = (SELECT user_id 
+                  FROM user 
+                  WHERE id = #{id});
+  </select>
+
+// 세션관련
+  <select id="getUsersWithType4" resultType="string">
+  SELECT id
+  FROM user
+  WHERE type = 4 AND id IN 
+  <foreach item="item" index="index" collection="userIds" open="(" close=")" separator=",">
+    #{item}
+  </foreach>
+  </select>
+
+  <select id='checkUserLoginTime'>
+    SELECT time 
+    FROM user_connect_history 
+    WHERE user_id = (SELECT user_id 
+                    FROM user 
+                    WHERE id = #{id})
+    ORDER BY time DESC LIMIT 1
+  </select>
+
+  <select id='getAllSessions'>
+    SELECT
+      *
+    FROM
+      sessions
+  </select>
+
+  <delete id='deleteExpiredSession'>
+    DELETE FROM sessions
+    WHERE session_id = #{session_id};
+  </delete>
+
+// 비밀번호
+  <select id='getAdminPw'>
+    SELECT pw
+    FROM admin_user
+    WHERE id = #{id};
+  </select>
+
+  <update id='updateAdminPw'>
+    UPDATE admin_user
+    SET pw = #{newPassword}
+    WHERE id = #{id};
+  </update>
+
+  <select id='checkUserWithdrawPassword'>
+    SELECT
+      bank_pw
+    FROM
+      user
+    WHERE
+      id = #{id};
+  </select>
+
+// 이벤트(출석, 로또)관련
+  <update id="resetCountinueCounter">
+    UPDATE attendance_history
+    SET continueCounter = CASE
+                              WHEN DATE(recentAttDate) != #{yesterdayDate} THEN 0
+                              ELSE continueCounter
+                          END
+  </update>
+
+  <update id='resetAttendanceState'>
+    UPDATE user
+    SET
+      attendance_state = 0    
+  </update>
+
+  <select id='ckeckEventState'>
+    SELECT
+      attendance_state,
+      lotto_state
+    FROM 
+      user
+    WHERE
+      id = #{id};
+  </select>
+
+  <update id='updateEventState'>
+    UPDATE user
+    SET
+      attendance_state = ${attendance_state},
+      lotto_state = ${lotto_state}
+    WHERE
+      id = #{id};
+  </update>
+
+  <select id='resetLottoState'>
+    UPDATE user
+    SET
+      lotto_state = 0
+  </select>
+
+// 가상유저관련
+  <select id='countVirtualUser'>
+    SELECT
+      COUNT(*)
+    FROM
+      virtual_user
+  </select>
+
+  <select id="batchInsertVirtualUser">
+    INSERT INTO virtual_user (id, level)
+    VALUES
+    <foreach item="item" index="index" collection="list" open="" separator="," close="">
+        (#{item.id}, #{item.level})
+    </foreach>
+  </select>
+
+  <update id='updateVirtualUser'>
+    UPDATE virtual_user
+    SET
+      level = ${level}
+    WHERE
+      id = #{id};
+  </update>
+</mapper>

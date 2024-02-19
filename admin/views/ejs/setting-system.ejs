@@ -1,0 +1,359 @@
+<!DOCTYPE html>
+<html lang="ko">
+<%- include('head.ejs') %>
+
+<body class="sb-nav-fixed">
+  <% if (user.type === 9) { %>
+  <%- include('navBar-admin.ejs') %>
+  <% } else { %> <%- include('navBar-agent.ejs') %>
+  <% } %> <%- include('modals.ejs', {user:
+    user}) %>
+  <div id="layoutSidenav">
+    <% if (user.type === 9) { %> <%- include('sideBar-admin.ejs') %> <% } else { %> <%- include('sideBar-agent.ejs') %>
+    <% } %>
+    <!-- 컨텐츠 시작 -->
+    <div id="layoutSidenav_content">
+      <main>
+        <div class="container-fluid px-4">
+          <h2 class="my-4">시스템 설정</h2>
+          <div class="row">
+            <div class="col-lg-4">
+              <div class="card mb-3">
+                <div class="card-header" style="font-size: 1rem">
+                  <i class="fa-solid fa-circle-dollar-to-slot me-1"></i>
+                  입출금 관련
+                </div>
+                <div class="card-body depositBonus my-2">
+                  <div class="row">
+                    <div class="col-3 mb-3 fs-5">• 입금 보너스</div>
+                    <div class="col-9 fs-5 d-flex justify-content-end">
+                      <div class="form-check form-switch">
+                        <input class="form-check-input" type="checkbox" role="switch" id="bonusStateBtn" />
+                        <label class="form-check-label fs-6" for="bonusStateBtn">사용</label>
+                      </div>
+                    </div>
+                    <div class="col-6 px-1">
+                      <div class="input-group mb-1 position-relative">
+                        <span class="input-group-text">가입 후 첫충전</span>
+                        <input id="joinBonusRate" type="number" class="form-control text-end pe-4" min="0" max="100" />
+                        <span class="position-absolute top-50 translate-middle-y" style="right: 10px">%</span>
+                      </div>
+                      <div id="joinBonusDesc">최초 가입 후 1회 적용</div>
+                    </div>
+                    <div class="col-6 px-1">
+                      <div class="input-group mb-1 position-relative">
+                        <span class="input-group-text">가입 당일 재충전</span>
+                        <input id="joinEveryBonusRate" type="number" class="form-control text-end pe-4" min="0"
+                          max="100" />
+                        <span class="position-absolute top-50 translate-middle-y" style="right: 10px">%</span>
+                      </div>
+                      <div id="joinBonusDesc">가입 당일 출금 전까지 계속 지급</div>
+                    </div>
+                    <div class="col-6 px-1 mt-3">
+                      <div class="input-group mb-1 position-relative">
+                        <span class="input-group-text">매일 첫충전</span>
+                        <input id="dailyBonusRate" type="number" class="form-control text-end pe-4" min="0" max="100" />
+                        <span class="position-absolute top-50 translate-middle-y" style="right: 10px">%</span>
+                      </div>
+                      <div id="dailyBonusDesc">1일 1회, 매일 자정 이후 초기화</div>
+                    </div>
+                    <div class="col-6 px-1 mt-3">
+                      <div class="input-group mb-1 position-relative">
+                        <span class="input-group-text">매일 재충전</span>
+                        <input id="everyBonusRate" type="number" class="form-control text-end pe-4" min="0" max="100" />
+                        <span class="position-absolute top-50 translate-middle-y" style="right: 10px">%</span>
+                      </div>
+                      <div id="everyBonusDesc">출금 전까지 계속 지급</div>
+                    </div>
+                    <div class="col-12 mt-2 text-end">
+                      <button id="bonusSettingBtn" class="btn btn-secondary" disabled>설정변경</button>
+                    </div>
+                  </div>
+                  <hr class="mt-3 border border-secondary border-1 text-opacity-25" />
+                  <div class="row">
+                    <div class="col-7 mb-3 fs-5">• 레벨별 자동안내 계좌정보</div>
+                    <div class="col-5 fs-5 d-flex justify-content-end">
+                      <div class="form-check form-switch">
+                        <label class="form-check-label fs-6" for="virtualAccount">가상계좌 안내</label>
+                        <input class="form-check-input" type="checkbox" role="switch" id="virtualAccount" />
+                      </div>
+                    </div>
+                    <div id="levelAccountSetting">
+                      <div class="row g-0 title">
+                        <div class="col-2"><input type="text" class="form-control title" value="레벨" disabled /></div>
+                        <div class="col-3"><input type="text" class="form-control title" value="은행명" disabled /></div>
+                        <div class="col"><input type="text" class="form-control title" value="계좌번호" disabled /></div>
+                        <div class="col-3"><input type="text" class="form-control title" value="예금주" disabled /></div>
+                      </div>
+                      <div class="row g-0">
+                        <div class="col-2"><input type="text" class="form-control level" value="1" disabled /></div>
+                        <div class="col-3"><input type="text" class="form-control" id="lv1_bank" minlength="2"
+                            maxlength="7" /></div>
+                        <div class="col"><input type="text" class="form-control" id="lv1_account" minlength="9"
+                            maxlength="14" /></div>
+                        <div class="col-3"><input type="text" class="form-control" id="lv1_holder" minlength="2"
+                            maxlength="8" /></div>
+                      </div>
+                      <div class="row g-0">
+                        <div class="col-2"><input type="text" class="form-control level" value="2" disabled /></div>
+                        <div class="col-3"><input type="text" class="form-control" id="lv2_bank" minlength="2"
+                            maxlength="7" /></div>
+                        <div class="col"><input type="text" class="form-control" id="lv2_account" minlength="9"
+                            maxlength="14" /></div>
+                        <div class="col-3"><input type="text" class="form-control" id="lv2_holder" minlength="2"
+                            maxlength="8" /></div>
+                      </div>
+                      <div class="row g-0">
+                        <div class="col-2"><input type="text" class="form-control level" value="3" disabled /></div>
+                        <div class="col-3"><input type="text" class="form-control" id="lv3_bank" minlength="2"
+                            maxlength="7" /></div>
+                        <div class="col"><input type="text" class="form-control" id="lv3_account" minlength="9"
+                            maxlength="14" /></div>
+                        <div class="col-3"><input type="text" class="form-control" id="lv3_holder" minlength="2"
+                            maxlength="8" /></div>
+                      </div>
+                      <div class="row g-0">
+                        <div class="col-2"><input type="text" class="form-control level" value="4" disabled /></div>
+                        <div class="col-3"><input type="text" class="form-control" id="lv4_bank" minlength="2"
+                            maxlength="7" /></div>
+                        <div class="col"><input type="text" class="form-control" id="lv4_account" minlength="9"
+                            maxlength="14" /></div>
+                        <div class="col-3"><input type="text" class="form-control" id="lv4_holder" minlength="2"
+                            maxlength="8" /></div>
+                      </div>
+                      <div class="row g-0">
+                        <div class="col-2"><input type="text" class="form-control level" value="5" disabled /></div>
+                        <div class="col-3"><input type="text" class="form-control" id="lv5_bank" minlength="2"
+                            maxlength="7" /></div>
+                        <div class="col"><input type="text" class="form-control" id="lv5_account" minlength="9"
+                            maxlength="14" /></div>
+                        <div class="col-3"><input type="text" class="form-control" id="lv5_holder" minlength="2"
+                            maxlength="8" /></div>
+                      </div>
+                    </div>
+                    <div class="col-8 mt-2 text-end">
+                      <div id="autoBankDesc" class="text-danger fs-5 text-start p-1"></div>
+                    </div>
+                    <div class="col-4 mt-2 text-end">
+                      <button id="autoBankSettingBtn" class="btn btn-secondary" disabled>설정변경</button>
+                    </div>
+                  </div>
+                  <hr class="mt-3 border border-secondary border-1 text-opacity-25" />
+                  <div class="row">
+                    <div class="col-3 mb-3 fs-5">• 가상 입출금</div>
+                    <div class="col-9 fs-5 d-flex justify-content-end">
+                      <div class="form-check form-switch">
+                        <label class="form-check-label fs-6" for="virtualAuto">자동생성</label>
+                        <input class="form-check-input" type="checkbox" role="switch" id="virtualAuto" />
+                      </div>
+                    </div>
+                    <div class="col-12">
+                      <table class="table table-bordered text-center" id="virtualSetTable">
+                        <thead>
+                          <tr>
+                            <th rowspan="2">종류</th>
+                            <th colspan="2">생성시간(분)</th>
+                            <th colspan="2">금액(분)</th>
+                          </tr>
+                          <tr>
+                            <th>최소</th>
+                            <th>최대</th>
+                            <th>최소</th>
+                            <th>최대</th>
+                          </tr>
+                        </thead>
+                        <tbody>
+                          <tr>
+                            <td class="type">입금</td>
+                            <td class="time"><input type="number" class="form-control" id="depoAutoMinTime" min="1"
+                                max="60" required /></td>
+                            <td class="time"><input type="number" class="form-control" id="depoAutoMaxTime" min="1"
+                                max="60" required /></td>
+                            <td class="money"><input type="text" class="form-control" id="depoAutoMinMoney" min="1"
+                                max="60" required /></td>
+                            <td class="money"><input type="text" class="form-control" id="depoAutoMaxMoney" min="1"
+                                max="60" required /></td>
+                          </tr>
+
+                          <tr data-id="2">
+                            <td class="type">출금</td>
+                            <td class="time"><input type="number" class="form-control" id="withAutoMinTime" min="1"
+                                max="60" required /></td>
+                            <td class="time"><input type="number" class="form-control" id="withAutoMaxTime" min="1"
+                                max="60" required /></td>
+                            <td class="money"><input type="text" class="form-control" id="withAutoMinMoney" min="1"
+                                max="60" required /></td>
+                            <td class="money"><input type="text" class="form-control" id="withAutoMaxMoney" min="1"
+                                max="60" required /></td>
+                          </tr>
+                        </tbody>
+                      </table>
+                    </div>
+                    <div class="col-9">
+
+                    </div>
+                    <div class="col-3 mt-2 text-end">
+                      <button id="virtualSetBtn" class="btn btn-secondary" disabled>설정변경</button>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div class="col-lg-4">
+              <div class="card mb-3">
+                <div class="card-header" style="font-size: 1rem"><i class="bi bi-1-square-fill me-1"></i> 요율 관련</div>
+                <div class="card-body my-2">
+                  <div class="marginRateSet row">
+                    <div class="col-12 mb-3 fs-5">• 마진 On / Off</div>
+                    <div class="col-3 mb-4 fs-6">카지노 베팅마진</div>
+                    <div class="col-3 fs-5 text-center ps-3">
+                      <div class="form-check form-switch">
+                        <input class="form-check-input" type="checkbox" role="switch" id="casinoBetMarginBtn" />
+                        <label class="form-check-label" for="casinoBetMarginBtn"></label>
+                      </div>
+                    </div>
+                    <div class="col-3 mb-3 fs-6 ps-3">슬롯 베팅마진</div>
+                    <div class="col-3 fs-5 text-center ps-3">
+                      <div class="form-check form-switch">
+                        <input class="form-check-input" type="checkbox" role="switch" id="slotBetMarginBtn" />
+                        <label class="form-check-label" for="slotBetMarginBtn"></label>
+                      </div>
+                    </div>
+                    <div class="col-3 mb-4 fs-6 ps-3">카지노 롤링마진</div>
+                    <div class="col-3 fs-5 text-center ps-3">
+                      <div class="form-check form-switch">
+                        <input class="form-check-input" type="checkbox" role="switch" id="casinoRollMarginBtn" />
+                        <label class="form-check-label" for="casinoRollMarginBtn"></label>
+                      </div>
+                    </div>
+                    <div class="col-3 mb-3 fs-6 ps-3">슬롯 롤링마진</div>
+                    <div class="col-3 fs-5 text-center ps-3">
+                      <div class="form-check form-switch">
+                        <input class="form-check-input" type="checkbox" role="switch" id="slotRollMarginBtn" />
+                        <label class="form-check-label" for="slotRollMarginBtn"></label>
+                      </div>
+                    </div>
+                    <div class="col-12 mt-2 text-end">
+                      <button id="marginSetBtn" class="btn btn-secondary" disabled>설정변경</button>
+                    </div>
+                  </div>
+                </div>
+              </div>
+              <div class="card mb-3">
+                <div class="card-header" style="font-size: 1rem"><i class="bi bi-dice-5 me-1"></i> 잭팟 관련</div>
+                <div class="card-body my-2">
+                  <div class="jackpotSet row">
+                    <div class="col-12 mb-3 fs-5">• 잭팟 종료금액 설정</div>
+                    <div class="col-6">
+                      <div class="input-group mb-1 position-relative">
+                        <span class="input-group-text">설정된 금액</span>
+                        <input id="currentSetJackpot" type="text" class="form-control text-end" disabled />
+                      </div>
+                      <div id="endJackpotDesc" class="break">유저페이지의 잭팟 금액이 위 금액을 넘어서면 다시 0부터 시작</div>
+                    </div>
+                    <div class="col-6">
+                      <div class="input-group mb-1 position-relative">
+                        <span class="input-group-text">금액설정</span>
+                        <input id="setJackpot" type="text" class="form-control text-end" />
+                      </div>
+                    </div>
+                    <div class="col-6 fs-5 mt-4 mb-3">• 종료금액 랜덤설정</div>
+                    <div class="col-6 fs-5 mt-4 mb-3 d-flex justify-content-end">
+                      <div class="form-check form-switch">
+                        <input class="form-check-input" type="checkbox" role="switch" id="randomJackpotBtn" />
+                        <label class="form-check-label" for="randomJackpotBtn"></label>
+                      </div>
+                    </div>
+                    <div class="col-6">
+                      <div class="input-group mb-1 position-relative">
+                        <span class="input-group-text">최소금액</span>
+                        <input id="setMinJackpot" type="text" class="form-control text-end" />
+                      </div>
+                    </div>
+                    <div class="col-6">
+                      <div class="input-group mb-1 position-relative">
+                        <span class="input-group-text">최대금액</span>
+                        <input id="setMaxJackpot" type="text" class="form-control text-end" />
+                      </div>
+                    </div>
+                    <div class="col-12 mt-2 text-end">
+                      <button id="jackpotSetBtn" class="btn btn-secondary" disabled>설정변경</button>
+                    </div>
+                  </div>
+                </div>
+              </div>
+              <div class="card mb-3 <% if (lotto == '0') { %>d-none<% } %>">
+                <div class="card-header" style="font-size: 1rem"><i class="bi bi-7-circle me-1"></i> 로또 관련</div>
+                <div class="card-body my-2">
+                  <div class="jackpotSet row">
+                    <div class="col-6 mb-3 fs-5">• 이번 회차 1등 인원 설정</div>
+                    <div class="col-6 mb-3 fs-5">• 다음 회차 가상 참여 설정</div>
+                    <div class="col-6">
+                      <div class="input-group mb-1 position-relative">
+                        <span class="input-group-text">1등 인원</span>
+                        <input id="currentLottoWinner" type="text" autocomplete="off" maxlength="2"
+                          class="form-control text-end" />
+                      </div>
+                      <div class="winnerDesc">회차 결과 정산 시 1등 데이터 추가</div>
+                    </div>
+                    <div class="col-6">
+                      <div class="input-group mb-1 position-relative">
+                        <span class="input-group-text">참여 인원</span>
+                        <input id="nextLottoRoundParicipate" type="text" autocomplete="off" maxlength="4"
+                          placeholder="최대 1,000개 설정 가능" class="form-control text-end" />
+                      </div>
+                    </div>
+                    <div class="col-12 mt-2 text-end">
+                      <button id="lottoSetBtn" class="btn btn-secondary" disabled>설정변경</button>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div class="col-lg-4">
+              <div class="card mb-3">
+                <div class="card-header" style="font-size: 1rem"><i class="bi bi-calendar-date me-1"></i> 출석체크 이벤트</div>
+                <div class="card-body my-2">
+                  <div class="attendanceSet row">
+                    <div class="col-6">
+                      <label for="attEventAmount" class="form-label fs-6">충족 금액</label>
+                      <input type="text" class="form-control text-end" id="attEventAmount" />
+                    </div>
+                    <div class="col-6">
+                      <label for="attEventType" class="form-label text-center fs-6">이벤트 갯수</label>
+                      <select class="form-select" id="attEventCount" required>
+                        <option value="0" selected>없음</option>
+                        <option value="1">1</option>
+                        <option value="2">2</option>
+                        <option value="3">3</option>
+                        <option value="4">4</option>
+                        <option value="5">5</option>
+                        <option value="6">6</option>
+                        <option value="7">7</option>
+                        <option value="8">8</option>
+                        <option value="9">9</option>
+                        <option value="10">10</option>
+                      </select>
+                    </div>
+                    <div class="col-12 mt-4 text-end">
+                      <div id="attEventTable"></div>
+                    </div>
+                    <div class="col-12 mt-2 text-end">
+                      <button id="attendanceSetBtn" class="btn btn-secondary" disabled>설정변경</button>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </main>
+    </div>
+  </div>
+
+  <!-- imported scripts -->
+  <%- include('foot.ejs') %>
+  <script src="/public/js/setting.js"></script>
+</body>
+
+</html>

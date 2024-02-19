@@ -1,0 +1,302 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="bank">
+// 내역 관련
+  <select id='getDepositHistory'>
+    SELECT 
+      IDX,
+      입금신청일시 AS 신청일시,
+      신청금액,
+      보너스금액,
+      처리현황,
+      `입금 처리일시` AS 처리일시
+    FROM deposit_request_view
+    WHERE 아이디 = #{id} AND 처리현황 IN ('입금승인', '신청취소', '승인취소');
+  </select>
+
+  <select id='getWithdrawHistory'>
+    SELECT
+      IDX,
+      출금신청일시 AS 신청일시,
+      신청금액,
+      처리현황,
+      `출금 처리일시` AS 처리일시
+    FROM withdraw_request_view
+    WHERE 아이디 = #{id} AND 처리현황 IN ('출금승인', '신청취소', '승인취소');      
+  </select>
+
+  <select id='getRewardHistory'>
+    SELECT 
+      point_log_id AS IDX,
+      time AS 신청일시,
+      point_amount AS 신청금액
+    FROM log_point
+    WHERE user_id = (SELECT user_id
+                    FROM   user
+                    WHERE  id = #{id})
+          AND event_type = '포인트 전환'; 
+  </select>
+
+  <select id='getVirtualDepositData'>
+    SELECT * FROM
+    (
+      (
+        SELECT 
+          d.req_time AS 'time',
+          u.id AS 'id',
+          d.req_money AS 'money'
+        FROM deposit_request_history d
+        JOIN user u ON d.user_id = u.user_id 
+        LIMIT 20
+      )
+      UNION ALL
+      (
+        SELECT 
+          dv.submit_time AS 'time',
+          dv.virtual_id AS 'id',
+          dv.virtual_money AS 'money'
+        FROM deposit_virtual_list dv
+        LIMIT 20
+      )
+    ) AS combined_table
+    ORDER BY time DESC LIMIT 20;
+  </select>
+
+  <select id='getVirtualWithdrawData'>
+    SELECT * FROM
+    (
+      (
+        SELECT 
+          w.req_time AS 'time',
+          u.id AS 'id',
+          w.req_money AS 'money'
+        FROM withdraw_request_history w
+        JOIN user u ON w.user_id = u.user_id 
+        LIMIT 20
+      )
+      UNION ALL
+      (
+        SELECT 
+          wv.submit_time AS 'time',
+          wv.virtual_id AS 'id',
+          wv.virtual_money AS 'money'
+        FROM withdraw_virtual_list wv
+        LIMIT 20
+      )
+    ) AS combined_table
+    ORDER BY time DESC LIMIT 20;
+  </select>
+
+
+// 입출금 상태 관련
+  <select id='checkReqState'>
+    SELECT bank_req_state
+    FROM user
+    WHERE user_id = (SELECT user_id
+                    FROM user
+                    WHERE id = #{id});
+  </select>
+
+  <update id='insertReqState'>
+    UPDATE user
+    SET bank_req_state = 
+    <if test="type == '입금'">
+      'd'
+    </if>
+    <if test="type == '출금'">
+      'w'
+    </if>    
+    WHERE user_id = (SELECT user_id
+                    FROM user
+                    WHERE id = #{id});
+  </update>
+
+
+// 입금 관련
+  <select id='getVirtualState'>
+    SELECT virtualAccountState
+    FROM   setting
+  </select>
+
+  <select id='getBankNum'>
+    SELECT id,
+      u.level,
+      l.bank,
+      l.bank_num,
+      l.bank_owner
+    FROM   user AS u
+    JOIN user_level_info AS l
+      ON u.level = l.user_level_id
+    WHERE  id = #{id}; 
+  </select>
+
+  <select id='insertReqDeposit'>
+    INSERT INTO deposit_request_history
+      (
+        user_id,
+        req_time,
+        at_req_balance,
+        req_type,
+        req_money,
+        bonus_state,
+        bonus_type, 
+        bonus_money,       
+        req_ip_adress
+      )
+    VALUES
+      (
+        (SELECT user_id
+        FROM user 
+        WHERE id = #{id}),
+        #{time},
+        ${balance},
+        #{type},
+        ${reqMoney},
+        ${bonusState},
+        ${bonusType},
+        ${bonusMoney},
+        #{ip}
+      );
+  </select>
+
+  <select id='checkDepositBonus'>
+    SELECT 
+      u.bonus_type, 
+      (SELECT bonusState FROM setting LIMIT 1) AS bonusState,
+      (SELECT joinBonusRate FROM setting LIMIT 1) AS joinBonusRate,
+      (SELECT joinEveryBonusRate FROM setting LIMIT 1) AS joinEveryBonusRate,
+      (SELECT dailyBonusRate FROM setting LIMIT 1) AS dailyBonusRate,
+      (SELECT everyBonusRate FROM setting LIMIT 1) AS everyBonusRate
+    FROM user_asset_info AS u 
+    WHERE
+      user_id = (SELECT user_id
+                 FROM user
+                 WHERE id = #{id});
+  </select>
+
+
+// 출금 관련
+  <select id='getUserBankInfo'>
+    SELECT bank,
+      bank_num,
+      bank_owner
+    FROM   user
+    WHERE  id = #{id};
+  </select>
+  
+  <select id='insertReqWithdraw'>
+    INSERT INTO withdraw_request_history
+      (
+        user_id,
+        req_time,
+        at_req_balance,
+        req_type,
+        req_money,
+        req_ip_adress
+      )
+    VALUES
+      (
+        (SELECT user_id
+        FROM user 
+        WHERE id = #{id}),
+        #{time},
+        ${balance},
+        #{type},
+        ${reqMoney},
+        #{ip}
+      );
+  </select>
+ 
+  <select id='checkPassword'>
+    SELECT bank_pw
+    FROM user
+    WHERE id = #{id};
+  </select>
+
+// 잭팟 관련
+  <select id='getJackpot'>
+    SELECT 
+      currentJackpot,
+      setJackpot
+    FROM setting
+  </select>
+
+  <select id='resetCurrentJackpot'>
+    UPDATE setting
+    SET currentJackpot = 0
+  </select>
+
+  <select id='updateJackpot'>
+    UPDATE setting
+    SET currentJackpot = ${currentJackpot}
+  </select>
+
+  <select id='getUserAsset'>
+    SELECT
+      balance,
+      point
+    FROM 
+      user_asset_info
+    WHERE 
+      user_id = (SELECT user_id
+                 FROM user
+                 WHERE id = #{id});
+  </select>
+
+
+// 콤프 관련
+  <update id='exchangeReward'>
+    UPDATE user_asset_info
+    SET
+      point = point - ${reqPoint}
+    WHERE user_id = (SELECT user_id
+                    FROM user
+                    WHERE id = #{id});
+  </update>
+
+  <insert id='exchangeBalanceLog'>
+    INSERT INTO log_balance
+      (
+        time,
+        user_id,
+        event_type,
+        amount,
+        before_balance,
+        after_balance
+      )
+    VALUES
+      (
+        #{time},
+        (SELECT user_id
+        FROM user 
+        WHERE id = #{id}),
+        #{type},
+        ${reqPoint},
+        ${balance},
+        ${balance} + ${reqPoint}
+      )
+  </insert>
+
+  <insert id='exchangePointLog'>
+    INSERT INTO log_point
+      (
+        time,
+        user_id,
+        event_type,
+        point_amount,
+        before_point,
+        after_point
+      )
+    VALUES
+      (
+        #{time},
+        (SELECT user_id
+        FROM user 
+        WHERE id = #{id}),
+        #{type},
+        -${reqPoint},
+        ${point},
+        ${point} - ${reqPoint}
+      )
+  </insert>
+</mapper>

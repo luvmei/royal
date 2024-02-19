@@ -1,0 +1,1898 @@
+<!--~ 관리자 접속 -->
+<div class="modal fade" id="confirmModal" tabindex="-1">
+  <div class="modal-dialog modal-dialog-centered" style="width: 370px">
+    <div class="modal-content">
+      <div class="modal-body text-center py-3"></div>
+      <div class="modal-footer justify-content-end">
+        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">닫기</button>
+        <button type="button" class="btn btn-success d-none" id="user-join-confirm">승인</button>
+        <button type="button" class="btn btn-danger d-none" id="user-join-block">차단</button>
+        <button type="button" class="btn btn-primary d-none" id="user-block-release">차단해제</button>
+        <button type="button" class="btn btn-success d-none" id="agent-add-confirm">생성</button>
+        <button type="button" class="btn btn-danger d-none" id="change-user-password-confirm">비밀번호 변경</button>
+        <button type="button" class="btn btn-danger d-none" id="change-user-withdraw-password-confirm">출금 비밀번호
+          변경</button>
+        <button type="button" class="btn btn-danger d-none" id="force-logout-confirm">강제 접속종료</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="modal fade" id="confirmCancel" tabindex="-1">
+  <div class="modal-dialog modal-dialog-centered">
+    <div class="modal-content">
+      <div class="modal-body pt-4 px-4 pb-0">
+        <div class="content row"></div>
+      </div>
+      <div class="modal-footer border-0">
+        <div type="button" class="btn btn-secondary" data-bs-dismiss="modal">닫기</div>
+        <button type="button" class="btn btn-success d-none" id="depositConfirm">입금승인</button>
+        <button type="button" class="btn btn-success d-none" id="withdrawConfirm">출금승인</button>
+        <button type="button" class="btn btn-danger d-none" id="depositCancel">입금취소</button>
+        <button type="button" class="btn btn-danger d-none" id="withdrawCancel">출금취소</button>
+        <button type="button" class="btn btn-danger d-none" id="depositConfirmCancel">입금승인취소</button>
+        <button type="button" class="btn btn-danger d-none" id="withdrawConfirmCancel">출금승인취소</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="modal fade" id="alertModal" tabindex="-1">
+  <div class="modal-dialog modal-dialog-centered modal-sm">
+    <div class="modal-content text-center">
+      <div class="modal-header d-block">
+        <div class="modal-title text-start fs-5">오류발생</div>
+      </div>
+      <div class="modal-body" id="notice-text"></div>
+      <div class="modal-footer d-block">
+        <button type="button" class="btn btn-sm btn-secondary" data-bs-toggle="modal" data-bs-target="#alertModal"
+          tabindex="0">확인</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- <div class="modal fade" id="userDetail" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true"
+  style="z-index:1061">
+  <div class="modal-dialog modal-dialog-centered">
+    <div class="modal-content">
+      <div class="modal-header" id="userDetailTitle">
+      </div>
+      <div class="modal-body px-3 px-lg-4" id="detailModalBody">
+        <div class="row g-2 justify-content-around" id="userDetailRow">
+          <h5 class="col-12 mt-2">기본정보</h5>
+          <div class="col-2">
+            <label for="detail-lv" class="form-label">레벨</label>
+            <select class="form-select" id="detail-lv">
+              <option value="1" selected>1</option>
+              <option value="2">2</option>
+              <option value="3">3</option>
+              <option value="4">4</option>
+              <option value="5">5</option>
+            </select>
+          </div>
+          <div class="col-5" id="balance">
+            <label for="detail-state" class="form-label">보유금</label>
+            <input type="text" class="form-control px-2" id="detail-balance" value="😃정상" disabled>
+          </div>
+          <div class="col-5" id="point">
+            <label for="detail-state" class="form-label">포인트</label>
+            <input type="text" class="form-control px-2" id="detail-point" value="😃정상" disabled>
+          </div>
+          <div class="col-3" id="state">
+            <label for="detail-state" class="form-label">상태</label>
+            <input type="text" class="form-control px-2" id="detail-state" value="😃정상" disabled>
+          </div>
+          <div class="col-3">
+            <label for="detail-id" class="form-label">아이디</label>
+            <input type="text" class="form-control" id="detail-id" disabled>
+          </div>
+          <div class="col-3" id="detail-pw-item">
+            <label for="detail-pw" class="form-label">비밀번호</label>
+            <input type="text" class="form-control" id="detail-pw" maxlength="10" required disabled value="확인하기">
+          </div>
+          <div class="col-3" id="detail-nickname-item">
+            <label for="detail-nickname" class="form-label">닉네임</label>
+            <input type="text" class="form-control" id="detail-nickname" maxlength="10" required>
+          </div>
+          <div class="col-6">
+            <label for="detail-phone" class="form-label">전화번호</label>
+            <input type="text" class="form-control" id="detail-phone" maxlength="11" required>
+          </div>
+          <div class="col-6">
+            <label for="detail-joindate" class="form-label">가입일시</label>
+            <input type="text" class="form-control" id="detail-joindate" disabled>
+          </div>
+          <div class="col-3">
+            <label for="detail-bank" class="form-label">출금은행</label>
+            <select class="form-select" id="detail-bank" value="" name="bank" required>
+              <option value="국민" id="bank-01">국민</option>
+              <option value="기업" id="bank-02">기업</option>
+              <option value="농협" id="bank-03">농협</option>
+              <option value="신한" id="bank-04">신한</option>
+              <option value="우리" id="bank-05">우리</option>
+              <option value="하나" id="bank-06">하나</option>
+              <option value="카카오뱅크" id="bank-07">카카오뱅크</option>
+              <option value="토스뱅크" id="bank-08">토스뱅크</option>
+              <option value="케이뱅크" id="bank-09">케이뱅크</option>
+              <option value="우체국" id="bank-10">우체국</option>
+              <option value="SC제일" id="bank-11">SC제일</option>
+              <option value="한국씨티" id="bank-12">한국씨티</option>
+              <option value="새마을금고" id="bank-13">새마을금고</option>
+              <option value="수협" id="bank-14">수협</option>
+              <option value="신협" id="bank-15">신협</option>
+              <option value="경남" id="bank-16">경남</option>
+              <option value="부산" id="bank-17">부산</option>
+              <option value="광주" id="bank-18">광주</option>
+              <option value="대구" id="bank-19">대구</option>
+              <option value="제주" id="bank-20">제주</option>
+              <option value="전북" id="bank-21">전북</option>
+            </select>
+          </div>
+          <div class="col-4">
+            <label for="detail-banknum" class="form-label">계좌번호</label>
+            <input type="text" class="form-control" id="detail-banknum" maxlength="14" required>
+          </div>
+          <div class="col-5">
+            <label for="detail-bankowner" class="form-label">예금주</label>
+            <input type="text" class="form-control" id="detail-bankowner" maxlength="10" required>
+          </div>
+          <div class="col-6">
+            <label for="detail-domain" class="form-label">전용 도메인</label>
+            <input type="text" class="form-control" id="detail-domain" disabled>
+          </div>
+          <div class="col-6">
+            <label for="detail-code" class="form-label">가입코드</label>
+            <input type="text" class="form-control" id="detail-code" disabled>
+          </div>
+          <div class="col-md-12">
+            <label for="detail-memo" class="form-label">메모</label>
+            <textarea class="form-control" id="detail-memo" rows="3" maxlength="147"></textarea>
+          </div>
+          <hr class="mt-4">
+          <div class="row p-0 d-none" id="agent-rate">
+            <h5 class="px-1">요율정보(%)</h5>
+            <div class="col-4">
+              <label for="agent-casinoRate" class="form-label">카지노 롤링</label>
+              <input type="text" class="form-control" id="agent-casinoRate" maxlength="5" required disabled>
+            </div>
+            <div class="col-4">
+              <label for="agent-slotRate" class="form-label">슬롯 롤링</label>
+              <input type="text" class="form-control" id="agent-slotRate" maxlength="5" required disabled>
+            </div>
+            <div class="col-4 mb-2">
+              <label for="agent-loseRate" class="form-label">루징</label>
+              <input type="text" class="form-control" id="agent-loseRate" maxlength="5" required disabled>
+            </div>
+          </div>
+          <div class="row p-0 g-2 d-none" id="admin-rate">
+            <h5 class="px-1">요율정보(%)</h5>
+            <div class="col-3">
+              <label for="admin-casinoRate" class="form-label">카지노 롤링</label>
+              <input type="text" class="form-control" id="admin-casinoRate" maxlength="5" required>
+            </div>
+            <div class="col-3">
+              <label for="admin-slotRate" class="form-label">슬롯 롤링</label>
+              <input type="text" class="form-control" id="admin-slotRate" maxlength="5" required>
+            </div>
+            <div class="col-3">
+              <label for="admin-loseRate" class="form-label">루징</label>
+              <input type="text" class="form-control" id="admin-loseRate" maxlength="5" required>
+            </div>
+            <div class="col-3 mb-2">
+              <label for="admin-marginRate" class="form-label">공바퀴</label>
+              <input type="text" class="form-control" id="admin-marginRate" maxlength="5" required>
+            </div>
+          </div>
+          <hr id="underRateLine">
+          <h5>에이전트 트리</h5>
+          <div class="btn-group mb-2 d-none" role="group" id="agent-detail-grid">
+            <button type="button" class="btn disabled" style="background-color: #E9ECEF; border: none;"
+              id="detail-user">유저</button>
+            <button type="button" class="btn disabled" style="background-color: #9EEAF9; border: none;"
+              id="detail-bronze">😃</button>
+            <button type="button" class="btn disabled" style="background-color: #A3CFBB; border: none;"
+              id="detail-silver"></button>
+            <button type="button" class="btn disabled" style="background-color: #FFE69C; border: none;"
+              id="detail-gold"></button>
+            <button type="button" class="btn disabled" style="background-color: #F1AEB5; border: none;"
+              id="detail-platinum"></button>
+          </div>
+          <div class="row text-center mb-2 align-content-center d-none" id="user-detail-grid">
+            <div class="col-2 border"></div>
+            <div class="col-2 border p-1" id="detail-user-name" style="background-color: rgb(233,236,239,0.4)">유저
+            </div>
+            <div class="col-2 border p-1" id="detail-bronze-name" style="background-color: rgb(158,234,249,0.4)">브론즈
+            </div>
+            <div class="col-2 border p-1" id="detail-silver-name" style="background-color: rgb(163,207,187,0.4)">실버
+            </div>
+            <div class=" col-2 border p-1" id="detail-gold-name" style="background-color: rgb(255,230,156,0.4)">골드
+            </div>
+            <div class=" col-2 border p-1" id="detail-platinum-name" style="background-color: rgb(241,174,181,0.4)">
+              플래티넘
+            </div>
+            <div class=" col-2 border" style="background-color: rgb(233,236,239,0.4)">카-롤링</div>
+            <div class="col-2 border p-1" id="detail-user-c-roll"></div>
+            <div class="col-2 border p-1" id="detail-bronze-c-roll"></div>
+            <div class="col-2 border p-1" id="detail-silver-c-roll"></div>
+            <div class="col-2 border p-1" id="detail-gold-c-roll"></div>
+            <div class="col-2 border p-1" id="detail-platinum-c-roll"></div>
+            <div class=" col-2 border" style="background-color: rgb(233,236,239,0.4)">슬-롤링</div>
+            <div class="col-2 border p-1" id="detail-user-s-roll"></div>
+            <div class="col-2 border p-1" id="detail-bronze-s-roll"></div>
+            <div class="col-2 border p-1" id="detail-silver-s-roll"></div>
+            <div class="col-2 border p-1" id="detail-gold-s-roll"></div>
+            <div class="col-2 border p-1" id="detail-platinum-s-roll"></div>
+            <div class="col-2 border" style="background-color: rgb(233,236,239,0.4)">루징</div>
+            <div class="col-2 border p-1" id="detail-user-lose"></div>
+            <div class="col-2 border p-1" id="detail-bronze-lose"></div>
+            <div class="col-2 border p-1" id="detail-silver-lose"></div>
+            <div class="col-2 border p-1" id="detail-gold-lose"></div>
+            <div class="col-2 border p-1" id="detail-platinum-lose"></div>
+            <div class="col-2 border" style="background-color: rgb(233,236,239,0.4)">공바퀴</div>
+            <div class="col-2 border p-1" id="detail-user-margin"></div>
+            <div class="col-2 border p-1" id="detail-bronze-margin"></div>
+            <div class="col-2 border p-1" id="detail-silver-margin"></div>
+            <div class="col-2 border p-1" id="detail-gold-margin"></div>
+            <div class="col-2 border p-1" id="detail-platinum-margin"></div>
+          </div>
+          <hr>
+          <h5 class="col-12">내역보기</h5>
+          <div class="btn-group mb-2 row menu-btn-group" role="group">
+            <button type="button" class="col-3 col-lg-1 btn btn-outline-secondary ">입출금</button>
+            <button type="button" class="col-3 col-lg-1 btn btn-outline-secondary ">베팅</button>
+            <button type="button" class="col-3 col-lg-1 btn btn-outline-secondary ">입금</button>
+            <button type="button" class="col-3 col-lg-1 btn btn-outline-secondary ">출금</button>
+            <button type="button" class="col-3 col-lg-1 btn btn-outline-secondary ">문의</button>
+            <button type="button" class="col-3 col-lg-1 btn btn-outline-secondary ">접속</button>
+            <button type="button" class="col-3 col-lg-1 btn btn-outline-secondary ">보유금</button>
+            <button type="button" class="col-3 col-lg-1 btn btn-outline-secondary ">포인트</button>
+          </div>
+          <div id="detail-addOn">
+            <hr>
+            <h5 class="col-12">부가기능</h5>
+            <div class="btn-group mb-2 func-btn-group col-12" role="group">
+              <button type="button" class="btn btn-outline-secondary text-break" id="resetPassword">비밀번호 초기화</button>
+              <button type="button" class="btn btn-outline-secondary">출금비번 초기화</button>
+              <button type="button" class="btn btn-outline-secondary" id="forceLogout">강제 접속종료</button>
+              <button type="button" class="btn asset-danger" id="blockBtn">차단하기</button>
+              <button type="button" class="btn asset-primary" id="cancelBlockBtn">차단해제</button>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="modal-footer">
+        <button type="button" class="btn asset-dark" data-bs-dismiss="modal">닫기</button>
+        <button type="button" class="btn asset-secondary" id="modifyUserBtn" disabled>수정하기</button>
+      </div>
+    </div>
+  </div>
+</div> -->
+
+<%- include('user-detail-modal.ejs') %>
+
+<div class="modal fade" id="addAgentModal" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1"
+  aria-hidden="true">
+  <div class="modal-dialog modal-dialog-centered modal-lg">
+    <div class="modal-content">
+      <form id="agent-join">
+        <div class="modal-header">
+          <h4 class="modal-title py-2" id="modal-title"></h4>
+        </div>
+        <div class="modal-body row gy-2 px-4">
+          <h5 class="my-3 fs-5 fw-bold" id="upper-agent-title"></h5>
+          <div class="row row-cols-6 text-center mx-auto" id="upper-agent-info">
+            <div class="col-3 p-1 border">아이디</div>
+            <div class="col-3 p-1 border">닉네임</div>
+            <div class="col-2 p-1 border">카지노 롤링</div>
+            <div class="col-2 p-1 border">슬롯 롤링</div>
+            <div class="col-2 p-1 border">루징</div>
+            <input type="text" class="col-3 p-1 border text-center" id="upper-id" name="upper_id" value="" />
+            <input type="text" class="col-3 p-1 border text-center" id="upper-nickname" name="upper_nickname"
+              value="" />
+            <input type="text" class="col-2 p-1 border text-center" id="upper-casino-roll" name="upper_casino_roll"
+              value="" />
+            <input type="text" class="col-2 p-1 border text-center" id="upper-slot-roll" name="upper_slot_roll"
+              value="" />
+            <input type="text" class="col-2 p-1 border text-center" id="upper-lose" name="upper_lose" value="" />
+          </div>
+          <div class="col-12 fw-bold fs-5 mt-4" id="basic-info">기본 정보</div>
+          <div class="col-12 d-none">
+            <div class="input-group">
+              <input type="text" class="form-control" id="agent-type" placeholder="에이전트타입" name="type" value="0"
+                required />
+            </div>
+          </div>
+          <div class="col-12 col-lg-6">
+            <div class="input-group">
+              <div class="form-floating">
+                <input type="text" class="form-control" id="agent-id" placeholder="아이디" name="id" maxlength="12"
+                  required />
+                <label for="agent-id">에이전트 아이디</label>
+              </div>
+              <button class="btn btn-sm btn-secondary" id="agent-id-btn" type="button">중복확인</button>
+            </div>
+            <div class="description" id="agent-id-desc">영문, 숫자 조합 4~12자</div>
+            <!-- <div class="description" id="agent-id-desc">영문, 숫자 조합 6~12자</div> -->
+          </div>
+          <div class="col-12 col-lg-6">
+            <div class="input-group">
+              <div class="form-floating">
+                <input type="password" class="form-control" id="agent-pw" placeholder="비밀번호" name="pw" maxlength="16"
+                  required />
+                <label for="agent-pw">비밀번호</label>
+              </div>
+              <button class="btn btn-sm btn-secondary px-3" id="agent-pw-btn" type="button">
+                <i class="fa-solid fa-eye fa-lg"></i>
+              </button>
+            </div>
+            <div class="description" id="agent-pw-desc">영문, 숫자, 특수문자 중 2가지 조합 6~16자</div>
+            <!-- <div class="description" id="agent-pw-desc">영문, 숫자, 특수문자 조합 8~16자</div> -->
+          </div>
+          <div class="col-12 col-lg-6">
+            <div class="input-group">
+              <div class="form-floating">
+                <input type="text" class="form-control" id="agent-nick" placeholder="닉네임" name="nickname" maxlength="8"
+                  required />
+                <label for="agent-nick">닉네임</label>
+              </div>
+              <button class="btn btn-sm btn-secondary" id="agent-nick-btn" type="button">중복확인</button>
+            </div>
+            <div class="description" id="agent-nick-desc">한글, 영문, 숫자 2~8자</div>
+          </div>
+          <div class="col-12 col-lg-6">
+            <div class="form-floating">
+              <input type="text" class="form-control" id="agent-phone" placeholder="전화번호" minlength="10" maxlength="11"
+                name="phone" required />
+              <label for="agent-phone">전화번호</label>
+            </div>
+            <div class="description" id="agent-phone-desc">(-)없이 숫자만 입력</div>
+          </div>
+          <div class="col-12 fw-bold fs-5 mt-4" id="bank-info">은행 정보</div>
+          <div class="col-12 col-lg-6">
+            <select class="form-select" id="agent-bank" style="height: 50px" value="" name="bank" required>
+              <option selected id="agent-bank-select" value="">은행 선택</option>
+              <option value="국민" id="bank-01">국민</option>
+              <option value="기업" id="bank-02">기업</option>
+              <option value="농협" id="bank-03">농협</option>
+              <option value="신한" id="bank-04">신한</option>
+              <option value="우리" id="bank-05">우리</option>
+              <option value="하나" id="bank-06">하나</option>
+              <option value="카카오뱅크" id="bank-07">카카오뱅크</option>
+              <option value="토스뱅크" id="bank-08">토스뱅크</option>
+              <option value="케이뱅크" id="bank-09">케이뱅크</option>
+              <option value="우체국" id="bank-10">우체국</option>
+              <option value="SC제일" id="bank-11">SC제일</option>
+              <option value="한국씨티" id="bank-12">한국씨티</option>
+              <option value="새마을금고" id="bank-13">새마을금고</option>
+              <option value="수협" id="bank-14">수협</option>
+              <option value="신협" id="bank-15">신협</option>
+              <option value="경남" id="bank-16">경남</option>
+              <option value="부산" id="bank-17">부산</option>
+              <option value="광주" id="bank-18">광주</option>
+              <option value="대구" id="bank-19">대구</option>
+              <option value="제주" id="bank-20">제주</option>
+              <option value="전북" id="bank-21">전북</option>
+            </select>
+          </div>
+          <div class="col-12 col-lg-6">
+            <div class="form-floating">
+              <input type="text" class="form-control" id="agent-account-num" placeholder="계좌번호" minlength="11"
+                maxlength="14" name="bank_num" required />
+              <label for="agent-account-num">계좌번호</label>
+            </div>
+            <div class="description" id="agent-account-num-desc">(-)없이 숫자만 입력</div>
+          </div>
+          <div class="col-12 col-lg-6">
+            <div class="form-floating">
+              <input type="text" class="form-control" id="agent-account-holder" placeholder="예금주" minlength="3"
+                maxlength="10" name="bank_owner" required />
+              <label for="agent-account-holder">예금주</label>
+            </div>
+            <div class="description" id="agent-account-holder-desc">실명만 가능</div>
+          </div>
+          <div class="col-12 col-lg-6">
+            <div class="input-group">
+              <div class="form-floating">
+                <input type="password" class="form-control" id="agent-withdraw-pw" placeholder="출금 비밀번호" maxlength="6"
+                  name="bank_pw" required />
+                <label for="agent-withdraw-pw">출금 비밀번호</label>
+              </div>
+              <button class="btn btn-sm btn-secondary px-3" id="agent-withdraw-pw-btn" type="button">
+                <i class="fa-solid fa-eye fa-lg"></i>
+              </button>
+            </div>
+            <div class="description" id="agent-withdraw-pw-desc">숫자 6자</div>
+          </div>
+          <div class="col-8 fw-bold fs-5 mt-4" id="rate-info">요율 정보</div>
+          <div class="col-4 mt-4 text-end" style="font-size: 0.8rem">(소수점 2자리까지 설정가능, 단위: %)</div>
+          <div class="col-12 col-lg-6">
+            <div class="form-floating">
+              <input type="text" class="form-control rate-input" id="casino-roll-rate" placeholder="카지노 롤링요율"
+                maxlength="5" name="casino_roll" data-ratetype="카지노 롤링요율" required />
+              <label for="casino-roll-rate">카지노 롤링 요율</label>
+            </div>
+          </div>
+          <div class="col-12 col-lg-6">
+            <div class="form-floating">
+              <input type="text" class="form-control rate-input" id="slot-roll-rate" placeholder="슬롯 롤링요율" maxlength="5"
+                name="slot_roll" data-ratetype="슬롯 롤링요율" required />
+              <label for="slot-roll-rate">슬롯 롤링 요율</label>
+            </div>
+          </div>
+          <div class="col-12 col-lg-6 my-3">
+            <div class="form-floating">
+              <input type="text" class="form-control rate-input" id="lose-rate" placeholder="루징요율" maxlength="5"
+                name="lose_rate" data-ratetype="루징요율" required />
+              <label for="lose-rate">루징 요율</label>
+            </div>
+          </div>
+          <div class="col-12 col-lg-6 my-3 d-none">
+            <div class="form-floating">
+              <input type="text" class="form-control rate-input" id="bet-margin-rate" placeholder="베팅마진 요율"
+                maxlength="5" name="bet-margin_rate" data-ratetype="베팅마진요율" value="0" required />
+              <label for="bet-margin-rate"></label>
+            </div>
+          </div>
+          <div class="col-12 col-lg-6 my-3 d-none">
+            <div class="form-floating">
+              <input type="text" class="form-control rate-input" id="roll-margin-rate" placeholder="롤링마진 요율"
+                maxlength="5" name="roll-margin_rate" data-ratetype="롤링마진요율" value="0" required />
+              <label for="margin-rate"></label>
+            </div>
+          </div>
+          <div class="col-12 fw-bold fs-5 mt-4 d-none" id="reg-domain-info" value>가입코드 정보</div>
+          <div class="col-12 col-lg-6 d-none" id="reg-domain-input">
+            <div class="form-floating">
+              <input type="text" class="form-control domain" id="reg-domain-name" placeholder="도메인 주소" name="reg_domain"
+                maxlength="30" required />
+              <label for="casino-roll-rate">도메인 주소</label>
+            </div>
+          </div>
+          <div class="col-12 col-lg-6 d-none" id="reg-code-input">
+            <div class="form-floating">
+              <input type="text" class="form-control code" id="reg-code" placeholder="추천코드" name="reg_code" value
+                required />
+              <label for="casino-roll-rate">추천코드</label>
+            </div>
+            <div class="description" id="reg-code-desc">영문 2~3자리 + 숫자 2~4자리 조합</div>
+          </div>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">취소</button>
+          <button type="button" class="btn btn-primary" id="addAgent">생성하기</button>
+        </div>
+      </form>
+    </div>
+  </div>
+</div>
+
+<div class="modal fade" id="addUserModal" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1"
+  aria-hidden="true">
+  <div class="modal-dialog modal-dialog-centered modal-lg">
+    <div class="modal-content">
+      <form id="user-join" autocomplete="off">
+        <div class="modal-header">
+          <h4 class="modal-title py-2" id="modal-title">유저 임의생성</h4>
+        </div>
+        <div class="modal-body row gy-2 px-4">
+          <div class="col-12" style="font-size: 1.05rem">
+            <p>생성 예시 > 아이디: royal | 닉네임: 로얄 | 생성갯수: 10개 생성 시</p>
+            <p>생성 결과 > royal01 (로얄01) ~ royal10 (로얄10) 생성 (최대 30개)</p>
+            <p class="text-danger fw-bold">주의사항: 한번 생성한 아이디 뒤에 숫자를 붙여서 다시 생성할 수 없습니다.</p>
+          </div>
+          <div class="col-12 fw-bold fs-5 mt-4" id="basic-info">기본 정보</div>
+          <div class="col-12 d-none">
+            <div class="input-group">
+              <input type="text" class="form-control" id="user-type" placeholder="유저타입" name="type" value="4"
+                required />
+            </div>
+          </div>
+          <div class="col-12 col-lg-6">
+            <div class="input-group">
+              <div class="form-floating">
+                <input type="text" class="form-control" id="user-id" placeholder="아이디" name="id" maxlength="12"
+                  required />
+                <label for="user-id">유저 아이디</label>
+              </div>
+              <button class="btn btn-sm btn-secondary" id="user-id-btn" type="button">중복확인</button>
+            </div>
+            <div class="description" id="user-id-desc">영문(필수)</div>
+          </div>
+          <div class="col-12 col-lg-6">
+            <div class="input-group">
+              <div class="form-floating">
+                <input type="password" class="form-control" id="user-pw" placeholder="비밀번호" name="pw" maxlength="16"
+                  autocomplete="off" required />
+                <label for="user-pw">비밀번호</label>
+              </div>
+              <button class="btn btn-sm btn-secondary px-3" id="user-pw-btn" type="button">
+                <i class="fa-solid fa-eye fa-lg"></i>
+              </button>
+            </div>
+            <div class="description" id="user-pw-desc">영문, 숫자, 특수문자(선택) 조합 4~16자</div>
+          </div>
+          <div class="col-12 col-lg-6">
+            <div class="input-group">
+              <div class="form-floating">
+                <input type="text" class="form-control" id="user-nick" placeholder="닉네임" name="nickname" maxlength="8"
+                  required />
+                <label for="user-nick">닉네임</label>
+              </div>
+              <button class="btn btn-sm btn-secondary" id="user-nick-btn" type="button">중복확인</button>
+            </div>
+            <div class="description" id="user-nick-desc">한글, 영문, 숫자 2~8자</div>
+          </div>
+          <div class="col-12 col-lg-6">
+            <div class="form-floating">
+              <input type="number" class="form-control" id="user-count" placeholder="자동생성 갯수" min="1" max="30"
+                name="count" required />
+              <label for="user-count" id="user-count-label">현재 유저수</label>
+            </div>
+            <div class="description" id="user-phone-desc">최대 30개까지 가능</div>
+          </div>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">취소</button>
+          <button type="button" class="btn btn-primary" id="addUser">생성하기</button>
+        </div>
+      </form>
+    </div>
+  </div>
+</div>
+
+<div class="modal fade" id="incomeDepoWithDetailModal" tabindex="-1" aria-labelledby="exampleModalLabel"
+  aria-hidden="true">
+  <div class="modal-dialog modal-dialog-centered">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h1 class="modal-title fs-5 fw-bold py-2" id="incomeDepoWithDetailTitle">하부 정산 상세보기 (입금 - 출금)</h1>
+      </div>
+      <div class="modal-body px-4" id="incomeDepoWithDetailBody"></div>
+      <div class="container-fluid px-4">
+        <div class="card mb-4">
+          <div class="card-body">
+            <table id="incomeDepoWithDetail" class="cell-border hover" style="width: 100%">
+              <thead>
+                <tr>
+                  <th rowspan="2">IDX</th>
+                  <th rowspan="2">정산일자</th>
+                  <th rowspan="2">node_id</th>
+                  <th rowspan="2">node_pid</th>
+                  <th rowspan="2">타입</th>
+                  <th rowspan="2">user_id</th>
+                  <th rowspan="2">아이디</th>
+                  <th rowspan="2">닉네임</th>
+                  <th rowspan="2">입금</th>
+                  <th rowspan="2">출금</th>
+                  <th rowspan="2">입금-출금</th>
+                  <th colspan="2" class="text-center">보유금</th>
+                  <th colspan="2" class="text-center">포인트</th>
+                  <th rowspan="2">루징</th>
+                  <th rowspan="2">상위 루징요율</th>
+                  <th rowspan="2">내 루징요율</th>
+                  <th rowspan="2">실적용 루징요율</th>
+                  <th rowspan="2">상위 정산금</th>
+                </tr>
+                <tr>
+                  <th>전일</th>
+                  <th class="border-end">당일</th>
+                  <th>전일</th>
+                  <th>당일</th>
+                </tr>
+              </thead>
+            </table>
+          </div>
+        </div>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-outline-dark" data-bs-dismiss="modal">닫기</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="modal fade" id="incomeBetWinDetailModal" tabindex="-1" aria-labelledby="exampleModalLabel"
+  aria-hidden="true">
+  <div class="modal-dialog modal-dialog-centered">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h1 class="modal-title fs-5 fw-bold py-2" id="incomeBetWinTitle">하부 정산 상세보기 (베팅 - 획득)</h1>
+      </div>
+      <div class="modal-body px-4" id="incomeDetailBody"></div>
+      <div class="container-fluid px-4">
+        <div class="card mb-4">
+          <div class="card-body">
+            <table id="incomeBetWinDetail" class="cell-border hover" style="width: 100%">
+              <thead>
+                <tr>
+                  <th rowspan="2">IDX</th>
+                  <th rowspan="2">정산일자</th>
+                  <th rowspan="2">node_id</th>
+                  <th rowspan="2">node_pid</th>
+                  <th rowspan="2">타입</th>
+                  <th rowspan="2">user_id</th>
+                  <th rowspan="2">아이디</th>
+                  <th rowspan="2">닉네임</th>
+                  <th colspan="3" class="text-center">카지노</th>
+                  <th colspan="3" class="text-center">슬롯</th>
+                  <th colspan="2" class="text-center">획득 롤링</th>
+                  <th rowspan="2">하부 합산<br>루징금</th>
+                  <th rowspan="2">최종<br>루징금</th>
+                </tr>
+                <tr>
+                  <th>베팅</th>
+                  <th>획득</th>
+                  <th class="border-end">베팅 - 획득</th>
+                  <th>베팅</th>
+                  <th>획득</th>
+                  <th class="border-end">베팅 - 획득</th>
+                  <th>카지노</th>
+                  <th>슬롯</th>
+                </tr>
+              </thead>
+            </table>
+          </div>
+        </div>
+      </div>
+
+      <div class="modal-footer">
+        <button type="button" class="btn btn-outline-dark" data-bs-dismiss="modal">닫기</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="modal fade" id="batchWithdrawModal" tabindex="-1">
+  <div class="modal-dialog modal-dialog-centered" style="width: 370px">
+    <div class="modal-content">
+      <div class="modal-header py-3">
+        <h4>일괄 출금승인</h4>
+      </div>
+      <div class="modal-body text-center py-3">
+        <h5 style="line-height: 1.5">'출금신청', '출금승인', '신청취소'를 제외한<br />모든 선택 된 내역을 승인하시겠습니까?</h5>
+      </div>
+      <div class="modal-footer justify-content-end">
+        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">닫기</button>
+        <button type="button" class="btn btn-danger" id="batchWithdrawConfirmBtn">일괄승인</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="modal fade" id="changePasswordModal" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1"
+  aria-hidden="true">
+  <div class="modal-dialog modal-dialog-centered">
+    <div class="modal-content">
+      <form id="passwordChange" autocomplete="off">
+        <div class="modal-header">
+          <h4 class="modal-title p-1" id="modal-title">비밀번호 변경</h4>
+        </div>
+        <div class="modal-body row gy-2 px-4">
+          <div class="col-12 mt-3">
+            <div class="input-group">
+              <div class="form-floating">
+                <input type="password" class="form-control" id="oldPassword" placeholder="기존비밀번호" name="oldPassword"
+                  maxlength="16" autocomplete="off" required />
+                <label for="oldPassword">기존 비밀번호</label>
+              </div>
+            </div>
+          </div>
+          <div class="col-12 my-3">
+            <div class="input-group">
+              <div class="form-floating">
+                <input type="password" class="form-control" id="newPassword" placeholder="새비밀번호" name="newPassword"
+                  maxlength="16" autocomplete="off" required />
+                <label for="newPassword">새 비밀번호 (영어, 숫자, 특수문자 포함 6자 ~ 16자)</label>
+              </div>
+              <button class="btn btn-sm btn-secondary px-3" id="newPasswordViewBtn" type="button">
+                <i class="fa-solid fa-eye fa-lg"></i>
+              </button>
+            </div>
+          </div>
+          <div class="col-12">
+            <div class="input-group">
+              <div class="form-floating">
+                <input type="password" class="form-control" id="newPasswordCheck" placeholder="새비밀번호확인"
+                  name="newPasswordCheck" maxlength="16" autocomplete="off" required />
+                <label for="newPasswordCheck">새 비밀번호 확인</label>
+              </div>
+              <button class="btn btn-sm btn-secondary px-3" id="newPasswordCheckViewBtn" type="button">
+                <i class="fa-solid fa-eye fa-lg"></i>
+              </button>
+            </div>
+          </div>
+          <div class="col-12 ps-3">
+            <p id="passwordDescription"></p>
+          </div>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">취소</button>
+          <button type="button" class="btn asset-success" id="changePasswordConfirm">변경하기</button>
+        </div>
+      </form>
+    </div>
+  </div>
+</div>
+
+<!--? 공지 모달 -->
+<div class="modal fade" id="writeNoticeModal" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1">
+  <div class="modal-dialog modal-dialog-centered modal-lg">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h1 class="modal-title fs-5 fw-bold py-1" id="noticeModaltitle">공지사항 및 이벤트</h1>
+      </div>
+      <div class="modal-body py-3">
+        <form id="writeNoticeForm" enctype="multipart/form-data">
+          <div class="row g-2">
+            <div class="col-12 d-none">
+              <input type="text" class="form-control" id="noticeCategory" placeholder="category" value="notice"
+                name="category" required />
+            </div>
+            <div class="col-2">
+              <div class="form-floating">
+                <select class="form-select" id="noticeType" name="noticeType" required>
+                  <option value="공지">공지</option>
+                  <option value="이벤트">이벤트</option>
+                  <option value="점검">점검</option>
+                </select>
+                <label for="noticeType">말머리 선택</label>
+              </div>
+            </div>
+            <div class="col-4">
+              <div class="form-floating">
+                <input type="text" class="form-control" id="noticeTitle" placeholder="title" value="" name="title"
+                  required />
+                <label for="noticeTitle">제목</label>
+              </div>
+            </div>
+            <div class="col-3">
+              <div class="form-floating">
+                <select class="form-select" id="noticeRange" name="noticeRange" required>
+                  <option value="4">전체(유저까지)</option>
+                  <option value="0">플래티넘만</option>
+                  <option value="1">골드까지</option>
+                  <option value="2">실버까지</option>
+                  <option value="3">브론즈까지</option>
+                </select>
+                <label for="noticeRange">범위 선택</label>
+              </div>
+            </div>
+            <div class="col-3">
+              <div class="form-floating">
+                <input type="date" class="form-control" id="noticeDate" placeholder="date" value="" name="writeTime"
+                  required />
+                <label for="noticeDate">날짜</label>
+              </div>
+            </div>
+            <div class="col-12 mt-3">
+              <div id="quillEditor" class="form-control" style="height: 300px;"></div>
+              <label for="noticeContent" class="form-label d-none">내용입력</label>
+              <textarea class="form-control d-none" id="noticeContent" rows="10" name="content"></textarea>
+            </div>
+            <div class="col-12 mt-3">
+              <div class="mb-3 w-50 float-start">
+                <input class="form-control" type="file" id="uploadFile" name="uploadFile">
+              </div>
+              <button type="submit" class="btn asset-success float-end px-3" id="writeNoticeBtn">작성하기</button>
+              <button type="button" class="btn asset-dark float-end me-2" data-bs-dismiss="modal">닫기</button>
+            </div>
+          </div>
+        </form>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="modal fade" id="readNoticeModal" tabindex="-1">
+  <div class="modal-dialog modal-dialog-centered modal-lg">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h1 class="modal-title fs-5 fw-bold py-1" id="noticeModaltitle">공지사항 및 이벤트</h1>
+      </div>
+      <div class="modal-body py-3">
+        <form id="readNoticeForm">
+          <div class="row g-2">
+            <div class="col-2">
+              <div class="form-floating">
+                <input type="text" class="form-control" id="readNoticeType" placeholder="title" value="" name="title"
+                  disabled required />
+                <label for="noticeType">종류</label>
+              </div>
+            </div>
+            <div class="col-10">
+              <div class="form-floating">
+                <input type="text" class="form-control" id="readNoticeTitle" placeholder="title" value="" name="title"
+                  disabled required />
+                <label for="noticeTitle">제목</label>
+              </div>
+            </div>
+            <div class="col-12 mt-3">
+              <label for="noticeContent" class="form-label">내용입력</label>
+              <textarea class="form-control" id="readNoticeContent" rows="10" name="content" disabled
+                required></textarea>
+            </div>
+            <div class="col-12 mt-3">
+              <button type="button" class="btn asset-dark float-end me-2" data-bs-dismiss="modal">닫기</button>
+            </div>
+          </div>
+        </form>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!--? 쪽지 모달 -->
+<div class="modal fade" id="sendMessageModal" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1">
+  <div class="modal-dialog modal-dialog-centered modal-lg">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h1 class="modal-title fs-5 fw-bold py-1" id="messageModalTitle">메세지 보내기</h1>
+      </div>
+      <div class="modal-body py-3">
+        <form id="sendMessageForm">
+          <div class="row g-2">
+            <div class="col-12 d-none">
+              <input type="text" class="form-control" id="messageCategory" placeholder="category" value="message"
+                name="category" required />
+            </div>
+            <div class="col-5">
+              <div class="form-floating">
+                <input type="text" class="form-control" id="messageTitle" placeholder="title" value="" name="title"
+                  required />
+                <label for="messageTitle">제목</label>
+              </div>
+            </div>
+            <div class="col-2">
+              <div class="form-floating">
+                <select class="form-select" id="messageType" name="messageType" required>
+                  <option value="일반">일반</option>
+                  <option value="긴급">긴급</option>
+                  <option value="개별">개별</option>
+                </select>
+                <label for="messageType">종류 선택</label>
+              </div>
+            </div>
+            <div class="col-3">
+              <div class="form-floating">
+                <select class="form-select" id="sendRange" name="sendRange" required>
+                  <option value="4">전체(유저까지)</option>
+                  <option value="0">플래티넘만</option>
+                  <option value="1">골드까지</option>
+                  <option value="2">실버까지</option>
+                  <option value="3">브론즈까지</option>
+                </select>
+                <label for="sendRange">범위 선택</label>
+              </div>
+            </div>
+            <div class="col-2">
+              <div class="form-floating">
+                <input type="text" class="form-control" id="selectedUser" placeholder="title" value=""
+                  name="selectedUser" required disabled />
+                <label for="selectedUser">유저아이디</label>
+              </div>
+            </div>
+            <div class="col-12 mt-3">
+              <label for="messageContent" class="form-label">내용입력</label>
+              <textarea class="form-control" id="messageContent" rows="10" name="content" required></textarea>
+            </div>
+            <div class="col-12 mt-3">
+              <button type="submit" class="btn asset-success float-end px-3" id="sendMessageBtn">전송하기</button>
+              <button type="button" class="btn asset-dark float-end me-2" data-bs-dismiss="modal">닫기</button>
+            </div>
+          </div>
+        </form>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!--? 확인, 내용 확인 및 삭제 모달 -->
+<div class="modal fade" id="messageContentModal" tabindex="-1">
+  <div class="modal-dialog modal-dialog-centered" style="width: 370px">
+    <div class="modal-content border-2">
+      <div class="modal-body text-center py-3">
+        <div id="messageContent" class="pt-3" style="font-size: 1.2rem"></div>
+      </div>
+      <div class="modal-footer justify-content-center py-2" style="background-color: #f8f9fa">
+        <button type="button" class="btn btn-sm btn-secondary confirmBtn" data-bs-dismiss="modal">확인</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="modal fade" id="boardConfirmModal" tabindex="-1">
+  <div class="modal-dialog modal-dialog-centered" style="width: 370px">
+    <div class="modal-content border-2">
+      <div class="modal-body text-center py-3">
+        <h5 id="boardConfirm" class="pt-3"></h5>
+      </div>
+      <div class="modal-footer justify-content-center py-2" style="background-color: #f8f9fa">
+        <button type="button" class="btn btn-sm btn-secondary confirmBtn" data-bs-dismiss="modal">확인</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="modal fade" id="boardDeleteModal" tabindex="-1">
+  <div class="modal-dialog modal-dialog-centered" style="width: 400px">
+    <div class="modal-content border-2 border-danger-subtle">
+      <div class="modal-body text-center py-3 bg-danger-subtle">
+        <div id="deleteBoardConfirm" class="pt-3">정말 삭제 하시겠습니까?</div>
+      </div>
+      <div class="modal-footer justify-content-end py-2" style="background-color: #f8f9fa">
+        <button type="button" class="btn btn-sm btn-danger" id="noticeDeleteConfirmBtn">삭제</button>
+        <button type="button" class="btn btn-sm btn-danger" id="bannerDeleteConfirmBtn">삭제</button>
+        <button type="button" class="btn btn-sm btn-secondary" data-bs-dismiss="modal">닫기</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!--? 문의 답변 모달 -->
+<div class="question modal fade" id="viewQuestionModal" tabindex="-1">
+  <div class="modal-dialog modal-dialog-centered">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h1 class="modal-title fs-5 fw-bold py-1" id="viewQuestionModaltitle">문의 확인 및 답변</h1>
+      </div>
+      <div class="modal-body rounded-3">
+        <form id="viewQuestionForm" class="p-2">
+          <div class="row g-2">
+            <div class="col-3">
+              <input class="form-control text-center" id="viewQuestionType" type="text" value="종류" readonly />
+            </div>
+            <div class="col-9">
+              <input class="form-control" id="viewQuestionTitle" type="text" value="제목" readonly />
+            </div>
+            <div class="col-12 mt-3">
+              <label for="viewQuestionContent" class="form-label">문의 내용</label>
+              <textarea class="form-control" id="viewQuestionContent" rows="5" name="content" readonly></textarea>
+            </div>
+            <div class="col-12 mt-4">
+              <label for="viewQuestionAnswer" class="form-label" id="viewQuestionLabel">답변 내용</label>
+              <div class="row mt-1 mb-3 g-2 row-cols-2 row-cols-lg-5" id="macroBtnGroup">
+                <div class="col px-1">
+                  <button type="button" class="btn btn-sm btn-outline-secondary w-100">매크로1</button>
+                </div>
+                <div class="col px-1">
+                  <button type="button" class="btn btn-sm btn-outline-secondary w-100">매크로2</button>
+                </div>
+                <div class="col px-1">
+                  <button type="button" class="btn btn-sm btn-outline-secondary w-100">매크로3</button>
+                </div>
+                <div class="col px-1">
+                  <button type="button" class="btn btn-sm btn-outline-secondary w-100">매크로4</button>
+                </div>
+                <div class="col px-1">
+                  <button type="button" class="btn btn-sm btn-outline-secondary w-100">매크로5</button>
+                </div>
+                <div class="col px-1">
+                  <button type="button" class="btn btn-sm btn-outline-secondary w-100" id="macro6">매크로6</button>
+                </div>
+                <div class="col px-1">
+                  <button type="button" class="btn btn-sm btn-outline-secondary w-100" id="macro7">매크로7</button>
+                </div>
+                <div class="col px-1">
+                  <button type="button" class="btn btn-sm btn-outline-secondary w-100" id="macro8">매크로8</button>
+                </div>
+                <div class="col px-1">
+                  <button type="button" class="btn btn-sm btn-outline-secondary w-100" id="macro9">매크로9</button>
+                </div>
+                <div class="col px-1">
+                  <button type="button" class="btn btn-sm btn-outline-secondary w-100" id="macro10">매크로10</button>
+                </div>
+              </div>
+              <textarea class="form-control" id="viewQuestionAnswer" rows="8" name="content" readonly></textarea>
+            </div>
+          </div>
+          <div class="col-12 mt-3">
+            <button type="button" class="btn asset-success float-end me-2" id="anserQuestionBtn">답변하기</button>
+            <button type="button" class="btn asset-success float-end me-2" id="modifyQuestionBtn">수정하기</button>
+            <button type="button" class="btn btn-secondary float-end me-2" data-bs-target="#viewQuestionModal"
+              data-bs-toggle="modal">닫기</button>
+          </div>
+        </form>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!--? 이벤트 배너 모달 -->
+<div class="modal fade" id="writeBannerModal" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1">
+  <div class="modal-dialog modal-dialog-centered modal-lg">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h1 class="modal-title fs-5 fw-bold py-1" id="bannerModaltitle">이벤트 배너</h1>
+      </div>
+      <div class="modal-body py-3">
+        <form id="writeBannerForm" enctype="multipart/form-data">
+          <div class="row g-2">
+            <div class="col-12 d-none">
+              <input type="text" class="form-control" id="bannerCategory" placeholder="category" value="banner"
+                name="category" required />
+            </div>
+            <div class="col-12">
+              <div class="input-group mb-3" id="bannerImg">
+                <span class="input-group-text">배너 이미지</span>
+                <span class="input-group-text bg-white me-3">메인페이지 노출, 크기: 256 * 366</span>
+                <input class="form-control rounded-start-1" type="file" id="uploadBannerFile" name="uploadBannerFile">
+                <button type="button" class="btn btn-sm asset-primary" id="bannerImgPreviewBtn">이미지 확인</button>
+              </div>
+            </div>
+            <div class="col-12">
+              <div class="form-floating">
+                <input type="text" class="form-control" id="bannerTitle" placeholder="title" value="" name="title"
+                  required />
+                <label for="bannerTitle">제목</label>
+              </div>
+            </div>
+            <div class="col-12 mt-3">
+              <label for="bannerContent" class="form-label">내용입력</label>
+              <textarea class="form-control" id="bannerContent" rows="10" name="content" required></textarea>
+            </div>
+            <div class="col-12 mt-3">
+              <div class="input-group mb-3" id="bannerContentImg">
+                <span class="input-group-text">내용 이미지</span>
+                <span class="input-group-text bg-white me-3">팝업창 내 노출</span>
+                <input class="form-control rounded-start-1" type="file" id="uploadContentFile" name="uploadContentFile">
+                <button type="button" class="btn btn-sm asset-primary" id="bannerContentImgPreviewBtn">이미지 확인</button>
+              </div>
+            </div>
+            <div class="col-12 mt-3">
+              <button type="submit" class="btn asset-success float-end px-3" id="writeBannerBtn">작성하기</button>
+              <button type="button" class="btn asset-dark float-end me-2" data-bs-dismiss="modal">닫기</button>
+            </div>
+          </div>
+        </form>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!--? 이미지 확인 모달 -->
+<div class="modal fade" id="imageCheckModal" tabindex="-1">
+  <div class="modal-dialog modal-dialog-centered">
+    <div class="modal-content border-2">
+      <div class="modal-body text-center py-3">
+      </div>
+      <div class="modal-footer justify-content-center py-2" style="background-color: #f8f9fa">
+        <button type="button" class="btn btn-sm btn-secondary confirmBtn" data-bs-dismiss="modal">확인</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!--? 설정모달 -->
+<div class="modal fade" id="providerModal" tabindex="-2">
+  <div class="modal-dialog modal-dialog-centered" style="width: 500px">
+    <div class="modal-content border-2 border-dark-subtle">
+      <div class="modal-header">
+        <h1 class="modal-title fs-5">프로바이더 노출설정</h1>
+      </div>
+      <div class="modal-body py-3">
+        <form class="row g-3" id="providerDisplayChangeForm">
+          <div class="col-4 pe-0 fs-6"><i class="bi bi-stopwatch"></i> 현재시간:</div>
+          <div class="col-8 ps-0 fs-6" id="clock"></div>
+          <div class="col-4 pe-0">
+            <div class="form-check">
+              <input class="form-check-input" type="checkbox" value="" id="reserve" name="reserve" />
+              <label class="form-check-label fs-6" for="reserve"> 점검 예약시간 설정: </label>
+            </div>
+          </div>
+          <div class="col-8">
+            <input type="text" class="text-center w-100" id="reserveDateSelector" name="date" value="" disabled />
+          </div>
+          <div class="col-12 text-center">
+            시작: 현시간 기준 <span class="text-danger fw-bold">5분 이후</span>부터 설정 / 종료: 현시간 기준 <span
+              class="text-danger fw-bold">2일 이내</span>
+            설정 가능
+          </div>
+          <div class="col-12">
+            <div class="form-check">
+              <input class="form-check-input" type="checkbox" name="cancelReserve" value="" id="cancelReserve" />
+              <label class="form-check-label fs-6" for="cancelReserve">
+                점검 예약 취소 [ <span class="text-danger fw-bold">모든 점검 예약이 취소</span>됩니다 ]
+              </label>
+            </div>
+          </div>
+          <hr />
+          <div class="col-md-8">
+            <select id="selectProviderName" class="form-select" name="providerName[]" multiple="multiple" required>
+              <option value="all">전체 프로바이더</option>
+            </select>
+          </div>
+          <div class="col-md-4">
+            <select id="selectDisplayState" class="form-select" name="displayState" required>
+              <option value=""></option>
+              <option value="show">보이기</option>
+              <option value="hide">숨기기</option>
+            </select>
+          </div>
+          <div class="col-12 text-end">
+            <button type="button" class="btn btn-secondary me-2" data-bs-dismiss="modal">닫기</button>
+            <button type="submit" class="btn asset-success">설정변경</button>
+          </div>
+        </form>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!--? 매크로 설정 모달 -->
+<div class="modal fade" id="setMacroModal" tabindex="-1">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h1 class="modal-title fs-5">매크로 매크로 설정</h1>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+      <div class="modal-body">
+        <div class="row row-cols-1 row-cols-lg-5 g-4">
+          <div class="col" data-slot="1">
+            <div class="card border-dark-subtle">
+              <div class="card-header">1번 슬롯</div>
+              <div class="card-body">
+                <div class="form-floating mb-3">
+                  <input type="text" class="form-control title-input" placeholder="제목" />
+                  <label>매크로 제목</label>
+                </div>
+                <div class="form-floating">
+                  <textarea class="form-control content-textarea" placeholder="내용" style="height: 350px"
+                    maxlength="500"></textarea>
+                  <label>매크로 내용(최대: 500자)</label>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="col" data-slot="2">
+            <div class="card border-dark-subtle">
+              <div class="card-header">2번 슬롯</div>
+              <div class="card-body">
+                <div class="form-floating mb-3">
+                  <input type="text" class="form-control title-input" placeholder="제목" />
+                  <label>매크로 제목</label>
+                </div>
+                <div class="form-floating">
+                  <textarea class="form-control content-textarea" placeholder="내용" style="height: 350px"
+                    maxlength="500"></textarea>
+                  <label>매크로 내용(최대: 500자)</label>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="col" data-slot="3">
+            <div class="card border-dark-subtle">
+              <div class="card-header">3번 슬롯</div>
+              <div class="card-body">
+                <div class="form-floating mb-3">
+                  <input type="text" class="form-control title-input" placeholder="제목" />
+                  <label>매크로 제목</label>
+                </div>
+                <div class="form-floating">
+                  <textarea class="form-control content-textarea" placeholder="내용" style="height: 350px"
+                    maxlength="500"></textarea>
+                  <label>매크로 내용(최대: 500자)</label>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="col" data-slot="4">
+            <div class="card border-dark-subtle">
+              <div class="card-header">4번 슬롯</div>
+              <div class="card-body">
+                <div class="form-floating mb-3">
+                  <input type="text" class="form-control title-input" placeholder="제목" />
+                  <label>매크로 제목</label>
+                </div>
+                <div class="form-floating">
+                  <textarea class="form-control content-textarea" placeholder="내용" style="height: 350px"
+                    maxlength="500"></textarea>
+                  <label>매크로 내용(최대: 500자)</label>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="col" data-slot="5">
+            <div class="card border-dark-subtle">
+              <div class="card-header">5번 슬롯</div>
+              <div class="card-body">
+                <div class="form-floating mb-3">
+                  <input type="text" class="form-control title-input" placeholder="제목" />
+                  <label>매크로 제목</label>
+                </div>
+                <div class="form-floating">
+                  <textarea class="form-control content-textarea" placeholder="내용" style="height: 350px"
+                    maxlength="500"></textarea>
+                  <label>매크로 내용(최대: 500자)</label>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="col" data-slot="6">
+            <div class="card border-dark-subtle">
+              <div class="card-header">6번 슬롯</div>
+              <div class="card-body">
+                <div class="form-floating mb-3">
+                  <input type="text" class="form-control title-input" placeholder="제목" />
+                  <label>매크로 제목</label>
+                </div>
+                <div class="form-floating">
+                  <textarea class="form-control content-textarea" placeholder="내용" style="height: 350px"
+                    maxlength="500"></textarea>
+                  <label>매크로 내용(최대: 500자)</label>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="col" data-slot="7">
+            <div class="card border-dark-subtle">
+              <div class="card-header">7번 슬롯</div>
+              <div class="card-body">
+                <div class="form-floating mb-3">
+                  <input type="text" class="form-control title-input" placeholder="제목" />
+                  <label>매크로 제목</label>
+                </div>
+                <div class="form-floating">
+                  <textarea class="form-control content-textarea" placeholder="내용" style="height: 350px"
+                    maxlength="500"></textarea>
+                  <label>매크로 내용(최대: 500자)</label>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="col" data-slot="8">
+            <div class="card border-dark-subtle">
+              <div class="card-header">8번 슬롯</div>
+              <div class="card-body">
+                <div class="form-floating mb-3">
+                  <input type="text" class="form-control title-input" placeholder="제목" />
+                  <label>매크로 제목</label>
+                </div>
+                <div class="form-floating">
+                  <textarea class="form-control content-textarea" placeholder="내용" style="height: 350px"
+                    maxlength="500"></textarea>
+                  <label>매크로 내용(최대: 500자)</label>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="col" data-slot="9">
+            <div class="card border-dark-subtle">
+              <div class="card-header">9번 슬롯</div>
+              <div class="card-body">
+                <div class="form-floating mb-3">
+                  <input type="text" class="form-control title-input" placeholder="제목" />
+                  <label>매크로 제목</label>
+                </div>
+                <div class="form-floating">
+                  <textarea class="form-control content-textarea" placeholder="내용" style="height: 350px"
+                    maxlength="500"></textarea>
+                  <label>매크로 내용(최대: 500자)</label>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="col" data-slot="10">
+            <div class="card border-dark-subtle">
+              <div class="card-header">10번 슬롯</div>
+              <div class="card-body">
+                <div class="form-floating mb-3">
+                  <input type="text" class="form-control title-input" placeholder="제목" />
+                  <label>매크로 제목</label>
+                </div>
+                <div class="form-floating">
+                  <textarea class="form-control content-textarea" placeholder="내용" style="height: 350px"
+                    maxlength="500"></textarea>
+                  <label>매크로 내용(최대: 500자)</label>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">닫기</button>
+        <button type="button" class="btn btn-secondary" id="setMacroBtn" disabled>답변 매크로 저장</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!--! 에이전트 접속 -->
+<div class="deposit modal fade" id="agentDepositModal" tabindex="-1">
+  <div class="modal-dialog modal-dialog-centered">
+    <div class="modal-content">
+      <div class="modal-header">
+        <div class="modal-title fs-5 fw-bold" id="agent-deposit-title">에이전트 입금신청</div>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+      <div class="modal-body fs-5">
+        <div class="row">
+          <div class="form col-12">
+            <div class="row g-2 justify-content-between align-items-center" id="deposit-btn-group">
+              <div class="col-6" id="deposit-cur-money">현재보유금</div>
+              <div class="col-6 text-end">
+                <span class="d-none" id="agentBalance"></span>
+                <span></span>
+                <span name="deposit-won">원</span>
+              </div>
+              <hr class="my-1" />
+              <div class="col-8" id="deposit-account">입금계좌</div>
+              <div class="col-4 float-end">
+                <button class="btn" id="deposit-req-bank">계좌문의하기</button>
+              </div>
+              <div class="col-12">
+                <input id="deposit-bank-value" class="form-control" type="text" value="계좌문의하기 버튼을 눌러주세요" readonly />
+              </div>
+              <div class="col-6" id="deposit-req-text">신청 할 금액</div>
+              <div class="col-6 text-end">
+                <span id="deposit-req-money"> </span>
+                <span name="deposit-won">원</span>
+              </div>
+              <div class="col-3">
+                <button type="button" class="btn btn-light" data-won="1">1<span name="deposit-man">만</span></button>
+              </div>
+              <div class="col-3">
+                <button type="button" class="btn btn-light" data-won="3">3<span name="deposit-man">만</span></button>
+              </div>
+              <div class="col-3">
+                <button type="button" class="btn btn-light" data-won="5">5<span name="deposit-man">만</span></button>
+              </div>
+              <div class="col-3">
+                <button type="button" class="btn btn-light" data-won="10">10<span name="deposit-man">만</span></button>
+              </div>
+              <div class="col-3">
+                <button type="button" class="btn btn-light" data-won="30">30<span name="deposit-man">만</span></button>
+              </div>
+              <div class="col-3">
+                <button type="button" class="btn btn-light" data-won="50">50<span name="deposit-man">만</span></button>
+              </div>
+              <div class="col-3">
+                <button type="button" class="btn btn-light" data-won="100">100<span name="deposit-man">만</span></button>
+              </div>
+              <div class="col-3">
+                <button id="deposit-modify" type="button" class="btn" data-won="0">정정</button>
+              </div>
+              <hr class="my-2" />
+              <div class="col-7" id="deposit-after-text">입금 후 보유금</div>
+              <div class="col-5 text-end">
+                <span id="deposit-after-money"></span>
+                <span name="deposit-won">원</span>
+              </div>
+              <div class="col-8"></div>
+              <div class="col-4 text-end">
+                <button id="deposit-submit" type="button" class="btn">입금 신청</button>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="withdraw modal fade" id="agentWithdrawModal" tabindex="-1">
+  <div class="modal-dialog modal-dialog-centered modal-lg">
+    <div class="modal-content">
+      <div class="modal-header">
+        <div class="modal-title fs-5 fw-bold" id="withdraw-title ">에이전트 출금신청</div>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+      <div class="modal-body">
+        <div class="row">
+          <div class="form col-12">
+            <div class="row g-2 justify-content-between align-items-center" id="withdraw-btn-group">
+              <div class="col-6" id="withdraw-cur-money">현재보유금</div>
+              <div class="col-6 text-end">
+                <span class="d-none" id="agentBalance"></span>
+                <span></span>
+                <span name="withdraw-won">원</span>
+              </div>
+              <hr class="my-1" />
+              <div class="col-12">
+                <div class="input-group">
+                  <span class="input-group-text w-25" id="withdraw-holder">예금주</span>
+                  <input type="text" class="form-control" value="" id="agentBankOwner" disabled />
+                </div>
+              </div>
+              <div class="col-12">
+                <div class="input-group">
+                  <span class="input-group-text w-25" id="withdraw-bank">은행</span>
+                  <input type="text" class="form-control" value="" id="agentBankName" disabled />
+                </div>
+              </div>
+              <div class="col-12">
+                <div class="input-group mt-0">
+                  <span class="input-group-text w-25" id="withdraw-account">계좌번호</span>
+                  <input type="text" class="form-control account" value="" id="agentBankNum" disabled />
+                </div>
+              </div>
+              <div class="col-6" id="withdraw-app-money">신청 할 금액</div>
+              <div class="col-6 text-end">
+                <span id="withdraw-req-money"></span>
+                <span name="withdraw-won"> 원</span>
+              </div>
+              <div class="col-3">
+                <button type="button" class="btn btn-light" data-won="1">1<span name="withdraw-man">만</span></button>
+              </div>
+              <div class="col-3">
+                <button type="button" class="btn btn-light" data-won="3">3<span name="withdraw-man">만</span></button>
+              </div>
+              <div class="col-3">
+                <button type="button" class="btn btn-light" data-won="5">5<span name="withdraw-man">만</span></button>
+              </div>
+              <div class="col-3">
+                <button type="button" class="btn btn-light" data-won="10">10<span name="withdraw-man">만</span></button>
+              </div>
+              <div class="col-3">
+                <button type="button" class="btn btn-light" data-won="30">30<span name="withdraw-man">만</span></button>
+              </div>
+              <div class="col-3">
+                <button type="button" class="btn btn-light" data-won="50">50<span name="withdraw-man">만</span></button>
+              </div>
+              <div class="col-3">
+                <button type="button" class="btn btn-light" data-won="100">100<span
+                    name="withdraw-man">만</span></button>
+              </div>
+              <div class="col-3">
+                <button type="button" class="btn" id="withdraw-modify">정정</button>
+              </div>
+              <hr class="my-2" />
+              <div class="col-7" id="withdraw-after-text">출금 후 보유금</div>
+              <div class="col-5 text-end"><span id="withdraw-after-money"></span><span name="withdraw-won"> 원</span>
+              </div>
+              <div class="col-5"></div>
+              <div class="col-5 text-end">
+                <button type="button" class="btn" id="withdraw-submit">출금 신청</button>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="exchange modal fade" id="agentExchangeModal" tabindex="-1">
+  <div class="modal-dialog modal-dialog-centered modal-sm">
+    <div class="modal-content">
+      <div class="modal-header">
+        <div class="modal-title fs-5 fw-bold" id="agent-exchange-title">에이전트 포인트전환</div>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+      <div class="modal-body fs-5">
+        <div class="row">
+          <div class="form col-12">
+            <div class="row g-2 justify-content-between align-items-center" id="exchange-btn-group">
+              <div class="col-6 mt-2" id="exchange-cur-money">현재 보유금</div>
+              <div class="col-6 text-end">
+                <span class="d-none" id="agentBalance"></span>
+                <span></span>
+                <span name="deposit-won">원</span>
+              </div>
+              <hr class="m-0" />
+              <div class="col-6" id="exchange-cur-point">현재 포인트</div>
+              <div class="col-6 text-end">
+                <span class="d-none" id="agentPoint"></span>
+                <span></span>
+                <span name="deposit-won">원</span>
+              </div>
+              <div class="col-12 text-center">
+                <i class="bi bi-caret-down-fill fs-3"></i>
+              </div>
+              <div class="col-12" style="font-size: 1rem">
+                <div class="input-group">
+                  <span class="input-group-text" id="withdraw-bank" style="width: 40%"> 전환 후 보유금 </span>
+                  <input type="text" class="form-control text-end" value="" id="after-exchange" disabled />
+                </div>
+              </div>
+              <div class="col-4 m-auto mt-2">
+                <button id="exchange-submit" type="button" class="btn">전환 신청</button>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="notice modal fade" id="agentConfirmModal" tabindex="-1">
+  <div class="modal-dialog modal-dialog-centered">
+    <div class="modal-content text-center">
+      <div class="modal-header d-block p-0"></div>
+      <div class="modal-body" id="confirm-text"></div>
+      <div class="modal-footer d-block">
+        <button type="button" id="notice-confirm-btn" class="btn btn-warning" data-bs-dismiss="modal"
+          tabindex="0">확인</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="give modal fade" id="giveBalanceModal" tabindex="-1">
+  <div class="modal-dialog modal-dialog-centered">
+    <div class="modal-content">
+      <div class="modal-header">
+        <div class="modal-title fs-5 fw-bold" id="user-balance-give-title">유저에게 보유금 지급</div>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+      <div class="modal-body fs-5">
+        <div class="row">
+          <div class="form col-12">
+            <div class="row g-2 justify-content-between align-items-center" id="give-balance-btn-group">
+              <div class="col-12 fw-bold asset-primary">- 지급 전</div>
+              <div class="col-8">나의 보유금</div>
+              <div class="col-4 text-end">
+                <span id="agent-give-balance-cur-money"></span>
+                <span name="deposit-won">원</span>
+              </div>
+              <div class="col-8" id="user-give-balacnce-cur-money-text">선택 유저 보유금</div>
+              <div class="col-4 text-end">
+                <span id="user-give-balance-cur-money"></span>
+                <span name="deposit-won">원</span>
+              </div>
+              <div id="giveTypeSelector" class="row justify-content-center">
+                <hr class="my-1" />
+                <div class="col-12">지급 유형</div>
+                <div class="form-check form-check-inline col">
+                  <input class="form-check-input" type="radio" name="giveType" id="giveTypeDefault" value="default"
+                    checked>
+                  <label class="form-check-label" for="giveTypeDefault">일반</label>
+                </div>
+                <div class="form-check form-check-inline col">
+                  <input class="form-check-input" type="radio" name="giveType" id="giveTypeLosing" value="losing">
+                  <label class="form-check-label" for="giveTypeLosing">루징</label>
+                </div>
+                <div class="form-check form-check-inline col d-none" id='lottoGiveCheck'>
+                  <input class="form-check-input" type="radio" name="giveType" id="giveTypeLottery" value="lottery">
+                  <label class="form-check-label" for="giveTypeLottery">로또</label>
+                </div>
+                <div class="form-check form-check-inline col">
+                  <input class="form-check-input" type="radio" name="giveType" id="giveTypeRecommend" value="recommend">
+                  <label class="form-check-label" for="giveTypeRecommend">지인추천</label>
+                </div>
+              </div>
+              <hr class="my-1" />
+              <div class="col-5">지급 할 금액</div>
+              <div class="col-6 mb-3 pt-1">
+                <input type="text" class="form-control text-center" id="give-req-money" autocomplete="off"
+                  placeholder="숫자만 입력 가능" maxlength="11" />
+              </div>
+              <div class="col-1">원</div>
+              <div class="col-3">
+                <button type="button" class="btn btn-light" data-won="1">1<span name="deposit-man">만</span></button>
+              </div>
+              <div class="col-3">
+                <button type="button" class="btn btn-light" data-won="3">3<span name="deposit-man">만</span></button>
+              </div>
+              <div class="col-3">
+                <button type="button" class="btn btn-light" data-won="5">5<span name="deposit-man">만</span></button>
+              </div>
+              <div class="col-3">
+                <button type="button" class="btn btn-light" data-won="10">10<span name="deposit-man">만</span></button>
+              </div>
+              <div class="col-3">
+                <button type="button" class="btn btn-light" data-won="30">30<span name="deposit-man">만</span></button>
+              </div>
+              <div class="col-3">
+                <button type="button" class="btn btn-light" data-won="50">50<span name="deposit-man">만</span></button>
+              </div>
+              <div class="col-3">
+                <button type="button" class="btn btn-light" data-won="100">100<span name="deposit-man">만</span></button>
+              </div>
+              <div class="col-3">
+                <button id="give-balance-modify" type="button" class="btn" data-won="0">정정</button>
+              </div>
+              <hr class="my-2" />
+              <div class="col-12 d-none" id="give-balance-reason-text">지급 사유</div>
+              <div class="col-12">
+                <textarea class="form-control d-none" id="giveBalanceMemo" rows="4"
+                  placeholder="지급 사유에 대해 입력하세요"></textarea>
+              </div>
+              <div class="col-12 fw-bold asset-danger">- 지급 후</div>
+              <div class="col-7">나의 보유금</div>
+              <div class="col-5 text-end">
+                <span id="agent-give-balance-after-money"></span>
+                <span name="deposit-won">원</span>
+              </div>
+              <div class="col-7" id="user-give-balance-after-text">유저 보유금</div>
+              <div class="col-5 text-end">
+                <span id="user-give-balance-after-money" class="fw-bold"></span>
+                <span name="deposit-won">원</span>
+              </div>
+              <div class="col-8"></div>
+              <div class="col-4 text-end">
+                <button id="give-balance-submit" type="button" class="btn">지급하기</button>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="take modal fade" id="takeBalanceModal" tabindex="-1">
+  <div class="modal-dialog modal-dialog-centered">
+    <div class="modal-content">
+      <div class="modal-header">
+        <div class="modal-title fs-5 fw-bold" id="user-take-title">유저에게 보유금 회수</div>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+      <div class="modal-body fs-5">
+        <div class="row">
+          <div class="form col-12">
+            <div class="row g-2 justify-content-between align-items-center" id="take-btn-group">
+              <div class="col-12 fw-bold asset-primary">- 회수 전</div>
+              <div class="col-8" id="user-take-cur-money-text"></div>
+              <div class="col-4 text-end">
+                <span id="user-take-cur-money"></span>
+                <span name="deposit-won">원</span>
+              </div>
+              <div class="col-8" id="agent-take-cur-money-text">나의 보유금</div>
+              <div class="col-4 text-end">
+                <span id="agent-take-cur-money"></span>
+                <span name="deposit-won">원</span>
+              </div>
+              <hr class="my-1" />
+              <div class="col-5" id="take-req-text">회수 할 금액</div>
+              <div class="col-6 mb-3 pt-1">
+                <input type="text" class="form-control text-center" id="take-req-money" autocomplete="off"
+                  placeholder="숫자만 입력 가능" maxlength="11" />
+              </div>
+              <div class="col-1">원</div>
+              <!-- <div class="col-6 text-end">
+                <span id="take-req-money" class="fw-bold">
+                </span>
+                <span name="deposit-won">원</span>
+              </div> -->
+              <div class="col-3">
+                <button type="button" class="btn btn-light" data-won="1">1<span name="deposit-man">만</span></button>
+              </div>
+              <!-- <div class="col-3">
+                <button type="button" class="btn btn-light" data-won="3">
+                  3<span name="deposit-man">만</span>
+                </button>
+              </div> -->
+              <div class="col-3">
+                <button type="button" class="btn btn-light" data-won="5">5<span name="deposit-man">만</span></button>
+              </div>
+              <div class="col-3">
+                <button type="button" class="btn btn-light" data-won="10">10<span name="deposit-man">만</span></button>
+              </div>
+              <div class="col-3">
+                <button type="button" class="btn btn-light" data-won="30">30<span name="deposit-man">만</span></button>
+              </div>
+              <div class="col-3">
+                <button type="button" class="btn btn-light" data-won="50">50<span name="deposit-man">만</span></button>
+              </div>
+              <div class="col-3">
+                <button type="button" class="btn btn-light" data-won="100">100<span name="deposit-man">만</span></button>
+              </div>
+              <div class="col-3">
+                <button type="button" class="btn btn-light border-warning border-3" data-won="all"
+                  id="wholeTake">전액</button>
+              </div>
+              <div class="col-3">
+                <button id="take-modify" type="button" class="btn" data-won="0">정정</button>
+              </div>
+              <hr class="my-2" />
+              <div class="col-12 d-none" id="take-reason-text">회수 사유</div>
+              <div class="col-12">
+                <textarea class="form-control d-none" id="takeMemo" rows="4" placeholder="회수 사유에 대해 입력하세요"></textarea>
+              </div>
+              <div class="col-12 fw-bold asset-danger">- 회수 후</div>
+              <div class="col-8" id="user-take-after-text">유저 보유금</div>
+              <div class="col-4 text-end">
+                <span id="user-take-after-money"></span>
+                <span name="deposit-won">원</span>
+              </div>
+              <div class="col-8" id="agent-take-after-text">나의 보유금</div>
+              <div class="col-4 text-end">
+                <span id="agent-take-after-money" class="fw-bold"></span>
+                <span name="deposit-won">원</span>
+              </div>
+              <div class="col-8"></div>
+              <div class="col-4 text-end">
+                <button id="take-submit" type="button" class="btn">회수하기</button>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!--? 에이전트 문의 모달 -->
+<div class="question modal fade" id="agentQuestionModal" tabindex="-1">
+  <div class="modal-dialog modal-dialog-centered modal-lg">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h1 class="modal-title fs-5 fw-bold py-1" id="questionListModaltitle">문의내역</h1>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+      <div class="modal-body px-4 rounded-3">
+        <table id="agentQna" class="display" style="width: 100%">
+          <thead>
+            <tr>
+              <th>IDX</th>
+              <th>문의일시</th>
+              <th>종류</th>
+              <th>제목</th>
+              <th>내용</th>
+              <th>상태</th>
+              <th>답변</th>
+              <th>답변일시</th>
+            </tr>
+          </thead>
+        </table>
+      </div>
+      <div class="modal-footer">
+        <button class="btn btn-sm btn-warning ms-auto" style="font-size: 0.9rem"
+          data-bs-target="#agentRequestQuestionModal" data-bs-toggle="modal">
+          문의하기
+        </button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="question modal fade" id="agentRequestQuestionModal" tabindex="-1">
+  <div class="modal-dialog modal-dialog-centered">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h1 class="modal-title fs-5 fw-bold py-1" id="reqQuestionModaltitle">에이전트 문의하기</h1>
+      </div>
+      <div class="modal-body rounded-3">
+        <form id="agentRequestQuestionForm" class="p-2">
+          <div class="row g-2">
+            <div class="col-12 d-none">
+              <input type="text" class="form-control" id="questionCategory" placeholder="category" value="question"
+                name="category" required />
+            </div>
+            <div class="col-3">
+              <div class="form-floating">
+                <select class="form-select" id="questionType" name="type" required>
+                  <option selected value="">선택</option>
+                  <option value="계좌">계좌</option>
+                  <option value="베팅">베팅</option>
+                  <option value="계정">계정</option>
+                  <option value="기타">기타</option>
+                </select>
+                <label for="questionType" class="text-black">카테고리</label>
+              </div>
+            </div>
+            <div class="col-9">
+              <div class="form-floating">
+                <input type="text" class="form-control" id="questionTitle" placeholder="title" value="" name="title"
+                  required />
+                <label for="questionTitle">제목</label>
+              </div>
+            </div>
+            <div class="col-12 mt-3">
+              <label for="questionContent" class="form-label text-white">문의 할 내용</label>
+              <textarea class="form-control" id="questionContent" rows="10" name="content" required></textarea>
+            </div>
+            <div class="col-12 mt-3">
+              <button type="submit" class="btn btn-warning float-end px-3" id="sendQuestionBtn">작성하기</button>
+              <button type="button" class="btn btn-secondary float-end me-2" data-bs-dismiss="modal">닫기</button>
+            </div>
+          </div>
+        </form>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="question modal fade" id="agentViewQuestionModal" tabindex="-1">
+  <div class="modal-dialog modal-dialog-centered">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h1 class="modal-title fs-5 fw-bold py-1" id="agentViewQuestionModaltitle">문의 확인 및 답변</h1>
+      </div>
+      <div class="modal-body rounded-3">
+        <form id="agentViewQuestionForm" class="p-2">
+          <div class="row g-2">
+            <div class="col-3">
+              <input class="form-control text-center" id="agentViewQuestionType" type="text" value="종류" readonly />
+            </div>
+            <div class="col-9">
+              <input class="form-control" id="agentViewQuestionTitle" type="text" value="제목" readonly />
+            </div>
+            <div class="col-12 mt-3">
+              <label for="agentViewQuestionContent" class="form-label">문의 내용</label>
+              <textarea class="form-control" id="agentViewQuestionContent" rows="5" name="content" readonly></textarea>
+            </div>
+            <div class="col-12 mt-4">
+              <label for="agentViewQuestionAnswer" class="form-label" id="agentViewQuestionLabel">답변 내용</label>
+              <textarea class="form-control" id="agentViewQuestionAnswer" rows="8" name="content" readonly></textarea>
+            </div>
+            <div class="col-12 mt-3">
+              <button type="button" class="btn btn-secondary float-end me-2" data-bs-dismiss="modal">확인</button>
+            </div>
+          </div>
+        </form>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!--? 에이전트 메시지 모달 -->
+<div class="message modal fade" id="agentMessageModal" tabindex="-1">
+  <div class="modal-dialog modal-dialog-centered modal-lg">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h1 class="modal-title fs-5 fw-bold py-1" id="messageListModaltitle">받은 쪽지</h1>
+        <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+      <div class="modal-body px-4 rounded-3">
+        <table id="agentMessage" class="display" style="width: 100%">
+          <thead>
+            <tr>
+              <th>IDX</th>
+              <th>받은일시</th>
+              <th>종류</th>
+              <th>제목</th>
+              <th>내용</th>
+              <th>읽음여부</th>
+            </tr>
+          </thead>
+        </table>
+      </div>
+      <div class="modal-footer">
+        <button class="btn btn-sm btn-danger me-auto" id="deleteAllModalOpen" style="font-size: 0.9rem">전체삭제</button>
+        <button class="btn btn-sm btn-warning ms-auto" id="readAllModalOpen" style="font-size: 0.9rem">전부읽기</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="message modal fade" id="agentViewMessageModal" tabindex="-1">
+  <div class="modal-dialog modal-dialog-centered">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h1 class="modal-title fs-5 fw-bold py-1" id="viewMessageModaltitle">쪽지 확인</h1>
+      </div>
+      <div class="modal-body rounded-3">
+        <form id="viewMessageForm" class="p-2">
+          <div class="row g-2">
+            <div class="col-3">
+              <input class="form-control text-center" id="viewMessageType" type="text" value="종류" readonly />
+            </div>
+            <div class="col-9">
+              <input class="form-control" id="viewMessageTitle" type="text" value="제목" readonly />
+            </div>
+            <div class="col-12 mt-3">
+              <label for="viewMessageContent" class="form-label text-white">내용</label>
+              <textarea class="form-control" id="viewMessageContent" rows="5" name="content" readonly></textarea>
+            </div>
+            <div class="col-12 mt-3">
+              <button type="button" class="btn btn-secondary float-end me-2" data-bs-target="#agentMessageModal"
+                data-bs-toggle="modal">확인</button>
+            </div>
+          </div>
+        </form>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="notice modal fade" id="agentAlertModal" tabindex="-1">
+  <div class="modal-dialog modal-dialog-centered">
+    <div class="modal-content text-center">
+      <div class="modal-header d-block p-0">
+        <i class="bi bi-exclamation-triangle-fill"></i>
+      </div>
+      <div class="modal-body" id="alert-text"></div>
+      <div class="modal-footer d-block">
+        <button type="button" class="btn btn-danger d-none" id="deleteAllMessageBtn">전체 삭제</button>
+        <button type="button" class="btn btn-warning d-none" id="readAllMessageBtn">모두 읽기</button>
+        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal" tabindex="0">확인</button>
+      </div>
+    </div>
+  </div>
+</div>

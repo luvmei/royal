@@ -1,0 +1,72 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="auth">
+  <select id='findAdmin'>
+    SELECT id, pw, type
+    FROM admin_user
+    WHERE id=#{id} AND type=9;
+  </select>
+
+  <select id='findAgent'>
+    SELECT id, pw, type
+    FROM user
+    WHERE id=#{id} AND type IN (0,1,2,3) AND state='정상' LIMIT 1;
+  </select>
+
+   <select id='findAdminInfo'>
+    SELECT id, type, sd_balance as balance
+    FROM admin_user    
+    WHERE id=#{id} LIMIT 1;
+  </select>
+
+  <select id='findAgentInfo'>
+    SELECT 
+      u.id, 
+      u.type,
+      u.state,
+      a.balance,
+      a.point,
+      t.node_id
+    FROM user as u
+    JOIN user_asset_info as a
+      ON u.user_id = a.user_id
+    JOIN system_tree as t
+      ON u.user_id = t.user_id
+    WHERE id=#{id} LIMIT 1;
+  </select>
+
+  <select id='insertConnectInfo'>
+    INSERT INTO user_connect_history
+      (
+		    user_id,
+		    time,
+		    type,
+		    ip_adress,
+        connect_domain,
+		    device,
+		    browser
+	    )
+    VALUES 
+	    (
+        <choose>
+            <when test="user_id != null">
+                #{user_id}
+            </when>
+            <otherwise>
+                (SELECT user_id FROM user WHERE id = #{id})
+            </otherwise>
+        </choose>,
+        #{time},
+        #{type},
+        #{ip_adress},
+        #{domain},
+        #{device},
+        #{browser}
+	    )
+  </select>
+
+  <select id='getOnlineAdmin'>
+    SELECT data
+    FROM sessions 
+  </select>
+</mapper>

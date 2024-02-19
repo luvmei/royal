@@ -1,0 +1,154 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="setting">    
+// 입금 보너스 설정
+  <select id='getBonusStatus'>
+    SELECT 
+      bonusState, 
+      joinBonusRate, 
+      joinEveryBonusRate,
+      dailyBonusRate, 
+      everyBonusRate
+    FROM setting
+  </select>
+
+  <update id='setBonusState'>
+    UPDATE setting
+    SET 
+      bonusState = #{bonusState},
+      joinBonusRate = #{joinBonusRate},
+      joinEveryBonusRate = #{joinEveryBonusRate},
+      dailyBonusRate = #{dailyBonusRate},
+      everyBonusRate = #{everyBonusRate}
+  </update>
+
+// 레벨별 자동안내 계좌정보
+  <select id="getVirtualAccount">
+    SELECT
+      virtualAccountState
+    FROM
+      setting
+  </select>
+
+  <select id="setVirtualAccount">
+    UPDATE setting
+    SET virtualAccountState = #{state}
+  </select>
+
+  <select id='getAutoBankInfo'>
+    SELECT user_level_id, bank, bank_num, bank_owner
+    FROM user_level_info
+  </select>
+
+  <update id="setAutoBankInfo">
+    UPDATE user_level_info 
+    SET bank = #{bank}, 
+        bank_num = #{account}, 
+        bank_owner = #{holder}
+    WHERE user_level_id = ${user_level_id}
+  </update>
+
+// 마진 설정
+  <select id='getMarginState'>
+    SELECT casinoBetMarginState, slotBetMarginState, casinoRollMarginState, slotRollMarginState
+    FROM setting
+  </select>
+
+  <update id='setMarginState'>
+    UPDATE setting
+    SET casinoBetMarginState = #{casinoBetMarginBtn}, slotBetMarginState = #{slotBetMarginBtn}, casinoRollMarginState = #{casinoRollMarginBtn}, slotRollMarginState = #{slotRollMarginBtn}  
+  </update>
+
+// 잭팟 설정
+  <select id='getJackpotState'>
+    SELECT 
+      stateRandomJackpot, 
+      currentJackpot, 
+      setJackpot, 
+      setMinJackpot, 
+      setMaxJackpot
+    FROM setting
+  </select>
+
+  <update id='setJackpotState'>
+    UPDATE setting
+    SET 
+      stateRandomJackpot = #{stateRandom},
+      setJackpot = #{setJackpot}, 
+      setMinJackpot = #{min}, 
+      setMaxJackpot = #{max}
+  </update>
+
+// 로또 설정
+  <select id='getLottoSetting'>
+    SELECT 
+      lottoWinnerAmount, 
+      lottoNextParticipation
+    FROM
+      setting
+  </select>
+
+  <update id='setLottoSetting'>
+    UPDATE setting
+    SET 
+      lottoWinnerAmount = ${winnerAmount},
+      lottoNextParticipation = ${nextParticipation}
+  </update>
+
+// 출석체크 설정
+  <select id='getAttendanceState'>
+    SELECT 
+      attEventAmount,
+      attEventCount
+    FROM setting
+  </select>
+
+  <select id='getAttRewardInfo'>
+    SELECT *
+    FROM attendance_reward
+  </select>
+
+  <select id='setAttendanceState'>
+    UPDATE setting
+    SET 
+      attEventAmount = #{attEventAmount},
+      attEventCount = #{attEventCount}
+  </select>
+
+  <update id='setAttRewardInfo'>
+    UPDATE attendance_reward
+    SET 
+      continueCounter = ${continueCounter},
+      reward_amount = ${reward_amount}
+      WHERE reward_id = ${reward_id}
+  </update>
+
+// 가상 입출금 설정
+  <select id='getVirtualState'>
+    SELECT 
+      virtualAutoState,
+      depoAutoMinTime, 
+      depoAutoMaxTime,
+      depoAutoMinMoney,
+      depoAutoMaxMoney,
+      withAutoMinTime,
+      withAutoMaxTime,
+      withAutoMinMoney,
+      withAutoMaxMoney
+    FROM setting
+  </select>
+
+  <select id='setVirtualState'>
+    UPDATE setting
+    SET
+      virtualAutoState = #{virtualAutoState},
+      depoAutoMinTime = ${depoAutoMinTime},
+      depoAutoMaxTime = ${depoAutoMaxTime},
+      depoAutoMinMoney = ${depoAutoMinMoney},
+      depoAutoMaxMoney = ${depoAutoMaxMoney},
+      withAutoMinTime = ${withAutoMinTime},
+      withAutoMaxTime = ${withAutoMaxTime},
+      withAutoMinMoney = ${withAutoMinMoney},
+      withAutoMaxMoney = ${withAutoMaxMoney}
+  </select>
+</mapper>

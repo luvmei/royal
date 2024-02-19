@@ -1,0 +1,225 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="detail">
+  <select id='deposit'>
+    SELECT
+      *
+    FROM
+      deposit_request_view
+    WHERE
+      입금신청일시 BETWEEN #{startDate} AND #{endDate}
+      AND 아이디 = #{userId}
+  </select>
+
+  <select id='withdraw'>
+    SELECT
+      *
+    FROM
+      withdraw_request_view
+    WHERE
+      출금신청일시 BETWEEN #{startDate} AND #{endDate}
+      AND 아이디 = #{userId}
+  </select>
+
+  <select id='give'>
+    SELECT
+      *
+    FROM
+      give_balance_view
+    WHERE
+      지급일시 BETWEEN #{startDate} AND #{endDate}   
+      AND 아이디 = #{userId}
+      </if>
+
+  </select>
+
+  <select id='take'>
+    SELECT
+      *
+    FROM
+      take_balance_view
+     WHERE
+      회수일시 BETWEEN #{startDate} AND #{endDate}
+      AND 아이디 = #{userId}
+  </select>
+
+  <select id='balance'>
+    SELECT
+      *
+    FROM
+      log_balance_view
+    WHERE
+      이벤트발생일시 BETWEEN #{startDate} AND #{endDate}
+      AND 아이디 = #{userId}
+  </select> 
+
+  <select id="point">
+    SELECT
+      *
+    FROM
+      log_point_view
+    WHERE
+      이벤트발생일시 BETWEEN #{startDate} AND #{endDate}
+      AND 아이디 = #{userId}
+  </select> 
+
+  <select id='betting'>
+    SELECT 
+      d.hl_detail_log_id AS IDX,	
+      d.event_date AS 발생시간,
+    	d.user_id AS 아이디,
+    	d.transaction_id AS 트랜젝션ID,
+    	d.round_id AS 라운드ID,
+    	d.provider_name AS 프로바이더,
+    	d.category AS 게임타입,
+      g.title AS 게임명,
+      d.transaction_type AS 내역타입,
+    	d.transaction_amount AS 금액,
+    	d.previous_balance AS 이전보유금,
+    	d.available_balance AS 이후보유금,
+      t.node_id,
+      u.type AS 회원타입,
+      u.join_code AS 가입코드
+    FROM log_hl_betting_detail AS d 
+    JOIN royal.user AS u ON u.id = d.user_id
+    JOIN royal.game_list AS g ON d.provider_name = g.provider AND d.game_id = g.uuid
+    JOIN royal.system_tree AS t ON u.upper_agt = t.user_id
+    JOIN royal.user AS u2 on u.upper_agt = u2.user_id 
+    <where>
+      SUBSTR(event_date, 1, 16) BETWEEN #{startDate} AND #{endDate}
+      AND u.id = #{userId}
+      <if test="searchValue != null and searchValue != ''">
+        AND (
+        d.user_id LIKE CONCAT('%', #{searchValue}, '%')
+        OR d.transaction_id LIKE CONCAT('%', #{searchValue}, '%')
+        OR d.round_id LIKE CONCAT('%', #{searchValue}, '%')
+        OR d.provider_name LIKE CONCAT('%', #{searchValue}, '%')
+        OR d.category LIKE CONCAT('%', #{searchValue}, '%')
+        OR g.title LIKE CONCAT('%', #{searchValue}, '%')
+        OR d.transaction_type LIKE CONCAT('%', #{searchValue}, '%')
+        OR d.transaction_amount LIKE CONCAT('%', #{searchValue}, '%')
+        OR d.previous_balance LIKE CONCAT('%', #{searchValue}, '%')
+        OR d.available_balance LIKE CONCAT('%', #{searchValue}, '%')
+        )
+      </if>
+    </where>
+      ORDER BY ${orderColumn} ${orderDirection}
+      LIMIT ${pageSize} OFFSET ${offset}
+  </select>
+
+  <select id='getTotalDetailRecordsCount'>
+    SELECT count(*) AS totalRecordsCount
+    FROM log_hl_betting_detail AS d
+    JOIN royal.user AS u ON u.id = d.user_id
+    JOIN royal.game_list AS g ON d.game_id = g.uuid
+    WHERE
+      event_date BETWEEN #{startDate} AND #{endDate}
+      AND u.id = #{userId}
+      
+      <if test="searchValue != null and searchValue != ''">
+        AND (
+        d.user_id LIKE CONCAT('%', #{searchValue}, '%')
+        OR d.transaction_id LIKE CONCAT('%', #{searchValue}, '%')
+        OR d.round_id LIKE CONCAT('%', #{searchValue}, '%')
+        OR d.provider_name LIKE CONCAT('%', #{searchValue}, '%')
+        OR d.category LIKE CONCAT('%', #{searchValue}, '%')
+        OR g.title LIKE CONCAT('%', #{searchValue}, '%')
+        OR d.transaction_type LIKE CONCAT('%', #{searchValue}, '%')
+        OR d.transaction_amount LIKE CONCAT('%', #{searchValue}, '%')
+        OR d.previous_balance LIKE CONCAT('%', #{searchValue}, '%')
+        OR d.available_balance LIKE CONCAT('%', #{searchValue}, '%')
+        )
+      </if>
+  </select> 
+
+  <select id='summaryBetting'>
+    SELECT 
+      *
+    FROM
+      log_summary_view
+    WHERE
+      결과수신시간 BETWEEN #{startDate} AND #{endDate}
+      AND 아이디 = #{userId}
+  </select>
+
+  <select id='connect'>
+    <choose>
+      <when test="userType != '4'">
+        SELECT
+          *
+        FROM 
+          agent_connect_view
+        WHERE
+          접속일시 BETWEEN #{startDate} AND #{endDate}
+          AND 아이디 = #{userId}
+      </when>
+      <otherwise>
+        SELECT
+          *
+        FROM 
+          user_connect_view
+        WHERE
+          접속일시 BETWEEN #{startDate} AND #{endDate}
+          AND 아이디 = #{userId}
+      </otherwise>
+    </choose>
+  </select>
+
+   <select id='message'>
+    SELECT 
+      message_id    as 'IDX',
+      receive_time  as '받은일시',
+      type          as '종류',
+      title         as '제목',
+      content       as '내용',
+      is_read       as '읽음여부'
+    FROM board_receive_message
+    WHERE receiver = (SELECT user_id
+                    FROM user
+                    WHERE id = #{userId})        
+          AND is_delete = 0
+  </select>
+
+  <select id='qna'>
+    SELECT
+      *
+    FROM board_qna_view    
+    WHERE
+      아이디 = #{userId}
+  </select>
+
+  <select id='recommend'>
+    SELECT
+      u.level AS '레벨',
+      u.id AS '아이디', 
+     	u.nickname AS '닉네임', 
+      u.name AS '이름', 
+     	u.join_code AS '가입코드', 
+     	u.join_date AS '가입일시', 
+     	a.total_deposit AS '총입금액',
+     	a.total_withdraw AS '총출금액',
+     	c.c_m_total_roll AS '카지노총롤링',
+     	c.s_m_total_roll AS '슬롯총롤링',
+     	b.c_m_total_betting AS '카지노총베팅',
+     	b.c_m_total_win AS '카지노총획득',
+     	b.s_m_total_betting AS '슬롯총베팅',
+     	b.s_m_total_win AS '슬롯총획득'  
+    FROM user u
+    JOIN user_asset_info a ON u.user_id = a.user_id 
+    JOIN user_commission_info c ON u.user_id = c.user_id 
+    JOIN user_betting_info b ON u.user_id = b.user_id
+    WHERE u.recommend_id = #{userId}
+  </select>
+
+  <select id='needInfo'>
+    SELECT 
+    	u.id AS 아이디, 
+    	u.type AS 타입, 
+    	a.balance AS 보유금, 
+    	u.join_code AS 가입코드  
+    FROM user AS u 
+    JOIN user_asset_info AS a 
+    ON u.user_id = a.user_id 
+    WHERE u.id = #{id}
+  </select>
+</mapper>

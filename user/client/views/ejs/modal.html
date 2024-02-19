@@ -1,0 +1,1337 @@
+<!-- ======= System Modals ======= -->
+<div id="systemModals">
+  <div class="login modal fade" id="loginModal" tabindex="-1">
+    <div class="modal-dialog modal-dialog-centered">
+      <div class="modal-content">
+        <form id="login-data">
+          <div class="modal-header">
+            <div class="modal-title" id="login-title">로그인</div>
+            <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Close"></button>
+          </div>
+          <div class="modal-body text-black">
+            <div class="form-floating mb-3">
+              <input type="text" class="form-control login-input" id="login-id" placeholder="아이디" name="id"
+                maxlength="20" autocomplete="off" required />
+              <label for="login-id">아이디</label>
+            </div>
+            <div class="form-floating mb-2">
+              <input type="password" class="form-control login-input" id="login-pw" placeholder="비밀번호" name="pw"
+                autocomplete="off" required />
+              <label for="login-pw">비밀번호</label>
+            </div>
+            <div class="login-message">
+              <br />
+            </div>
+            <% if (!isLogin) { %>
+            <div class="input-group my-3">
+              <img src="/user/captcha" class="captcha-img bg-white rounded-start" alt="CAPTCHA" onclick="loadCaptcha()">
+              <input type="text" class="form-control captcha-input" placeholder="이미지 클릭 시 새로고침" name="captcha"
+                maxlength="3" required />
+            </div>
+            <% } %>
+            <div class="d-flex justify-content-end">
+              <!-- <div class="form-check">
+                <input class="form-check-input" type="checkbox" value="" id="remember" />
+                <label class="form-check-label" for="flexCheckDefault" id="login-save">
+                  계정 정보 저장
+                </label>
+              </div> -->
+              <a href="#" id="login-forget">비밀번호를 잊으셨나요?</a>
+            </div>
+          </div>
+          <div class="modal-footer">
+            <button type="submit" class="btn" id="login-btn">로그인</button>
+          </div>
+        </form>
+        <div class="text-center">
+          <span class="join-text text-white-50" id="login-notyet"> 아직 계정이 없으신가요? </span>
+          <a data-bs-toggle="modal" data-bs-target="#joinModal" id="login-join">회원가입</a>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="join modal fade" id="joinModal" tabindex="-1">
+    <div class="modal-dialog modal-dialog-centered modal-lg">
+      <div class="modal-content">
+        <form id="join-data">
+          <div class="modal-header">
+            <div class="modal-title" id="join-title">회원가입</div>
+            <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="close"></button>
+          </div>
+          <div class="modal-body">
+            <div class="row g-4">
+              <div class="col-12 col-lg-6">
+                <div class="input-group">
+                  <div class="form-floating">
+                    <input type="text" class="form-control" id="join-id" name="id" placeholder="아이디" minlength="6"
+                      maxlength="12" autocomplete="off" required />
+                    <label for="join-id">아이디</label>
+                  </div>
+                  <button class="btn" type="button" id="join-id-btn">중복확인</button>
+                </div>
+                <div class="description" id="join-id-desc">영어 소문자, 숫자 조합 6~12자</div>
+              </div>
+              <div class="col-12 col-lg-6">
+                <div class="input-group">
+                  <div class="form-floating">
+                    <input type="password" class="form-control" id="join-pw" name="pw" placeholder="비밀번호" minlength="8"
+                      maxlength="16" autocomplete="off" required />
+                    <label for="join-pw">비밀번호</label>
+                  </div>
+                  <button class="btn" type="button" id="join-pw-btn">비밀번호 확인</button>
+                </div>
+                <div class="description" id="join-pw-desc">영문, 숫자, 특수문자 조합 8~16자</div>
+              </div>
+              <div class="col-12 col-lg-4">
+                <div class="input-group">
+                  <div class="form-floating">
+                    <input type="text" class="form-control" id="join-nick" name="nickname" placeholder="닉네임"
+                      minlength="2" autocomplete="off" maxlength="8" required />
+                    <label for="join-nick">닉네임</label>
+                  </div>
+                  <button class="btn" type="button" id="join-nick-btn">중복확인</button>
+                </div>
+                <div class="description" id="join-nick-desc">한글, 영문, 숫자 4~12자</div>
+              </div>
+              <div class="col-12 col-lg-4">
+                <div class="input-group">
+                  <div class="form-floating">
+                    <input type="text" class="form-control" id="join-name" name="name" placeholder="이름" minlength="2"
+                      maxlength="20" autocomplete="off" required />
+                    <label for="join-name">이름</label>
+                  </div>
+                </div>
+                <div class="description" id="join-name-desc">예금주와 동일한 실명</div>
+              </div>
+              <div class="col-12 col-lg-4">
+                <div class="input-group">
+                  <div class="form-floating">
+                    <input type="text" class="form-control" id="join-phone-num" name="phone" placeholder="전화번호"
+                      minlength="10" autocomplete="off" maxlength="11" required />
+                    <label for="join-phone-num">전화번호</label>
+                  </div>
+                  <button class="btn" type="button" id="join-phone-btn">중복확인</button>
+                </div>
+                <div class="description" id="join-phone-desc">( - ) 없이 입력</div>
+              </div>
+              <div class="col-lg-4">
+                <select class="form-select" id="join-bank" name="bank" required>
+                  <option selected id="join-bank-select" value="">은행 선택</option>
+                  <option value="국민" id="bank-01">국민</option>
+                  <option value="기업" id="bank-02">기업</option>
+                  <option value="농협" id="bank-03">농협</option>
+                  <option value="신한" id="bank-04">신한</option>
+                  <option value="우리" id="bank-05">우리</option>
+                  <option value="하나" id="bank-06">하나</option>
+                  <option value="카카오뱅크" id="bank-07">카카오뱅크</option>
+                  <option value="토스뱅크" id="bank-08">토스뱅크</option>
+                  <option value="케이뱅크" id="bank-09">케이뱅크</option>
+                  <option value="우체국" id="bank-10">우체국</option>
+                  <option value="SC제일" id="bank-11">SC제일</option>
+                  <option value="한국씨티" id="bank-12">한국씨티</option>
+                  <option value="새마을금고" id="bank-13">새마을금고</option>
+                  <option value="수협" id="bank-14">수협</option>
+                  <option value="신협" id="bank-15">신협</option>
+                  <option value="경남" id="bank-16">경남</option>
+                  <option value="부산" id="bank-17">부산</option>
+                  <option value="광주" id="bank-18">광주</option>
+                  <option value="대구" id="bank-19">대구</option>
+                  <option value="제주" id="bank-20">제주</option>
+                  <option value="전북" id="bank-21">전북</option>
+                </select>
+              </div>
+              <div class="col-lg-4">
+                <div class="form-floating">
+                  <input type="text" class="form-control" id="join-account-num" name="bank_num" placeholder="계좌번호"
+                    minlength="11" maxlength="14" autocomplete="off" required />
+                  <label for="join-account-num">계좌번호</label>
+                </div>
+                <div class="description" id="join-account-num-desc">( - ) 없이 숫자만 입력</div>
+              </div>
+              <div class="col-lg-4">
+                <div class="form-floating">
+                  <input type="text" class="form-control" id="join-account-holder" name="bank_owner" placeholder="예금주"
+                    minlength="3" maxlength="10" autocomplete="off" required />
+                  <label for="join-account-holder">예금주</label>
+                </div>
+                <div class="description" id="join-account-holder-desc">실명만 가능</div>
+              </div>
+              <div class="<%= recommend == 0 ? 'col-lg-6' : 'col-lg-4' %>">
+                <div class="input-group">
+                  <div class="form-floating">
+                    <input type="password" class="form-control" id="join-withdraw-pw" name="bank_pw"
+                      placeholder="출금 비밀번호" maxlength="6" autocomplete="off" required />
+                    <label for="join-withdraw-pw">출금 비밀번호</label>
+                  </div>
+                  <button class="btn" type="button" id="join-withdraw-pw-btn">비밀번호 확인</button>
+                </div>
+                <div class="description" id="join-withdraw-pw-desc">숫자 6자</div>
+              </div>
+              <div class="<%= recommend == 0 ? 'col-lg-6' : 'col-lg-4' %>">
+                <div class="input-group">
+                  <div class="form-floating">
+                    <input type="text" class="form-control" id="join-code" name="join_code" placeholder="가입코드"
+                      minlength="4" maxlength="20" autocomplete="off" required />
+                    <label for="join-code">가입코드</label>
+                  </div>
+                  <button class="btn" type="button" id="join-code-btn">가입코드 확인</button>
+                </div>
+                <div class="description" id="join-code-desc"></div>
+              </div>
+              <div class="col-lg-4 <%= recommend == 0 ? 'd-none' : '' %>">
+                <div class="input-group">
+                  <div class="form-floating">
+                    <input type="text" class="form-control" id="join-recommend" name="recommend" placeholder="추천인ID"
+                      minlength="4" maxlength="12" autocomplete="off" />
+                    <label for="join-recommend">추천인코드</label>
+                  </div>
+                  <button class="btn" type="button" id="join-recommend-btn">추천인 확인</button>
+                </div>
+                <div class="description" id="join-recommend-desc">없을 시 미입력</div>
+              </div>
+            </div>
+          </div>
+          <div class="modal-footer">
+            <button type="button" class="btn" id="join-btn">회원가입</button>
+          </div>
+          <div class="text-center">
+            <span class="join-text text-white-50" id="join-already"> 이미 계정이 있으신가요? </span>
+            <a data-bs-toggle="modal" data-bs-target="#loginModal" id="join-login">로그인</a>
+          </div>
+        </form>
+      </div>
+    </div>
+  </div>
+  <div class="deposit modal fade" id="depositModal" tabindex="-1">
+    <div class="modal-dialog modal-dialog-centered modal-lg">
+      <div class="modal-content">
+        <div class="modal-header">
+          <div class="modal-title" id="deposit-title">입금신청</div>
+          <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Close"></button>
+        </div>
+        <div class="modal-body">
+          <div class="row">
+            <div class="check col-12 col-lg-6">
+              <h3 id="deposit-sub">- 입금신청 전 필수 확인사항</h3>
+              <p id="deposit-content-1">입금계좌를 확인하지 않으시고 이전 계좌로 입금 시 책임은 본인에게 있습니다.</p>
+              <p id="deposit-content-2">입금계좌는 수시로 변경되오니 반드시 계좌번호를 확인하신 후 입금해 주시기 바랍니다.</p>
+              <p id="deposit-content-3">입금 시 입금자명은 반드시 회원님의 실명으로 입금해 주시기 바랍니다.</p>
+              <p id="deposit-content-4">은행 점검 시간에는 입금이 지연될 수 있으니 점검 시간을 확인해 주시기 바랍니다.</p>
+              <p id="deposit-content-5">자세한 문의사항은 고객센터를 이용해 주시기 바랍니다.</p>
+              <a id="deposit-banktime" data-bs-toggle="modal" data-bs-target="#bankModal">은행 업무시간 확인하기</a>
+            </div>
+            <div class="form col-12 col-lg-6">
+              <div class="row g-2 justify-content-between align-items-center p-3" id="deposit-btn-group">
+                <div class="col-6" id="deposit-cur-money">현재 보유금</div>
+                <div class="col-6 text-end">
+                  <% if (isLogin) { %>
+                  <span class="userBalance"></span>
+                  <% } else { %>
+                  <span></span>
+                  <% } %>
+                  <span name="deposit-won">원</span>
+                </div>
+                <hr class="my-1" />
+                <div class="col-6" id="deposit-account">입금계좌</div>
+                <div class="col-6 float-end">
+                  <button class="btn" id="deposit-req-bank">계좌문의하기</button>
+                </div>
+                <div class="col-12">
+                  <input id="deposit-bank-value" class="form-control" type="text" value="계좌문의하기 버튼을 눌러주세요" readonly />
+                </div>
+                <div class="col-6" id="deposit-req-text">신청 할 금액</div>
+                <div class="col-6 text-end">
+                  <span id="deposit-req-money"> </span>
+                  <span name="deposit-won">원</span>
+                </div>
+                <div class="col-3">
+                  <button type="button" class="btn btn-light" data-won="1">1<span name="deposit-man">만</span></button>
+                </div>
+                <div class="col-3">
+                  <button type="button" class="btn btn-light" data-won="3">3<span name="deposit-man">만</span></button>
+                </div>
+                <div class="col-3">
+                  <button type="button" class="btn btn-light" data-won="5">5<span name="deposit-man">만</span></button>
+                </div>
+                <div class="col-3">
+                  <button type="button" class="btn btn-light" data-won="10">10<span name="deposit-man">만</span></button>
+                </div>
+                <div class="col-3">
+                  <button type="button" class="btn btn-light" data-won="30">30<span name="deposit-man">만</span></button>
+                </div>
+                <div class="col-3">
+                  <button type="button" class="btn btn-light" data-won="50">50<span name="deposit-man">만</span></button>
+                </div>
+                <div class="col-3">
+                  <button type="button" class="btn btn-light" data-won="100">100<span
+                      name="deposit-man">만</span></button>
+                </div>
+                <div class="col-3">
+                  <button id="deposit-modify" type="button" class="btn" data-won="0">정정</button>
+                </div>
+                <hr class="my-2" />
+                <div class="col-7" id="deposit-bonus-text">입금 보너스</div>
+                <div class="col-5 text-end">
+                  <span id="deposit-bonus-money"></span>
+                  <span name="deposit-won">원</span>
+                </div>
+                <div class="col-7" id="deposit-after-text">입금 후 보유금</div>
+                <div class="col-5 text-end">
+                  <span id="deposit-after-money"></span>
+                  <span name="deposit-won">원</span>
+                </div>
+                <div class="col-5">
+                  <button id="deposit-history" type="button" class="btn btn-outline-warning history"
+                    data-bs-target="#depositHistoryModal" data-bs-toggle="modal">입금내역 확인</button>
+                </div>
+                <div class="col-5 text-end ms-auto">
+                  <button id="deposit-submit" type="button" class="btn">입금 신청</button>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="bankHistory modal fade" id="depositHistoryModal" tabindex="-1">
+    <div class="modal-dialog modal-dialog-centered modal-lg">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h1 class="modal-title fs-5 fw-bold py-1">입금내역</h1>
+          <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Close"></button>
+        </div>
+        <div class="modal-body px-4 rounded-3">
+          <table id="depositHistory" class="display" style="width: 100%">
+            <thead>
+              <tr>
+                <th>IDX</th>
+                <th>신청일시</th>
+                <th>신청금액</th>
+                <th>보너스금액</th>
+                <th>전체금액</th>
+                <th>처리현황</th>
+                <th>처리일시</th>
+              </tr>
+            </thead>
+          </table>
+        </div>
+        <div class="modal-footer pe-0">
+          <button class="btn asset-success float-end" style="font-size: 0.9rem;" data-bs-target="#userInfoModal"
+            data-bs-toggle="modal">
+            회원정보
+          </button>
+          <button class="btn asset-primary float-end ms-1" style="font-size: 0.9rem;" data-bs-target="#depositModal"
+            data-bs-toggle="modal">
+            입금신청
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="withdraw modal fade" id="withdrawModal" tabindex="-1">
+    <div class="modal-dialog modal-dialog-centered modal-lg">
+      <div class="modal-content">
+        <div class="modal-header">
+          <div class="modal-title" id="withdraw-title">출금신청</div>
+          <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Close"></button>
+        </div>
+        <div class="modal-body">
+          <div class="row">
+            <div class="check col-12 col-lg-6">
+              <h3 id="withdraw-sub">- 출금신청 전 필수 확인사항</h3>
+              <p id="withdraw-content-1">출금신청은 신청한 금액만큼 보유머니에서 차감되어 계좌로 입금됩니다.</p>
+              <p id="withdraw-content-2">출금은 회원가입 시 입력한 계좌정보로만 가능합니다.</p>
+              <p id="withdraw-content-3">출금신청 시 회원가입 시 등록한 출금비밀번호를 입력 해 주세요.</p>
+              <p id="withdraw-content-4">은행 점검 시간에는 입금이 지연될 수 있으니 점검 시간을 확인해 주시기 바랍니다.</p>
+              <p id="withdraw-content-5">자세한 문의사항은 고객센터를 이용해 주시기 바랍니다.</p>
+              <a data-bs-toggle="modal" data-bs-target="#bankModal" id="withdraw-banktime">은행 업무시간 확인하기</a>
+            </div>
+            <div class="form col-12 col-lg-6">
+              <div class="row g-2 justify-content-between align-items-center p-3" id="withdraw-btn-group">
+                <div class="col-6" id="withdraw-cur-money">현재 보유금</div>
+                <div class="col-6 text-end">
+                  <% if (isLogin) { %>
+                  <span class="userBalance"></span>
+                  <% } else { %>
+                  <span></span>
+                  <% } %>
+                  <span name="withdraw-won">원</span>
+                </div>
+                <hr class="my-1" />
+                <div class="col-12">
+                  <div class="input-group">
+                    <span class="input-group-text" id="withdraw-holder">예금주</span>
+                    <input type="text" class="form-control" value="마카오박" disabled />
+                  </div>
+                </div>
+                <div class="col-12">
+                  <div class="input-group">
+                    <span class="input-group-text" id="withdraw-bank">은행</span>
+                    <input type="text" class="form-control" value="새마을금고" disabled />
+                  </div>
+                </div>
+                <div class="col-12">
+                  <div class="input-group mt-0">
+                    <span class="input-group-text" id="withdraw-account">계좌번호</span>
+                    <input type="text" class="form-control account" value="322918855039838" disabled />
+                  </div>
+                </div>
+                <div class="col-6" id="withdraw-app-money">신청 할 금액</div>
+                <div class="col-6 text-end">
+                  <span id="withdraw-req-money"></span>
+                  <span name="withdraw-won"> 원</span>
+                </div>
+                <div class="col-3">
+                  <button type="button" class="btn btn-light" data-won="1">1<span name="withdraw-man">만</span></button>
+                </div>
+                <div class="col-3">
+                  <button type="button" class="btn btn-light" data-won="3">3<span name="withdraw-man">만</span></button>
+                </div>
+                <div class="col-3">
+                  <button type="button" class="btn btn-light" data-won="5">5<span name="withdraw-man">만</span></button>
+                </div>
+                <div class="col-3">
+                  <button type="button" class="btn btn-light" data-won="10">10<span
+                      name="withdraw-man">만</span></button>
+                </div>
+                <div class="col-3">
+                  <button type="button" class="btn btn-light" data-won="30">30<span
+                      name="withdraw-man">만</span></button>
+                </div>
+                <div class="col-3">
+                  <button type="button" class="btn btn-light" data-won="50">50<span
+                      name="withdraw-man">만</span></button>
+                </div>
+                <div class="col-3">
+                  <button type="button" class="btn btn-light" data-won="100">100<span
+                      name="withdraw-man">만</span></button>
+                </div>
+                <div class="col-3">
+                  <button type="button" class="btn" id="withdraw-modify">정정</button>
+                </div>
+                <div class="col-7" id="withdraw-after-text">출금 후 보유금</div>
+                <div class="col-5 text-end"><span id="withdraw-after-money"></span><span name="withdraw-won"> 원</span>
+                </div>
+                <hr class="my-2" />
+                <div class="col-12">
+                  <div class="input-group">
+                    <span class="input-group-text" id="withdraw-holder">출금 비밀번호</span>
+                    <input id="withdraw-password" type="password" class="form-control" maxlength="6" autocomplete="off"
+                      value="" placeholder="숫자 6자리 입력" />
+                  </div>
+                </div>
+                <div class="col-5">
+                  <button type="button" id="withdraw-history" class="btn btn-outline-warning history"
+                    data-bs-target="#withdrawHistoryModal" data-bs-toggle="modal">출금내역 확인</button>
+                </div>
+                <div class="col-5 text-end ms-auto">
+                  <button type="button" class="btn" id="withdraw-submit">출금 신청</button>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="bankHistory modal fade" id="withdrawHistoryModal" tabindex="-1">
+    <div class="modal-dialog modal-dialog-centered modal-lg">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h1 class="modal-title fs-5 fw-bold py-1">출금내역</h1>
+          <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Close"></button>
+        </div>
+        <div class="modal-body px-4 rounded-3">
+          <table id="withdrawHistory" class="display" style="width: 100%">
+            <thead>
+              <tr>
+                <th>IDX</th>
+                <th>신청일시</th>
+                <th>신청금액</th>
+                <th>처리현황</th>
+                <th>처리일시</th>
+              </tr>
+            </thead>
+          </table>
+        </div>
+        <div class="modal-footer pe-0">
+          <button class="btn asset-success float-end" style="font-size: 0.9rem;" data-bs-target="#userInfoModal"
+            data-bs-toggle="modal">
+            회원정보
+          </button>
+          <button class="btn asset-danger float-end ms-1" style="font-size: 0.9rem;" data-bs-target="#withdrawModal"
+            data-bs-toggle="modal">
+            출금신청
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="bankTime modal fade" id="bankModal" tabindex="-1">
+    <div class="modal-dialog modal-dialog-centered modal-lg">
+      <div class="modal-content pb-0">
+        <div class="modal-header">
+          <div class="modal-title">은행 점검시간 안내</div>
+          <a class="fs-4 text-white back-btn" data-bs-toggle="modal" data-bs-target="#depositModal">
+            <i class="bi bi-arrow-left"></i>
+          </a>
+        </div>
+        <div class="modal-body">
+          <div class="row justify-content-around align-items-center">
+            <div class="col-3 col-lg-2 bankName">국민은행</div>
+            <div class="col-9 col-lg-4 maintenance">00:00 ~ 00:05<br />정기: 2주 토, 3주 일 00:00 ~ 06:20</div>
+            <hr class="d-lg-none" />
+            <div class="col-3 col-lg-2 bankName">농협</div>
+            <div class="col-9 col-lg-4 maintenance">00:00 ~ 01:30<br />정기: 매주 첫 영업일 00:00 ~ 06:30</div>
+            <hr />
+            <div class="col-3 col-lg-2 bankName">신한은행</div>
+            <div class="col-9 col-lg-4 maintenance">23:30 ~ 00:05<br />정기: 매월 2째주 일요일 00:00 ~ 04:00</div>
+            <hr class="d-lg-none" />
+            <div class="col-3 col-lg-2 bankName">하나은행</div>
+            <div class="col-9 col-lg-4 maintenance">00:00 ~ 00:30<br />정기: 매주 첫 영업일 00:00 ~ 06:30</div>
+            <hr />
+            <div class="col-3 col-lg-2 bankName">우리은행</div>
+            <div class="col-9 col-lg-4 maintenance">00:00 ~ 00:20<br />정기: 매월 2째주 토요일 23:50 ~ 06:00</div>
+            <hr class="d-lg-none" />
+            <div class="col-3 col-lg-2 bankName">대구은행</div>
+            <div class="col-9 col-lg-4 maintenance">00:00 ~ 01:00<br />매주 일요일 00:00 ~ 08:00</div>
+            <hr />
+            <div class="col-3 col-lg-2 bankName">기업은행</div>
+            <div class="col-9 col-lg-4 maintenance">23:00 ~ 00:30</div>
+            <hr class="d-lg-none" />
+            <div class="col-3 col-lg-2 bankName">부산은행</div>
+            <div class="col-9 col-lg-4 maintenance">23:00 ~ 01:00</div>
+            <hr />
+            <div class="col-3 col-lg-2 bankName">외환은행</div>
+            <div class="col-9 col-lg-4 maintenance">23:00 ~ 00:00</div>
+            <hr class="d-lg-none" />
+            <div class="col-3 col-lg-2 bankName">새마을금고</div>
+            <div class="col-9 col-lg-4 maintenance">23:30 ~ 01:00</div>
+            <hr />
+            <div class="col-3 col-lg-2 bankName">SC제일은행</div>
+            <div class="col-9 col-lg-4 maintenance">23:40 ~ 00:40</div>
+            <hr class="d-lg-none" />
+            <div class="col-3 col-lg-2 bankName">광주은행</div>
+            <div class="col-9 col-lg-4 maintenance">00:00 ~ 05:00</div>
+            <hr />
+            <div class="col-3 col-lg-2 bankName">우체국</div>
+            <div class="col-9 col-lg-4 maintenance">23:40 ~ 00:00, 04:00 ~ 05:00</div>
+            <hr class="d-lg-none" />
+            <div class="col-3 col-lg-2 bankName">전북은행</div>
+            <div class="col-9 col-lg-4 maintenance">00:00 ~ 05:00</div>
+            <hr />
+            <div class="col-3 col-lg-2 bankName">부산은행</div>
+            <div class="col-9 col-lg-4 maintenance">00:00 ~ 00:30</div>
+            <hr class="d-lg-none" />
+            <div class="col-3 col-lg-2 bankName">제주은행</div>
+            <div class="col-9 col-lg-4 maintenance">00:00 ~ 06:00</div>
+            <hr />
+            <div class="col-3 col-lg-2 bankName">씨티은행</div>
+            <div class="col-9 col-lg-4 maintenance">23:55 ~ 00:05</div>
+            <hr class="d-lg-none" />
+            <div class="col-3 col-lg-2 bankName">대구은행</div>
+            <div class="col-9 col-lg-4 maintenance">00:00 ~ 01:00</div>
+            <hr />
+            <div class="col-3 col-lg-2 bankName">수협</div>
+            <div class="col-9 col-lg-4 maintenance">23:50 ~ 00:30</div>
+            <hr class="d-lg-none" />
+            <div class="col-3 col-lg-2 bankName">경남은행</div>
+            <div class="col-9 col-lg-4 maintenance">03:00 ~ 08:40</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="reward modal fade" id="rewardModal" tabindex="-1">
+    <div class="modal-dialog modal-dialog-centered">
+      <div class="modal-content">
+        <div class="modal-header">
+          <div class="modal-title" id="reward-title">콤프 전환신청</div>
+          <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Close"></button>
+        </div>
+        <div class="modal-body">
+          <div class="form col-12 mt-2">
+            <div class="row g-2 justify-content-between align-items-center p-3 pb-1" id="reward-btn-group">
+              <div class="col-6" id="reward-cur-point">현재 포인트</div>
+              <div class="col-6 text-end">
+                <% if (isLogin) { %>
+                <span id="rewardCurrentPoint"></span>
+                <% } else { %>
+                <span></span>
+                <% } %>
+                <span name="withdraw-won">원</span>
+              </div>
+              <hr class="my-1" />
+              <div class="col-6" id="reward-app-money">전환 할 포인트</div>
+              <div class="col-6 text-end">
+                <span id="rewardRequestPoint"></span>
+                <span name="withdraw-won"> 원</span>
+              </div>
+              <div class="col-3">
+                <button type="button" class="btn btn-light" data-won="1">1<span name="withdraw-man">만</span></button>
+              </div>
+              <div class="col-3">
+                <button type="button" class="btn btn-light" data-won="3">3<span name="withdraw-man">만</span></button>
+              </div>
+              <div class="col-3">
+                <button type="button" class="btn btn-light" data-won="5">5<span name="withdraw-man">만</span></button>
+              </div>
+              <div class="col-3">
+                <button type="button" class="btn btn-light" data-won="10">10<span name="withdraw-man">만</span></button>
+              </div>
+              <div class="col-3">
+                <button type="button" class="btn btn-light" data-won="30">30<span name="withdraw-man">만</span></button>
+              </div>
+              <div class="col-3">
+                <button type="button" class="btn btn-light" data-won="50">50<span name="withdraw-man">만</span></button>
+              </div>
+              <div class="col-3">
+                <button type="button" class="btn btn-light" data-won="100">100<span
+                    name="withdraw-man">만</span></button>
+              </div>
+              <div class="col-3">
+                <button type="button" class="btn" id="reward-modify">정정</button>
+              </div>
+              <hr class="my-2" />
+              <div class="col-12" id="reward-after-text">전환 후 보유금</div>
+              <div class="col-5 text-center">
+                <span id="rewarCurrentBalance"></span>
+                <span name="withdraw-won"> 원</span>
+              </div>
+              <div class="col-2 text-center">▶</div>
+              <div class="col-5 text-center">
+                <span id="afterRewardBalance"></span>
+                <span name="withdraw-won"> 원</span>
+              </div>
+              <div class="col-5">
+                <button type="button" class="btn btn-outline-warning history mt-3" id="reward-history"
+                  data-bs-target="#rewardHistoryModal" data-bs-toggle="modal">전환내역 확인</button>
+              </div>
+              <div class="col-5 text-end ms-auto">
+                <button type="button" class="btn mt-3" id="reward-submit">전환 신청</button>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="bankHistory modal fade" id="rewardHistoryModal" tabindex="-1">
+    <div class="modal-dialog modal-dialog-centered">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h1 class="modal-title fs-5 fw-bold py-1">콤프전환</h1>
+          <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Close"></button>
+        </div>
+        <div class="modal-body px-4 rounded-3">
+          <table id="rewardHistory" class="display" style="width: 100%">
+            <thead>
+              <tr>
+                <th>IDX</th>
+                <th>신청일시</th>
+                <th>신청금액</th>
+              </tr>
+            </thead>
+          </table>
+        </div>
+        <div class="modal-footer pe-0">
+          <button class="btn asset-success float-end" style="font-size: 0.9rem;" data-bs-target="#userInfoModal"
+            data-bs-toggle="modal">
+            회원정보
+          </button>
+          <button class="btn asset-danger float-end ms-1" style="font-size: 0.9rem;" data-bs-target="#rewardModal"
+            data-bs-toggle="modal">
+            콤프전환신청
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="bankHistory modal fade" id="recommendHistoryModal" tabindex="-1">
+    <div class="modal-dialog modal-dialog-centered">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h1 class="modal-title fs-5 fw-bold py-1">추천인 목록</h1>
+          <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Close"></button>
+        </div>
+        <div class="modal-body px-4 rounded-3">
+          <table id="recommendHistory" class="display" style="width: 100%">
+            <thead>
+              <tr>
+                <th>가입일시</th>
+                <th>아이디</th>
+              </tr>
+            </thead>
+          </table>
+        </div>
+        <div class="modal-footer pe-0">
+          <button class="btn asset-success float-end" style="font-size: 0.9rem;" data-bs-target="#userInfoModal"
+            data-bs-toggle="modal">
+            회원정보
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="login modal fade" id="settingModal" tabindex="-1">
+    <div class="modal-dialog modal-dialog-centered">
+      <div class="modal-content">
+        <form id="change-data">
+          <div class="modal-header">
+            <div class="modal-title pt-3" id="setting-title"></div>
+            <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Close"></button>
+          </div>
+          <div class="modal-body text-black mt-3">
+            <div class="form-floating mb-3">
+              <input type="text" class="form-control" id="beforeChange" placeholder="변경전" name="beforeChange"
+                required />
+              <label for="beforeChange"></label>
+            </div>
+            <div class="form-floating mb-2">
+              <input type="text" class="form-control" id="setChange" placeholder="변경내용" name="setChange"
+                autocomplete="off" required />
+              <label for="setChange"></label>
+            </div>
+            <div class="form-floating mb-2">
+              <input type="text" class="form-control" id="setChangeCheck" placeholder="변경내용확인" name="setChangeCheck"
+                autocomplete="off" required />
+              <label for="setChangeCheck"></label>
+            </div>
+            <div class="description" id="setting-desc"></div>
+          </div>
+          <div class="modal-footer">
+            <button type="button" class="btn" id="change-nick-btn">닉네임 변경</button>
+            <button type="button" class="btn" id="change-password-btn">비밀번호 변경</button>
+          </div>
+        </form>
+      </div>
+    </div>
+  </div>
+  <div class="userInfo modal fade" id="userInfoModal" tabindex="-1">
+    <div class="modal-dialog modal-dialog-centered">
+      <div class="modal-content">
+        <div class="modal-header">
+          <div class="modal-title">회원 정보</div>
+          <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Close"></button>
+        </div>
+        <div class="modal-body text-white">
+          <div class="userInfoTable row">
+            <div class="col-4 type">
+              <i class="fa-solid fa-ranking-star"></i> 레벨
+            </div>
+            <div class="col-8 value">
+              <span id="userLevel"></span>
+            </div>
+            <div class="col-4 type">
+              <i class="fa-solid fa-user"></i>아이디
+            </div>
+            <div class="col-8 value">
+              <span id="userId"></span>
+            </div>
+            <div class="col-4 type">
+              <i class="fa-solid fa-lock"></i>비밀번호
+            </div>
+            <div class="col-8 value">
+              <button type="button" class="btn btn-sm btn-warning" id="requestQna">변경요청</button>
+            </div>
+            <div class="col-4 type">
+              <i class="fa-regular fa-id-card"></i>이름
+            </div>
+            <div class="col-8 value">
+              <span id="userName"></span>
+            </div>
+            <div class="col-4 type">
+              <i class="fa-solid fa-star"></i>닉네임
+            </div>
+            <div class="col-8 value">
+              <span id="userNick"></span>
+            </div>
+            <div class="col-4 type">
+              <i class="fa-solid fa-phone"></i>전화번호
+            </div>
+            <div class="col-8 value">
+              <span id="userPhone"></span>
+            </div>
+            <div class="col-4 type">
+              <i class="fa-solid fa-sack-dollar"></i>보유금
+            </div>
+            <div class="col-8 value">
+              <span id="userBalance"></span>
+              <span name="deposit-won">원</span>
+            </div>
+            <div class="col-4 type">
+              <i class="fa-solid fa-p"></i>포인트
+            </div>
+            <div class="col-8 value">
+              <span id="userPoint"></span>P
+            </div>
+            <div class="col-4 type">
+              <i class="fa-solid fa-money-check-dollar"></i>계좌정보
+            </div>
+            <div class="col-8 value">
+              <button type="button" class="btn btn-sm btn-warning" id="requestAccount">변경요청</button>
+            </div>
+            <div class="col-4 type bankInfo">
+              은행
+            </div>
+            <div class="col-8 value">
+              <span id="userBank"></span>
+            </div>
+            <div class="col-4 type bankInfo">
+              계좌번호
+            </div>
+            <div class="col-8 value">
+              <span id="userAccount"></span>
+            </div>
+            <div class="col-4 type bankInfo">
+              예금주
+            </div>
+            <div class="col-8 value">
+              <span id="userOwner"></span>
+            </div>
+          </div>
+          <div class="row g-2 m-0 p-0">
+            <div class="col-6 mt-2">
+              <button type="button" class="btn asset-success historyBtn w-100" data-bs-target="#depositHistoryModal"
+                data-bs-toggle="modal">입금내역</button>
+            </div>
+            <div class="col-6 mt-2">
+              <button type="button" class="btn asset-danger historyBtn w-100" data-bs-target="#withdrawHistoryModal"
+                data-bs-toggle="modal">출금내역</button>
+            </div>
+            <div class="col-6 mt-2">
+              <button type="button" class="btn asset-primary historyBtn w-100" data-bs-target="#rewardHistoryModal"
+                data-bs-toggle="modal">콤프전환내역</button>
+            </div>
+            <div class="col-6 mt-2">
+              <button type="button" class="btn asset-warning historyBtn w-100" data-bs-target="#recommendHistoryModal"
+                data-bs-toggle="modal">추천인내역</button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="lottery modal fade" id="lotteryListModal" tabindex="-1">
+    <div class="modal-dialog modal-dialog-centered modal-lg">
+      <div class="modal-content">
+        <div class="modal-header">
+          <div class="modal-title" id="lottery-title">로또이벤트 회차정보</div>
+          <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Close"></button>
+        </div>
+        <div class="modal-body">
+          <div class="list-group" id="lotteryList">
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="lottery modal fade" id="lotteryDetailModal" tabindex="-1">
+    <div class="modal-dialog modal-dialog-centered modal-xl modal-dialog-scrollable">
+      <div class="modal-content">
+        <div class="modal-header">
+          <div class="modal-title" id="lottery-title">로또이벤트 상세내역</div>
+          <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Close"></button>
+        </div>
+        <div class="modal-body">
+          <div class="list-group" id="lotteryDetail">
+          </div>
+        </div>
+        <div class="modal-footer">
+          <button class="btn btn-sm btn-warning" data-bs-target="#lotteryListModal" data-bs-toggle="modal">회차정보</button>
+        </div>
+      </div>
+    </div>
+  </div>
+  <% if (isLogin) { %>
+  <div class="question modal fade" id="noticeModal" tabindex="-1">
+    <div class="modal-dialog modal-dialog-centered modal-lg" style="max-width: 1200px;">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h1 class="modal-title fs-5 fw-bold py-1" id="questionListModaltitle">공지사항</h1>
+          <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Close"></button>
+        </div>
+        <div class="modal-body px-4 rounded-3">
+          <table id="noticeList" class="display" style="width: 100%">
+            <thead>
+              <tr>
+                <th>IDX</th>
+                <th>공지일자</th>
+                <th>종류</th>
+                <th>제목</th>
+                <th></th>
+              </tr>
+            </thead>
+          </table>
+        </div>
+        <div class="modal-footer"></div>
+      </div>
+    </div>
+  </div>
+  <div class="question modal fade" id="readNoticeModal" tabindex="-1">
+    <div class="modal-dialog modal-dialog-centered modal-lg">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h1 class="modal-title fs-5 fw-bold py-1" id="noticeModaltitle">공지사항 및 이벤트</h1>
+        </div>
+        <div class="modal-body py-3">
+          <form id="readNoticeForm">
+            <div class="row g-2">
+              <div class="col-2">
+                <div class="form-floating">
+                  <input type="text" class="form-control" id="readNoticeType" placeholder="title" value="" name="title"
+                    disabled required />
+                  <label for="noticeType">종류</label>
+                </div>
+              </div>
+              <div class="col-10">
+                <div class="form-floating">
+                  <input type="text" class="form-control" id="readNoticeTitle" placeholder="title" value="" name="title"
+                    disabled required />
+                  <label for="noticeTitle">제목</label>
+                </div>
+              </div>
+              <div class="col-12 mt-3">
+                <label for="noticeContent" class="form-label">내용입력</label>
+                <textarea class="form-control" id="readNoticeContent" rows="10" name="content" disabled
+                  required></textarea>
+              </div>
+              <div class="col-12 mt-3">
+                <button type="button" class="btn asset-dark float-end me-2" data-bs-dismiss="modal">닫기</button>
+              </div>
+            </div>
+          </form>
+        </div>
+        <div class="modal-footer"></div>
+      </div>
+    </div>
+  </div>
+  <div class="question modal fade" id="questionModal" tabindex="-1">
+    <div class="modal-dialog modal-dialog-centered modal-lg">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h1 class="modal-title fs-5 fw-bold py-1" id="questionListModaltitle">문의내역</h1>
+          <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Close"></button>
+        </div>
+        <div class="modal-body px-4 rounded-3">
+          <table id="questionList" class="display" style="width: 100%">
+            <thead>
+              <tr>
+                <th>IDX</th>
+                <th>문의일시</th>
+                <th>종류</th>
+                <th>제목</th>
+                <th>내용</th>
+                <th>상태</th>
+              </tr>
+            </thead>
+          </table>
+        </div>
+        <div class="modal-footer">
+          <button class="btn btn-sm btn-warning ms-auto" style="font-size: 0.9rem" data-bs-target="#reqQuestionModal"
+            data-bs-toggle="modal">
+            문의하기
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="question modal fade" id="reqQuestionModal" tabindex="-1">
+    <div class="modal-dialog modal-dialog-centered">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h1 class="modal-title fs-5 fw-bold py-1" id="reqQuestionModaltitle">문의하기</h1>
+        </div>
+        <div class="modal-body rounded-3">
+          <form id="reqQuestionForm" class="p-2">
+            <div class="row g-2">
+              <div class="col-12 d-none">
+                <input type="text" class="form-control" id="questionCategory" placeholder="category" value="question"
+                  name="category" required />
+              </div>
+              <div class="col-3">
+                <div class="form-floating">
+                  <select class="form-select" id="questionType" name="type" required>
+                    <option selected value="">선택</option>
+                    <option value="계좌">계좌</option>
+                    <option value="베팅">베팅</option>
+                    <option value="계정">계정</option>
+                    <option value="기타">기타</option>
+                  </select>
+                  <label for="questionType" class="text-black">카테고리</label>
+                </div>
+              </div>
+              <div class="col-9">
+                <div class="form-floating">
+                  <input type="text" class="form-control" id="questionTitle" placeholder="title" value="" name="title"
+                    required />
+                  <label for="questionTitle">제목</label>
+                </div>
+              </div>
+              <div class="col-12 mt-3">
+                <label for="questionContent" class="form-label text-white">문의 할 내용</label>
+                <textarea class="form-control" id="questionContent" rows="10" name="content" spellcheck="false"
+                  required></textarea>
+              </div>
+              <div class="col-12 mt-3">
+                <button type="submit" class="btn btn-warning float-end px-3" id="sendQuestionBtn">작성하기</button>
+                <button type="button" class="btn btn-secondary float-end me-2" data-bs-dismiss="modal">닫기</button>
+              </div>
+            </div>
+          </form>
+        </div>
+        <div class="modal-footer"></div>
+      </div>
+    </div>
+  </div>
+  <div class="question modal fade" id="viewQuestionModal" tabindex="-1">
+    <div class="modal-dialog modal-dialog-centered">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h1 class="modal-title fs-5 fw-bold py-1" id="viewQuestionModaltitle">문의 확인 및 답변</h1>
+        </div>
+        <form id="viewQuestionForm" class="p-2">
+          <div class="modal-body rounded-3">
+            <div class="row g-2">
+              <div class="col-3">
+                <input class="form-control text-center" id="viewQuestionType" type="text" value="종류" readonly />
+              </div>
+              <div class="col-9">
+                <input class="form-control" id="viewQuestionTitle" type="text" value="제목" readonly />
+              </div>
+              <div class="col-12 mt-3">
+                <label for="viewQuestionContent" class="form-label text-white">문의 내용</label>
+                <textarea class="form-control" id="viewQuestionContent" rows="5" name="content" readonly></textarea>
+              </div>
+              <div class="col-12 mt-4">
+                <label for="viewQuestionAnswer" class="form-label text-white" id="viewQuestionLabel">답변
+                  내용</label>
+                <textarea class="form-control" id="viewQuestionAnswer" rows="8" name="content" readonly></textarea>
+              </div>
+              <div class="col-12 mt-3">
+                <button type="button" class="btn btn-secondary float-end me-2" data-bs-target="#questionModal"
+                  data-bs-toggle="modal">확인</button>
+              </div>
+            </div>
+          </div>
+          <div class="modal-footer"></div>
+        </form>
+      </div>
+    </div>
+  </div>
+  <div class="message modal fade" id="messageModal" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1">
+    <div class="modal-dialog modal-dialog-centered modal-lg">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h1 class="modal-title fs-5 fw-bold py-1" id="messageListModaltitle">받은 메세지</h1>
+          <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Close"
+            id="messageModalCloser"></button>
+        </div>
+        <div class="modal-body px-4 rounded-3">
+          <table id="messageList" class="display" style="width: 100%">
+            <thead>
+              <tr>
+                <th>IDX</th>
+                <th>받은일시</th>
+                <th>종류</th>
+                <th>제목</th>
+                <th>내용</th>
+                <th>읽음여부</th>
+              </tr>
+            </thead>
+          </table>
+        </div>
+        <div class="modal-footer">
+          <button class="btn btn-sm btn-danger me-auto" id="deleteAllModalOpen" style="font-size: 0.9rem">전체삭제</button>
+          <button class="btn btn-sm btn-warning ms-auto" id="readAllModalOpen" style="font-size: 0.9rem">전부읽기</button>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="message modal fade" id="viewMessageModal" tabindex="-1">
+    <div class="modal-dialog modal-dialog-centered">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h1 class="modal-title fs-5 fw-bold py-1" id="viewMessageModaltitle">메세지 확인</h1>
+        </div>
+        <form id="viewMessageForm" class="p-2">
+          <div class="modal-body rounded-3">
+            <div class="row g-2">
+              <div class="col-3">
+                <input class="form-control text-center" id="viewMessageType" type="text" value="종류" readonly />
+              </div>
+              <div class="col-9">
+                <input class="form-control" id="viewMessageTitle" type="text" value="제목" readonly />
+              </div>
+              <div class="col-12 mt-3">
+                <label for="viewMessageContent" class="form-label text-white">내용</label>
+                <textarea class="form-control" id="viewMessageContent" rows="15" name="content" readonly></textarea>
+              </div>
+              <div class="col-12 mt-3">
+                <button type="button" class="btn btn-secondary float-end me-2" data-bs-target="#messageModal"
+                  data-bs-toggle="modal">확인</button>
+              </div>
+            </div>
+          </div>
+          <div class="modal-footer"></div>
+        </form>
+      </div>
+    </div>
+  </div>
+  <div class="attendance modal fade" id="attendanceModal" tabindex="-1">
+    <div class="modal-dialog modal-dialog-centered modal-lg">
+      <div class="modal-content pb-0">
+        <div class="modal-header">
+          <h1 class="modal-title fs-5 fw-bold py-1" id="attendanceModalTitle">출석 체크 - 10월</h1>
+          <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Close"></button>
+        </div>
+        <div class="modal-body" id="attendanceTable">
+        </div>
+      </div>
+    </div>
+  </div>
+  <% } %>
+
+  <div class="notice modal fade" id="confirmModal" tabindex="-1">
+    <div class="modal-dialog modal-dialog-centered">
+      <div class="modal-content text-center">
+        <div class="modal-header d-block p-0">
+          <i class="bi bi-check2-circle"></i>
+        </div>
+        <div class="modal-body" id="confirm-text"></div>
+        <div class="modal-footer d-block">
+          <button type="button" id="notice-confirm-btn" class="btn btn-warning" data-bs-dismiss="modal"
+            tabindex="0">확인</button>
+          <button type="button" id="after-reset" class="btn btn-warning d-none" data-bs-dismiss="modal"
+            tabindex="0">확인</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="notice modal fade" id="sportModal" tabindex="-1">
+    <div class="modal-dialog modal-dialog-centered">
+      <div class="modal-content text-center">
+        <div class="modal-header d-block p-0">
+          <i class="bi bi-check2-circle"></i>
+        </div>
+        <div class="modal-body" id="confirm-text">
+          <h3 class="mb-2">라이브 스포츠를 실행하시겠습니까?</h3>
+        </div>
+        <div class="modal-footer d-block">
+          <button type="button" id="sport-start" class="btn btn-warning" data-bs-dismiss="modal"
+            tabindex="0">시작하기</button>
+          <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">닫기</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="notice modal fade" id="alertModal" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1">
+    <div class="modal-dialog modal-dialog-centered">
+      <div class="modal-content text-center">
+        <div class="modal-header d-block p-0">
+          <i class="bi bi-exclamation-triangle-fill"></i>
+        </div>
+        <div class="modal-body" id="alert-text"></div>
+        <div class="modal-footer d-block">
+          <button type="button" class="btn btn-secondary" data-bs-dismiss="modal" aria-label="Close">확인</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="notice modal fade" id="alertMsgModal" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1">
+    <div class="modal-dialog modal-dialog-centered">
+      <div class="modal-content text-center">
+        <div class="modal-header d-block p-0">
+          <i class="bi bi-exclamation-triangle-fill"></i>
+        </div>
+        <div class="modal-body" id="alertMsg-text"></div>
+        <div class="modal-footer d-block">
+          <button type="button" class="btn btn-danger d-none" id="deleteAllMessageBtn">전체 삭제</button>
+          <button type="button" class="btn btn-warning d-none" id="readAllMessageBtn">모두 읽기</button>
+          <button type="button" class="btn btn-secondary" data-bs-dismiss="modal" aria-label="Close"
+            id="returnMessageBtn">확인</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="notice modal fade" id="logoutModal" tabindex="-1">
+    <div class="modal-dialog modal-dialog-centered">
+      <div class="modal-content text-center">
+        <div class="modal-header d-block p-0">
+          <i class="bi bi-box-arrow-right"></i>
+        </div>
+        <div class="modal-body" id="logout-text">
+          <h3>로그아웃 하시겠습니까?</h3>
+        </div>
+        <div class="modal-footer d-block">
+          <button type="button" id="notice-logout-btn" class="btn btn-danger" data-bs-dismiss="modal"
+            tabindex="0">로그아웃</button>
+          <button type="button" id="notice-cancel-btn" class="btn btn-secondary" data-bs-dismiss="modal"
+            tabindex="0">취소</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="notice modal fade" id="notLoginModal" tabindex="-1">
+    <div class="modal-dialog modal-dialog-centered">
+      <div class="modal-content text-center">
+        <div class="modal-header d-block p-0">
+          <i class="bi bi-box-arrow-in-right"></i>
+        </div>
+        <div class="modal-body" id="not-login-text">
+          <h3>로그인 후 이용해주세요</h3>
+        </div>
+        <div class="modal-footer d-block">
+          <button type="button" class="btn btn-warning" data-bs-toggle="modal" data-bs-target="#loginModal"
+            tabindex="-1">
+            로그인
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ======= Game Modals ======= -->
+<div id="gameModals">
+  <div class="games modal fade" id="slotModal" tabindex="-1">
+    <div class="modal-dialog modal-dialog-centered modal-xl">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title"></h5>
+          <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Close"></button>
+        </div>
+        <div class="modal-body">
+          <div class="row g-3"></div>
+          <button type="button" class="btn btn-danger btn-floating rounded-circle" id="btn-back-to-top">
+            <i class="bi bi-arrow-up-circle fs-2 fw-bold"></i>
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ======= Info Modals ======= -->
+<div id="infoModals">
+  <div class="modal popup fade" id="popup1" tabindex="-1">
+    <div class="modal-dialog modal-dialog-centered modal-dialog-scrollable">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h1 class="modal-title fs-5" id="popupTitle1"></h1>
+          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+        </div>
+        <div class="modal-body">
+          <div id="popupBody1"></div>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-warning btn-sm d-none" id="stopPopup1">3시간 동안 보지않기</button>
+          <button type="button" class="btn btn-danger btn-sm" id="stopPopupToday1">오늘 하루 보지않기</button>
+          <button type="button" class="btn btn-secondary btn-sm ms-auto" data-bs-dismiss="modal">닫기</button>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="modal popup fade" id="popup2" tabindex="-1">
+    <div class="modal-dialog modal-dialog-centered modal-dialog-scrollable">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h1 class="modal-title fs-5" id="popupTitle2"></h1>
+          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+        </div>
+        <div class="modal-body" id="popupBody2"></div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-warning btn-sm d-none" id="stopPopup2">3시간 동안 보지않기</button>
+          <button type="button" class="btn btn-danger btn-sm" id="stopPopupToday2">오늘 하루 보지않기</button>
+          <button type="button" class="btn btn-secondary btn-sm ms-auto" data-bs-dismiss="modal">닫기</button>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="modal popup fade" id="popup3" tabindex="-1">
+    <div class="modal-dialog modal-dialog-centered modal-dialog-scrollable">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h1 class="modal-title fs-5" id="popupTitle3"></h1>
+          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+        </div>
+        <div class="modal-body" id="popupBody3"></div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-warning btn-sm d-none" id="stopPopup3">3시간 동안 보지않기</button>
+          <button type="button" class="btn btn-danger btn-sm" id="stopPopupToday3">오늘 하루 보지않기</button>
+          <button type="button" class="btn btn-secondary btn-sm ms-auto" data-bs-dismiss="modal">닫기</button>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="modal popup fade" id="popup4" tabindex="-1">
+    <div class="modal-dialog modal-dialog-centered modal-dialog-scrollable">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h1 class="modal-title fs-5" id="popupTitle4"></h1>
+          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+        </div>
+        <div class="modal-body" id="popupBody4"></div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-warning btn-sm d-none" id="stopPopup4">3시간 동안 보지않기</button>
+          <button type="button" class="btn btn-danger btn-sm" id="stopPopupToday4">오늘 하루 보지않기</button>
+          <button type="button" class="btn btn-secondary btn-sm ms-auto" data-bs-dismiss="modal">닫기</button>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="modal popup fade" id="popup5" tabindex="-1">
+    <div class="modal-dialog modal-dialog-centered modal-dialog-scrollable">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h1 class="modal-title fs-5" id="popupTitle5"></h1>
+          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+        </div>
+        <div class="modal-body" id="popupBody5"></div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-warning btn-sm d-none" id="stopPopup5">3시간 동안 보지않기</button>
+          <button type="button" class="btn btn-danger btn-sm" id="stopPopupToday5">오늘 하루 보지않기</button>
+          <button type="button" class="btn btn-secondary btn-sm ms-auto" data-bs-dismiss="modal">닫기</button>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="modal popup fade" id="noticePopup" tabindex="-1">
+    <div class="modal-dialog modal-dialog-centered modal-dialog-scrollable">
+      <div class="modal-content">
+        <div class="modal-header">
+          <button class="btn btn-sm btn-outline-warning fs-5 me-3" id="noticePopupType"></button>
+          <h1 class="modal-title fs-5" id="noticePopupTitle"></h1>
+          <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Close"></button>
+        </div>
+        <div class="modal-body" id="noticePopupBody">
+          <img src="" class="" id="noticePopupImage">
+          <div id="noticePopupContent"></div>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">닫기</button>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="modal popup fade" id="eventPopup" tabindex="-1">
+    <div class="modal-dialog modal-dialog-centered modal-dialog-scrollable">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h1 class="modal-title fs-5" id="eventPopupTitle"></h1>
+          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+        </div>
+        <div class="modal-body" id="eventPpopupBody"></div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">닫기</button>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

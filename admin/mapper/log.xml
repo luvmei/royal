@@ -1,0 +1,1034 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="log">    
+// 로그관리 테이블 뷰
+  <select id="getBalanceLog">
+    SELECT
+      *
+    FROM
+      log_balance_view
+    WHERE
+      SUBSTR(이벤트발생일시, 1, 10) 
+      BETWEEN #{startDate} AND #{endDate}
+      <if test="type < 9">
+        <if test="type == 0">
+          AND 플래티넘 = (SELECT nickname
+                          FROM user
+                        WHERE id = #{id})
+        </if>
+        <if test="type == 1">
+          AND 골드 = (SELECT nickname
+                          FROM user
+                        WHERE id = #{id})
+        </if>
+        <if test="type == 2">
+          AND 실버 = (SELECT nickname
+                          FROM user
+                        WHERE id = #{id})
+        </if>
+        <if test="type == 3">
+          AND 브론즈 = (SELECT nickname
+                          FROM user
+                        WHERE id = #{id})
+        </if>
+      </if>    
+  </select> 
+
+  <select id="getPointLog">
+    SELECT
+      *
+    FROM
+      log_point_view
+    <where>
+      SUBSTR(이벤트발생일시, 1, 10) 
+      BETWEEN #{startDate} AND #{endDate}
+      <if test="node_id != undefined">
+        AND node_id = #{node_id}
+      </if>
+    </where>;
+  </select> 
+
+  <select id='getSportDetailLog'>
+    SELECT 
+      d.hl_detail_log_id AS IDX,	
+      d.event_date AS 발생시간,
+      d.user_id AS 아이디,
+      d.transaction_id AS 트랜젝션ID,
+      d.round_id AS 라운드ID,
+      d.provider_name AS 프로바이더,
+      d.category AS 게임타입,
+      d.game_title AS 게임명,
+      d.transaction_type AS 내역타입,
+      d.transaction_amount AS 금액,
+      d.previous_balance AS 이전보유금,
+      d.available_balance AS 이후보유금,
+      t.node_id,
+      u.type AS 회원타입,
+      u.join_code AS 가입코드
+    FROM log_hl_betting_detail AS d 
+    JOIN royal.user AS u ON u.id = d.user_id
+    LEFT JOIN royal.game_list AS g ON d.game_id = g.uuid
+    JOIN royal.system_tree AS t ON u.upper_agt = t.user_id
+    <where>      
+      SUBSTR(event_date, 1, 16) BETWEEN #{startDate} AND #{endDate}
+      AND d.category = 'live-sport'
+      <if test="node_id != undefined">
+        AND node_id LIKE CONCAT(#{node_id},'%')
+      </if>
+      <if test="searchValue != null and searchValue != ''">
+        AND (
+        d.user_id LIKE CONCAT(#{searchValue}, '%')
+        OR d.transaction_id LIKE CONCAT(#{searchValue}, '%')
+        OR d.round_id LIKE CONCAT(#{searchValue}, '%')
+        OR d.provider_name LIKE CONCAT(#{searchValue}, '%')
+        OR g.title LIKE CONCAT(#{searchValue}, '%')
+        OR d.transaction_type LIKE CONCAT(#{searchValue}, '%')
+        OR d.transaction_amount LIKE CONCAT('%', #{searchValue}, '%')
+        OR d.previous_balance LIKE CONCAT('%', #{searchValue}, '%')
+        OR d.available_balance LIKE CONCAT('%', #{searchValue}, '%')
+        )
+      </if>
+    </where>
+      ORDER BY ${orderColumn} ${orderDirection}
+      LIMIT ${pageSize} OFFSET ${offset}
+  </select>
+
+  <select id='getCasinoDetailLog'>
+    SELECT 
+      d.hl_detail_log_id AS IDX,	
+      d.event_date AS 발생시간,
+      d.user_id AS 아이디,
+      d.transaction_id AS 트랜젝션ID,
+      d.round_id AS 라운드ID,
+      d.provider_name AS 프로바이더,
+      d.category AS 게임타입,
+      COALESCE(g.title, d.game_title) AS 게임명,
+      d.transaction_type AS 내역타입,
+      d.transaction_amount AS 금액,
+      d.previous_balance AS 이전보유금,
+      d.available_balance AS 이후보유금,
+      t.node_id,
+      u.type AS 회원타입,
+      u.join_code AS 가입코드
+    FROM log_hl_betting_detail AS d 
+    JOIN royal.user AS u ON u.id = d.user_id
+    LEFT JOIN royal.game_list AS g ON d.provider_name = g.provider AND d.game_id = g.uuid
+    JOIN royal.system_tree AS t ON u.upper_agt = t.user_id
+    <where>      
+      SUBSTR(event_date, 1, 16) BETWEEN #{startDate} AND #{endDate}
+      AND d.category = 'casino'
+      <if test="node_id != undefined">
+        AND node_id LIKE CONCAT(#{node_id},'%')
+      </if>
+      <if test="searchValue != null and searchValue != ''">
+        AND (
+        d.user_id LIKE CONCAT(#{searchValue}, '%')
+        OR d.transaction_id LIKE CONCAT(#{searchValue}, '%')
+        OR d.round_id LIKE CONCAT(#{searchValue}, '%')
+        OR d.provider_name LIKE CONCAT(#{searchValue}, '%')
+        OR g.title LIKE CONCAT(#{searchValue}, '%')
+        OR d.transaction_type LIKE CONCAT(#{searchValue}, '%')
+        OR d.transaction_amount LIKE CONCAT('%', #{searchValue}, '%')
+        OR d.previous_balance LIKE CONCAT('%', #{searchValue}, '%')
+        OR d.available_balance LIKE CONCAT('%', #{searchValue}, '%')
+        )
+      </if>
+    </where>
+      ORDER BY ${orderColumn} ${orderDirection}
+      LIMIT ${pageSize} OFFSET ${offset}
+  </select>
+
+  <select id='getSlotDetailLog'>
+    SELECT 
+      d.hl_detail_log_id AS IDX,	
+      d.event_date AS 발생시간,
+    	d.user_id AS 아이디,
+    	d.transaction_id AS 트랜젝션ID,
+    	d.round_id AS 라운드ID,
+    	d.provider_name AS 프로바이더,
+    	d.category AS 게임타입,
+    	g.title AS 게임명,
+    	d.transaction_type AS 내역타입,
+    	d.transaction_amount AS 금액,
+    	d.previous_balance AS 이전보유금,
+    	d.available_balance AS 이후보유금,
+      t.node_id,
+      u.type AS 회원타입
+    FROM log_hl_betting_detail AS d 
+    JOIN royal.user AS u ON u.id = d.user_id
+    JOIN royal.game_list AS g ON d.game_id = g.uuid
+    JOIN royal.system_tree AS t ON u.upper_agt = t.user_id
+    <where>      
+      SUBSTR(event_date, 1, 16) 
+      BETWEEN #{startDate} AND #{endDate}
+      AND d.category = 'slot'
+      <if test="node_id != undefined">
+        AND node_id LIKE CONCAT(#{node_id},'%')
+      </if>
+      <if test="searchValue != null and searchValue != ''">
+        AND (
+        d.user_id LIKE CONCAT('%', #{searchValue}, '%')
+        OR d.transaction_id LIKE CONCAT('%', #{searchValue}, '%')
+        OR d.round_id LIKE CONCAT('%', #{searchValue}, '%')
+        OR d.provider_name LIKE CONCAT('%', #{searchValue}, '%')
+        OR d.category LIKE CONCAT('%', #{searchValue}, '%')
+        OR g.title LIKE CONCAT('%', #{searchValue}, '%')
+        OR d.transaction_type LIKE CONCAT('%', #{searchValue}, '%')
+        OR d.transaction_amount LIKE CONCAT('%', #{searchValue}, '%')
+        OR d.previous_balance LIKE CONCAT('%', #{searchValue}, '%')
+        OR d.available_balance LIKE CONCAT('%', #{searchValue}, '%')
+        )
+      </if>
+    </where>
+    ORDER BY ${orderColumn} ${orderDirection}
+    LIMIT ${pageSize} OFFSET ${offset}
+  </select>
+
+  <select id='getTotalDetailRecordsCount'>
+    SELECT count(*) AS totalRecordsCount
+    FROM log_hl_betting_detail AS d
+    JOIN royal.user AS u ON u.id = d.user_id
+    JOIN royal.game_list AS g ON d.game_id = g.uuid
+    JOIN royal.system_tree AS t ON u.upper_agt = t.user_id
+    <where>
+      event_date BETWEEN #{startDate} AND #{endDate}
+      AND d.category = #{type}
+      <if test="node_id != undefined">
+        AND node_id LIKE CONCAT(#{node_id},'%')
+      </if>
+      <if test="searchValue != null and searchValue != ''">
+        AND (
+        d.user_id LIKE CONCAT('%', #{searchValue}, '%')
+        OR d.transaction_id LIKE CONCAT('%', #{searchValue}, '%')
+        OR d.round_id LIKE CONCAT('%', #{searchValue}, '%')
+        OR d.provider_name LIKE CONCAT('%', #{searchValue}, '%')
+        OR d.category LIKE CONCAT('%', #{searchValue}, '%')
+        OR g.title LIKE CONCAT('%', #{searchValue}, '%')
+        OR d.transaction_type LIKE CONCAT('%', #{searchValue}, '%')
+        OR d.transaction_amount LIKE CONCAT('%', #{searchValue}, '%')
+        OR d.previous_balance LIKE CONCAT('%', #{searchValue}, '%')
+        OR d.available_balance LIKE CONCAT('%', #{searchValue}, '%')
+        )
+      </if>
+    </where>
+  </select> 
+
+  <select id='getTotalSummaryRecordsCount'>
+    SELECT count(*) AS totalRecordsCount
+    FROM log_betting_summary AS s
+    JOIN royal.user AS u ON u.user_id = s.user_id
+    JOIN royal.system_tree AS t ON u.upper_agt = t.user_id
+    <where>
+      transTime 
+      BETWEEN #{startDate} AND #{endDate}
+      AND s.type = #{type}
+      <if test="node_id != undefined">
+        AND node_id LIKE CONCAT(#{node_id},'%')
+      </if>
+    </where>
+  </select> 
+
+  <select id='getSummaryLog'>
+    SELECT 
+      *
+    FROM
+      log_summary_view
+    <where>
+      SUBSTR(결과수신시간, 1, 16) 
+      BETWEEN #{startDate} AND #{endDate}
+      <if test="node_id != undefined">
+        AND node_id LIKE CONCAT(#{node_id},'%')
+      </if>
+    </where>;
+  </select>
+
+  <select id='getSportSummaryLog'>
+    SELECT 
+     *
+    FROM
+      log_summary_view
+    <where>
+      SUBSTR(결과수신시간, 1, 16) 
+      BETWEEN #{startDate} AND #{endDate}
+      AND 베팅타입 = 'sp'
+      <if test="node_id != undefined">
+        AND node_id LIKE CONCAT(#{node_id},'%')
+      </if>
+      <if test="searchValue != null and searchValue != ''">
+        AND (
+        결과수신시간 LIKE CONCAT('%', #{searchValue}, '%')
+        OR 아이디 LIKE CONCAT('%', #{searchValue}, '%')
+        OR 닉네임 LIKE CONCAT('%', #{searchValue}, '%')
+        OR '상위 에이전트' LIKE CONCAT('%', #{searchValue}, '%')
+        OR 베팅타입 LIKE CONCAT('%', #{searchValue}, '%')
+        OR 플래티넘 LIKE CONCAT('%', #{searchValue}, '%')
+        OR 골드 LIKE CONCAT('%', #{searchValue}, '%')
+        OR 실버 LIKE CONCAT('%', #{searchValue}, '%')
+        OR 브론즈 LIKE CONCAT('%', #{searchValue}, '%')
+        OR 가입코드 LIKE CONCAT('%', #{searchValue}, '%')
+        )
+      </if>
+    </where>
+    ORDER BY ${orderColumn} ${orderDirection}
+    LIMIT ${pageSize} OFFSET ${offset}
+  </select>
+
+  <select id='getCasinoSummaryLog'>
+    SELECT 
+     *
+    FROM
+      log_summary_view
+    <where>
+      SUBSTR(결과수신시간, 1, 16) 
+      BETWEEN #{startDate} AND #{endDate}
+      AND 베팅타입 = 'c'
+      <if test="node_id != undefined">
+        AND node_id LIKE CONCAT(#{node_id},'%')
+      </if>
+      <if test="searchValue != null and searchValue != ''">
+        AND (
+        결과수신시간 LIKE CONCAT('%', #{searchValue}, '%')
+        OR 아이디 LIKE CONCAT('%', #{searchValue}, '%')
+        OR 닉네임 LIKE CONCAT('%', #{searchValue}, '%')
+        OR '상위 에이전트' LIKE CONCAT('%', #{searchValue}, '%')
+        OR 베팅타입 LIKE CONCAT('%', #{searchValue}, '%')
+        OR 플래티넘 LIKE CONCAT('%', #{searchValue}, '%')
+        OR 골드 LIKE CONCAT('%', #{searchValue}, '%')
+        OR 실버 LIKE CONCAT('%', #{searchValue}, '%')
+        OR 브론즈 LIKE CONCAT('%', #{searchValue}, '%')
+        OR 가입코드 LIKE CONCAT('%', #{searchValue}, '%')
+        )
+      </if>
+    </where>
+    ORDER BY ${orderColumn} ${orderDirection}
+    LIMIT ${pageSize} OFFSET ${offset}
+  </select>
+
+
+  <!-- <select id='getCasinoSummaryLog'>
+    SELECT 
+      *
+    FROM
+      log_summary_view
+    <where>
+      SUBSTR(결과수신시간, 1, 16) 
+      BETWEEN #{startDate} AND #{endDate}
+      AND 베팅타입 = 'c'
+      <if test="node_id != undefined">
+        AND node_id LIKE CONCAT(#{node_id},'%')
+      </if>
+    </where>;
+  </select> -->
+
+  <select id='getSlotSummaryLog'>
+    SELECT 
+      *
+    FROM
+      log_summary_view
+    <where>
+      SUBSTR(결과수신시간, 1, 16) 
+      BETWEEN #{startDate} AND #{endDate}
+      AND 베팅타입 = 's'
+      <if test="node_id != undefined">
+        AND node_id LIKE CONCAT(#{node_id},'%')
+      </if>
+      <if test="searchValue != null and searchValue != ''">
+        AND (
+        결과수신시간 LIKE CONCAT('%', #{searchValue}, '%')
+        OR 아이디 LIKE CONCAT('%', #{searchValue}, '%')
+        OR 닉네임 LIKE CONCAT('%', #{searchValue}, '%')
+        OR '상위 에이전트' LIKE CONCAT('%', #{searchValue}, '%')
+        OR 베팅타입 LIKE CONCAT('%', #{searchValue}, '%')
+        OR 플래티넘 LIKE CONCAT('%', #{searchValue}, '%')
+        OR 골드 LIKE CONCAT('%', #{searchValue}, '%')
+        OR 실버 LIKE CONCAT('%', #{searchValue}, '%')
+        OR 브론즈 LIKE CONCAT('%', #{searchValue}, '%')
+        OR 가입코드 LIKE CONCAT('%', #{searchValue}, '%')
+        )
+      </if>
+    </where>
+    ORDER BY ${orderColumn} ${orderDirection}
+    LIMIT ${pageSize} OFFSET ${offset}
+  </select>
+
+// 상세로그
+  <insert id='insertDetailLog'>
+    INSERT IGNORE INTO log_betting_detail
+      (
+        gameSessionId,
+        mem_id,
+        gameID,
+        transID,
+        roundID,
+        transTime,
+        transType,
+        betmoney,
+        resultmoney,
+        provider,
+        spintype
+      )
+    VALUES    
+      (
+        #{id},
+        #{mem_id},
+        #{gameID},
+        #{transID},
+        #{roundID},
+        #{transTime},
+        #{transType},
+        #{betmoney},
+        #{resultmoney},
+        #{provider},
+        #{spintype}
+      )
+  </insert>
+
+  <insert id='insertDetailSdLog'>
+    INSERT IGNORE INTO log_sd_betting_detail
+      (
+        record_date,
+        event_date,
+        transaction_id,
+        round_id,
+        user_id,
+        provider_name,
+        category,
+        game_id,
+        game_title_korean,
+        transaction_type,
+        transaction_amount,
+        previous_balance,
+        available_balance
+      )
+    VALUES    
+    <foreach collection="betHistory" item="betting" separator=",">
+      (
+        NOW(),
+        #{betting.created_date},
+        #{betting.transaction_id},
+        #{betting.round_id},
+        #{betting.username},
+        #{betting.provider_name},
+        #{betting.category},
+        #{betting.game_id},
+        #{betting.game_title_korean},
+        #{betting.transaction_type},
+        #{betting.transaction_amount},
+        #{betting.previous_balance},
+        #{betting.available_balance}
+      )
+    </foreach>
+  </insert>
+
+  <insert id='insertDetailHlLog'>
+    INSERT IGNORE INTO log_hl_betting_detail
+      (
+        record_date,
+        event_date,
+        transaction_id,
+        round_id,
+        user_id,
+        provider_name,
+        category,
+        game_id,
+        game_title,
+        transaction_type,
+        transaction_amount,
+        previous_balance,
+        available_balance
+      )
+    VALUES    
+    <foreach collection="betHistory" item="betting" separator=",">
+      (
+        NOW(),
+        #{betting.created_date},
+        #{betting.transaction_id},
+        #{betting.round_id},
+        #{betting.username},
+        #{betting.provider_name},
+        #{betting.category},
+        #{betting.game_id},
+        #{betting.game_title},
+        #{betting.transaction_type},
+        #{betting.transaction_amount},
+        #{betting.previous_balance},
+        #{betting.available_balance}
+      )
+    </foreach>
+  </insert>
+
+  <insert id='getLatestIdx'>
+    SELECT 
+      transaction_id 
+    FROM
+      log_hl_betting_detail
+    ORDER BY 
+      hl_detail_log_id DESC LIMIT 1      
+  </insert>
+
+// 요약로그
+  <select id='checkUserBetting'>
+    SELECT user_id,
+      sp_today_betting    AS sp_bet,
+      sp_today_win        AS sp_win,
+      c_today_betting     AS c_bet,
+      c_today_win         AS c_win,
+      s_today_betting     AS s_bet,
+      s_today_win         AS s_win,
+      c_m_today_betting   AS c_m_bet,
+      c_m_today_win       AS c_m_win,
+      s_m_today_betting   AS s_m_bet,
+      s_m_today_win       AS s_m_win
+    FROM user_betting_info
+    WHERE user_id = (SELECT user_id
+                    FROM user
+                    WHERE  id = #{mem_id}) 
+  </select>   
+
+  <select id='updateBettingInfo'>
+    UPDATE 
+      user_betting_info
+    SET 
+      sp_today_betting = sp_today_betting + #{sportBetting},
+      sp_today_win = sp_today_win + #{sportWin},
+      sp_total_betting = sp_total_betting + #{sportBetting},
+      sp_total_win = sp_total_win + #{sportWin},
+      c_today_betting = c_today_betting + #{casinoBetting},
+      c_today_win = c_today_win + #{casinoWin},
+      c_total_betting = c_total_betting + #{casinoBetting},
+      c_total_win = c_total_win + #{casinoWin},
+      c_temp_betting = c_temp_betting + #{casinoBetting},
+      c_m_today_betting = c_m_today_betting + #{marginCasinoBetting},
+      c_m_today_win = c_m_today_win + #{marginCasinoWin},
+      c_m_total_betting = c_m_total_betting + #{marginCasinoBetting},
+      c_m_total_win = c_m_total_win + #{marginCasinoWin},
+      c_m_temp_betting = c_m_temp_betting + #{marginCasinoBetting},
+      s_today_betting = s_today_betting + #{slotBetting},
+      s_today_win = s_today_win + #{slotWin},
+      s_total_betting = s_total_betting + #{slotBetting},
+      s_total_win = s_total_win + #{slotWin},
+      s_temp_betting = s_temp_betting + #{slotBetting},
+      s_m_today_betting = s_m_today_betting + #{marginSlotBetting},
+      s_m_today_win = s_m_today_win + #{marginSlotWin},
+      s_m_total_betting = s_m_total_betting + #{marginSlotBetting},
+      s_m_total_win = s_m_total_win + #{marginSlotWin},
+      s_m_temp_betting = s_m_temp_betting + #{marginSlotBetting}
+    WHERE user_id = (SELECT u.user_id
+                    FROM user AS u
+                    WHERE u.id = #{mem_id})
+  </select>
+
+  <select id='updateCombineBettingInfo'>
+    UPDATE 
+      user_betting_info
+    SET 
+      sp_today_combine_betting = sp_today_combine_betting + #{sportBetting},
+      sp_today_combine_win = sp_today_combine_win + #{sportWin},
+      sp_total_combine_betting = sp_total_combine_betting + #{sportBetting},
+      sp_total_combine_win = sp_total_combine_win + #{sportWin},
+      c_today_combine_betting = c_today_combine_betting + #{casinoBetting},
+      c_today_combine_win = c_today_combine_win + #{casinoWin},
+      c_total_combine_betting = c_total_combine_betting + #{casinoBetting},
+      c_total_combine_win = c_total_combine_win + #{casinoWin},
+      c_m_today_combine_betting = c_m_today_combine_betting + #{marginCasinoBetting},
+      c_m_today_combine_win = c_m_today_combine_win + #{marginCasinoWin},
+      c_m_total_combine_betting = c_m_total_combine_betting + #{marginCasinoBetting},
+      c_m_total_combine_win = c_m_total_combine_win + #{marginCasinoWin},
+      s_today_combine_betting = s_today_combine_betting + #{slotBetting},
+      s_today_combine_win = s_today_combine_win + #{slotWin},
+      s_total_combine_betting = s_total_combine_betting + #{slotBetting},
+      s_total_combine_win = s_total_combine_win + #{slotWin},
+      s_m_today_combine_betting = s_m_today_combine_betting + #{marginSlotBetting},
+      s_m_today_combine_win = s_m_today_combine_win + #{marginSlotWin},
+      s_m_total_combine_betting = s_m_total_combine_betting + #{marginSlotBetting},
+      s_m_total_combine_win = s_m_total_combine_win + #{marginSlotWin}
+    WHERE user_id = #{agent_id}
+  </select>
+
+  <select id='updateUpperBettingInfo'>
+    UPDATE 
+      user_betting_info
+    SET 
+      sp_today_betting = sp_today_betting + #{sportBetting},
+      sp_today_win = sp_today_win + #{sportWin},
+      sp_total_betting = sp_total_betting + #{sportBetting},
+      sp_total_win = sp_total_win + #{sportWin},
+      c_today_betting = c_today_betting + #{casinoBetting},
+      c_today_win = c_today_win + #{casinoWin},
+      c_total_betting = c_total_betting + #{casinoBetting},
+      c_total_win = c_total_win + #{casinoWin},
+      c_m_today_betting = c_m_today_betting + #{marginCasinoBetting},
+      c_m_today_win = c_m_today_win + #{marginCasinoWin},
+      c_m_total_betting = c_m_total_betting + #{marginCasinoBetting},
+      c_m_total_win = c_m_total_win + #{marginCasinoWin},
+      s_today_betting = s_today_betting + #{slotBetting},
+      s_today_win = s_today_win + #{slotWin},
+      s_total_betting = s_total_betting + #{slotBetting},
+      s_total_win = s_total_win + #{slotWin},
+      s_m_today_betting = s_m_today_betting + #{marginSlotBetting},
+      s_m_today_win = s_m_today_win + #{marginSlotWin},
+      s_m_total_betting = s_m_total_betting + #{marginSlotBetting},
+      s_m_total_win = s_m_total_win + #{marginSlotWin}
+    WHERE user_id = (SELECT upper_agt FROM user WHERE user_id = #{user_id})
+  </select>
+
+  <select id='updateUserBettingInfo'>
+    UPDATE 
+      user_betting_info
+    SET 
+      c_today_betting = c_today_betting + #{casinoBetting},
+      c_today_win = c_today_win + #{casinoWin},
+      c_total_betting = c_total_betting + #{casinoBetting},
+      c_total_win = c_total_win + #{casinoWin},
+      c_m_today_betting = c_m_today_betting + #{marginCasinoBetting},
+      c_m_today_win = c_m_today_win + #{marginCasinoWin},
+      c_m_total_betting = c_m_total_betting + #{marginCasinoBetting},
+      c_m_total_win = c_m_total_win + #{marginCasinoWin},
+      s_today_betting = s_today_betting + #{slotBetting},
+      s_today_win = s_today_win + #{slotWin},
+      s_total_betting = s_total_betting + #{slotBetting},
+      s_total_win = s_total_win + #{slotWin},
+      s_m_today_betting = s_m_today_betting + #{marginSlotBetting},
+      s_m_today_win = s_m_today_win + #{marginSlotWin},
+      s_m_total_betting = s_m_total_betting + #{marginSlotBetting},
+      s_m_total_win = s_m_total_win + #{marginSlotWin}
+    WHERE user_id = #{target_id}
+  </select>  
+
+  <select id='insertSummarySportLog'>
+    INSERT INTO log_betting_summary
+      (
+        user_id,
+        transTime,
+        type,
+        bet,
+        win,
+        m_bet,
+        m_win
+      )
+    VALUES
+      (
+        (SELECT user_id
+        FROM user
+        WHERE  id = #{mem_id}),
+        #{currentTime},
+        'sp',
+        ${sportBetting},
+        ${sportWin},
+        ${sportBetting},
+        ${sportWin}
+      )
+  </select>
+
+  <select id='insertSummaryCasinoLog'>
+    INSERT INTO log_betting_summary
+      (
+        user_id,
+        transTime,
+        type,
+        bet,
+        win,
+        m_bet,
+        m_win
+      )
+    VALUES
+      (
+        (SELECT user_id
+        FROM user
+        WHERE  id = #{mem_id}),
+        #{currentTime},
+        'c',
+        ${casinoBetting},
+        ${casinoWin},
+        ${marginCasinoBetting},
+        ${marginCasinoWin}
+      )
+  </select>
+
+  <select id='insertSummarySlotLog'>
+    INSERT INTO log_betting_summary
+      (
+        user_id,
+        transTime,
+        type,
+        bet,
+        win,
+        m_bet,
+        m_win
+      )
+    VALUES
+      (
+        (SELECT user_id
+        FROM user
+        WHERE id = #{mem_id}),
+        #{currentTime},
+        's',
+        ${slotBetting},
+        ${slotWin},
+        ${marginSlotBetting},
+        ${marginSlotWin}
+      )
+  </select>
+
+  <select id='checkUserType'>
+    SELECT type
+    FROM user
+    WHERE id = #{id}
+  </select>
+
+  <select id='updateUserBalance'>
+    UPDATE user_asset_info
+    SET balance = ${balance}
+    WHERE user_id = (SELECT user_id
+                        FROM   user
+                        WHERE  id = #{id}); 
+  </select>
+
+  <select id='updateAdminBalance'>
+    UPDATE admin_user
+    set sd_balance = ${balance}
+  </select>
+
+  <select id='updateDgBalance'>
+    UPDATE admin_user
+    set dg_balance = ${balance}
+    WHERE id = #{id}
+  </select>
+
+  <select id='getAllUsers'>
+    SELECT user_id,
+           type
+    FROM   user
+    WHERE type IN (0, 1, 2, 3)
+  </select>
+
+  <select id='getCombineAssets'>
+    call getCombineAsset(${user_id},${type})
+  </select>
+
+  <select id='updateCombineAssets'>
+    UPDATE user_asset_info
+    SET combine_balance = ${combine_balance},
+        combine_point = ${combine_point}
+    WHERE  user_id = ${user_id}
+  </select>
+
+  <select id='agentHierarchy'>
+    call agent_Hierarchy(#{mem_id});
+  </select>
+
+  <select id='insertRollingCommission'>
+    UPDATE user_commission_info
+    SET
+      c_today_roll = c_today_roll + #{c_roll_amount},
+      c_total_roll = c_total_roll + #{c_roll_amount},
+      s_today_roll = s_today_roll + #{s_roll_amount},
+      s_total_roll = s_total_roll + #{s_roll_amount},
+      c_m_today_roll = c_m_today_roll + #{c_m_roll_amount},
+      c_m_total_roll = c_m_total_roll + #{c_m_roll_amount},
+      s_m_today_roll = s_m_today_roll + #{s_m_roll_amount},
+      s_m_total_roll = s_m_total_roll + #{s_m_roll_amount}
+    WHERE
+      user_id = #{id}
+  </select>
+
+  <select id='addAssetPoint'>
+    UPDATE user_asset_info
+    SET point = point + ${c_m_roll_amount} + ${s_m_roll_amount}
+    WHERE user_id = #{id}
+  </select>
+
+  <select id='insertCasinoLog'>
+    INSERT INTO log_point
+      (
+        time,
+        user_id,
+        event_type,
+        event_id,
+        event_triger,
+        event_amount,
+        bet_margin_rate,
+        bet_margin_amount,
+        event_rate,
+        point_amount,
+        roll_margin_rate,
+        m_point_amount,
+        before_point,
+        after_point
+      )
+    VALUES
+      (
+        #{currentTime},
+        #{id},
+        '롤링_카지노',
+        (SELECT summary_log_id FROM log_betting_summary WHERE type = 'c' ORDER BY summary_log_id DESC LIMIT 1),
+        ${triger},
+        ${casinoBetting},
+        ${c_bet_margin_rate},
+        ${marginCasinoBetting},
+        #{c_roll_rate},
+        ${c_roll_amount},
+        ${c_roll_margin_rate},
+        ${c_m_roll_amount},
+        (SELECT point FROM user_asset_info WHERE user_id = #{id}),
+        (SELECT point FROM user_asset_info WHERE user_id = #{id}) + ${c_m_roll_amount}
+      )
+  </select>
+
+  <select id='insertSlotLog'>
+    INSERT INTO log_point
+      (
+        time,
+        user_id,
+        event_type,
+        event_id,
+        event_triger,
+        event_amount,
+        bet_margin_rate,
+        bet_margin_amount,
+        event_rate,
+        point_amount,
+        roll_margin_rate,
+        m_point_amount,
+        before_point,
+        after_point
+      )
+    VALUES
+      (
+        #{currentTime},
+        #{id},
+        '롤링_슬롯',
+        (SELECT summary_log_id FROM log_betting_summary WHERE type = 's' ORDER BY summary_log_id DESC LIMIT 1),
+        ${triger},
+        ${slotBetting},
+        ${s_bet_margin_rate},
+        ${marginSlotBetting},
+        #{s_roll_rate},
+        ${s_roll_amount},
+        ${s_roll_margin_rate},
+        ${s_m_roll_amount},
+        (SELECT point FROM user_asset_info WHERE user_id = #{id}),
+        (SELECT point FROM user_asset_info WHERE user_id = #{id}) + ${s_m_roll_amount}
+      )
+  </select>  
+
+  <select id='getUserBalance'>
+    SELECT after_balance
+    FROM log_balance
+    WHERE user_id = ${user_id}
+    ORDER BY balance_log_id DESC LIMIT 1 
+  </select>
+
+  <select id='getUserDefaultBalance'>
+    SELECT balance
+    FROM user_asset_info
+    WHERE user_id = ${user_id}
+  </select>
+
+  <select id='casinoBetting'>
+    INSERT INTO log_balance
+      (
+        time,
+        user_id,
+        event_type,
+        event_id,
+        amount,
+        before_balance,
+        after_balance
+      )
+    VALUES
+      (
+        #{currentTime},
+        ${user_id},
+        '베팅_카지노',
+        (SELECT summary_log_id
+        FROM log_betting_summary
+        ORDER BY summary_log_id DESC LIMIT 1),
+        ${casinoBetting},
+        ${balance},
+        ${afterBalance}
+      )
+  </select>  
+
+  <select id='casinoWin'>
+    INSERT INTO log_balance
+      (
+        time,
+        user_id,
+        event_type,
+        event_id,
+        amount,
+        before_balance,
+        after_balance
+      )
+    VALUES
+      (
+        #{currentTime},
+        ${user_id},
+        '위닝_카지노',
+        (SELECT summary_log_id
+        FROM log_betting_summary
+        ORDER BY summary_log_id DESC LIMIT 1),
+        ${casinoWin},
+        ${balance},
+        ${afterBalance}
+      )
+  </select>
+
+  <select id='slotBetting'>
+    INSERT INTO log_balance
+      (
+        time,
+        user_id,
+        event_type,
+        event_id,
+        amount,
+        before_balance,
+        after_balance
+      )
+    VALUES
+      (
+        #{currentTime},
+        ${user_id},
+        '베팅_슬롯',
+        (SELECT summary_log_id
+        FROM log_betting_summary
+        ORDER BY summary_log_id DESC LIMIT 1),
+        ${slotBetting},
+        ${balance},
+        ${afterBalance}
+      )
+  </select>
+
+  <select id='slotWin'>
+    INSERT INTO log_balance
+      (
+        time,
+        user_id,
+        event_type,
+        event_id,
+        amount,
+        before_balance,
+        after_balance
+      )
+    VALUES
+      (
+        #{currentTime},
+        ${user_id},
+        '위닝_슬롯',
+        (SELECT summary_log_id
+        FROM log_betting_summary
+        ORDER BY summary_log_id DESC LIMIT 1),
+        ${slotWin},
+        ${balance},
+        ${afterBalance}
+        )
+  </select>
+
+  <select id='marginCasinoBetting'>
+    INSERT INTO log_balance
+      (
+        time,
+        user_id,
+        event_type,
+        event_id,
+        amount,
+        before_balance,
+        after_balance
+      )
+    VALUES
+      (
+        #{currentTime},
+        ${user_id},
+        '베팅_카지노',
+        (SELECT summary_log_id
+        FROM log_betting_summary
+        ORDER BY summary_log_id DESC LIMIT 1),
+        ${marginCasinoBetting},
+        ${balance},
+        ${afterBalance}
+      )
+  </select>
+
+  <select id='marginCasinoWin'>
+    INSERT INTO log_balance
+      (
+        time,
+        user_id,
+        event_type,
+        event_id,
+        amount,
+        before_balance,
+        after_balance
+      )
+    VALUES
+      (
+        #{currentTime},
+        ${user_id},
+        '위닝_카지노',
+        (SELECT summary_log_id
+        FROM log_betting_summary
+        ORDER BY summary_log_id DESC LIMIT 1),
+        ${marginCasinoWin},
+        ${balance},
+        ${afterBalance}
+      )
+  </select>
+
+  <select id='marginSlotBetting'>
+    INSERT INTO log_balance
+      (
+        time,
+        user_id,
+        event_type,
+        event_id,
+        amount,
+        before_balance,
+        after_balance
+      )
+    VALUES
+      (
+        #{currentTime},
+        ${user_id},
+        '베팅_슬롯',
+        (SELECT summary_log_id
+        FROM log_betting_summary
+        ORDER BY summary_log_id DESC LIMIT 1),
+        ${marginSlotBetting},
+        ${balance},
+        ${afterBalance}
+      )
+  </select>
+
+  <select id='marginSlotWin'>
+    INSERT INTO log_balance
+      (
+        time,
+        user_id,
+        event_type,
+        event_id,
+        amount,
+        before_balance,
+        after_balance
+      )
+    VALUES
+      (
+        #{currentTime},
+        ${user_id},
+        '위닝_슬롯',
+        (SELECT summary_log_id
+        FROM log_betting_summary
+        ORDER BY summary_log_id DESC LIMIT 1),
+        ${marginSlotWin},
+        ${balance},
+        ${afterBalance}
+        )
+  </select>
+
+  <select id='getSummaryLog'>
+    SELECT user_id, category, transaction_type, sum(transaction_amount) 
+    FROM log_hl_betting_detail 
+    WHERE date(record_date) = CURDATE() AND transaction_type != 'tie'
+    GROUP BY user_id, category, transaction_type
+  </select>
+</mapper>

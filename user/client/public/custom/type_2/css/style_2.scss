@@ -1,0 +1,2889 @@
+@import '../../../../public/css/font.scss';
+
+/*--------------------------------------------------------------
+# Color
+--------------------------------------------------------------*/
+$primary: #001676;
+$secondary: #af0e1c;
+$modal-primary: #000;
+$modal-secondary: rgba(0, 0, 0, 0.6);
+$font-primary: #ffc451;
+$font-secondary: #ffc451;
+$point: #ffc451;
+$alert: #f95668;
+
+/*--------------------------------------------------------------
+# General
+--------------------------------------------------------------*/
+body::-webkit-scrollbar,
+html::-webkit-scrollbar {
+  display: none;
+}
+
+input[type='number']::-webkit-inner-spin-button,
+input[type='number']::-webkit-outer-spin-button {
+  -webkit-appearance: none;
+  margin: 0;
+}
+
+body {
+  font-family: 'Pretendard-Regular', sans-serif;
+  // font-family: 'Noto Sans KR', sans-serif;
+  overflow-y: overlay;
+  background-color: #000;
+  // padding-right: 0 !important;
+}
+
+@media Screen and (max-width: 430px) {
+  html,
+  body {
+    max-width: 100%;
+    overflow-x: hidden;
+  }
+}
+
+a {
+  color: $point;
+  text-decoration: none;
+
+  &:hover {
+    color: $point;
+    text-decoration: none;
+  }
+}
+
+h1,
+h2,
+h3,
+h4,
+h5,
+h6 {
+  font-family: 'Noto Sans KR', sans-serif;
+}
+
+h1 {
+  font-size: 2rem;
+}
+
+h2 {
+  font-size: 1.5rem;
+}
+
+h3 {
+  font-size: 1.2rem;
+}
+
+h4 {
+  font-size: 1rem;
+}
+
+h5 {
+  font-size: 0.8rem;
+}
+h6 {
+  font-size: 0.6rem;
+}
+
+.asset-danger {
+  color: #b02a37;
+  background-color: #f8d7da;
+  border-color: #f1aeb5;
+
+  &:hover,
+  &:focus {
+    background-color: #f1aeb5;
+  }
+}
+
+.asset-warning {
+  color: #997404;
+  background-color: #fff3cd;
+  border-color: #ffe69c;
+
+  &:hover,
+  &:focus {
+    background-color: #ffe69c;
+  }
+}
+
+.asset-primary {
+  color: #0a58ca;
+  background-color: #cfe2ff;
+  border-color: #9ec5fe;
+
+  &:hover,
+  &:focus {
+    background-color: #9ec5fe;
+  }
+}
+
+.asset-secondary {
+  color: #6c757d;
+  background-color: #f8f9fa;
+  border-color: #e9ecef;
+
+  &:hover,
+  &:focus {
+    background-color: #e9ecef;
+  }
+}
+
+.asset-success {
+  color: #146c43;
+  background-color: #d1e7dd;
+  border-color: #a3cfbb;
+
+  &:hover,
+  &:focus {
+    background-color: #a3cfbb;
+  }
+}
+
+.asset-dark {
+  color: #495057;
+  background-color: #ced4da;
+  border-color: #adb5bd;
+
+  &:hover,
+  &:focus {
+    background-color: #adb5bd;
+  }
+}
+
+.pastel-danger {
+  color: #ffbdc2;
+}
+
+.pastel-primary {
+  color: #b7d5ff;
+}
+
+.bg-pastel-danger {
+  background-color: #fff9fa !important;
+}
+
+.bg-pastel-primary {
+  background-color: #b7d5ff !important;
+}
+
+.bg-pastel-success {
+  background-color: #f7fffb !important;
+}
+/*--------------------------------------------------------------
+#  Modal 
+--------------------------------------------------------------*/
+.modal {
+  color: white;
+
+  .back-btn {
+    cursor: pointer;
+  }
+
+  .modal-content {
+    border: 2px solid $point;
+    background-color: $modal-primary;
+    background-image: linear-gradient(rgba(0, 0, 0, 0.8), rgba(0, 0, 0, 0.8)), url(/public/custom/type_2/bg/modal_bg.webp);
+    background-repeat: no-repeat;
+    background-size: cover;
+    background-position: center;
+
+    padding: 1.5rem;
+
+    .modal-header,
+    .modal-footer {
+      border: none;
+
+      .btn {
+        font-size: 1.1rem;
+      }
+    }
+
+    .modal-header {
+      height: 40px;
+      font-size: 1.2rem;
+
+      .modal-title {
+        font-weight: 700;
+        font-size: 1.4rem;
+        color: $point;
+      }
+    }
+
+    .modal-body {
+      .form-check {
+        label {
+          color: rgb(175, 175, 175);
+        }
+      }
+    }
+  }
+
+  &.login {
+    .modal-content {
+      .form-floating {
+        .form-control,
+        .form-select {
+          height: 50px;
+          font-size: 0.9rem;
+        }
+
+        label {
+          padding: 0.75rem 0.75rem;
+        }
+      }
+    }
+    .description {
+      font-size: 1.1rem;
+      margin-left: 0.5rem;
+      font-weight: 500;
+      color: red;
+      text-decoration: none;
+    }
+
+    .login-message {
+      color: $alert;
+    }
+
+    #login-btn,
+    #change-nick-btn,
+    #change-password-btn {
+      border: 2px solid $point;
+      font-weight: 700;
+      color: $primary;
+      background-color: $point;
+      width: 100%;
+      height: 50px;
+      transition: all 0.3s;
+
+      &:hover {
+        filter: brightness(0.7);
+      }
+    }
+
+    a {
+      font-size: 1.1rem;
+      margin-left: 0.5rem;
+      font-weight: 500;
+      color: rgba(255, 255, 255, 0.5);
+      text-decoration: none;
+      cursor: pointer;
+
+      &:hover {
+        filter: brightness(0.7);
+      }
+    }
+
+    #login-join {
+      color: $point;
+    }
+  }
+
+  &.join {
+    .modal-dialog {
+      max-width: 1000px;
+      .modal-content {
+        .form-select {
+          height: 50px;
+          font-size: 1rem;
+        }
+        .form-floating {
+          .form-control {
+            color: #000 !important;
+            height: 50px;
+          }
+
+          label {
+            font-weight: 500;
+            color: $primary;
+            padding: 0.8rem 0.75rem;
+          }
+        }
+
+        .btn {
+          font-weight: 500;
+          color: $point;
+          background-color: rgba(0, 0, 0, 0.5);
+          font-size: 0.9rem;
+          border: 1px solid $point;
+
+          &:hover,
+          &:focus {
+            box-shadow: rgb(255, 193, 7) 0px 0px 5px 3px inset;
+          }
+        }
+
+        .description {
+          color: rgba(255, 255, 255, 0.5);
+          margin-top: 8px;
+          margin-left: 7px;
+          font-size: 0.95rem;
+        }
+      }
+    }
+    #join-btn {
+      font-weight: 700;
+      background-color: $point;
+      width: 100%;
+      height: 50px;
+      color: black;
+      font-size: 1.2rem;
+      transition: all 0.3s;
+
+      &.notice {
+        background-color: #ffdbdb;
+        color: $alert;
+        border: 1px solid $alert;
+      }
+
+      &:hover {
+        filter: brightness(0.7);
+      }
+    }
+
+    a {
+      font-size: 1.2rem;
+      margin-left: 0.5rem;
+      font-weight: 700;
+      color: $point;
+      text-decoration: none;
+      cursor: pointer;
+
+      &:hover {
+        color: $point;
+        filter: brightness(0.7);
+      }
+    }
+  }
+
+  &.deposit,
+  &.withdraw,
+  &.reward {
+    .modal-content {
+      padding: 2rem 2rem 1rem 2rem;
+
+      .modal-body {
+        .check {
+          h3 {
+            margin-bottom: 0.8rem;
+            font-size: 1.1rem;
+          }
+
+          p {
+            font-size: 1rem;
+            font-weight: 300;
+            color: #d6d6d6;
+          }
+
+          a {
+            color: $point;
+            cursor: pointer;
+            font-weight: 700;
+          }
+        }
+
+        .form {
+          font-weight: 500;
+          font-size: 1.1rem;
+          .row {
+            background-color: $modal-secondary;
+            border-radius: 10px;
+
+            #deposit-bank-value {
+              text-align: center;
+              font-size: 0.95rem;
+            }
+
+            hr {
+              border: 1px solid $point;
+              text-align: center;
+              opacity: 0.7;
+              width: 110%;
+              margin-left: auto;
+              margin-right: auto;
+            }
+
+            div {
+              margin: 7px 0;
+              &:nth-child(1),
+              &:nth-child(2),
+              &:nth-child(4),
+              &:nth-child(7),
+              &:nth-child(8),
+              &:nth-child(17),
+              &:nth-child(18),
+              &:nth-child(19),
+              &:nth-child(20),
+              &:nth-child(21) {
+                color: $point;
+              }
+            }
+
+            .btn {
+              width: 100%;
+              background-color: $point;
+              color: black;
+              font-size: 0.9rem;
+              font-weight: 600;
+
+              &.btn-light {
+                background-color: white;
+              }
+
+              &.history {
+                background-color: transparent !important;
+                color: $point;
+              }
+            }
+          }
+        }
+      }
+    }
+  }
+
+  &.userInfo {
+    .modal-dialog {
+      max-width: 400px !important;
+      .modal-content {
+        font-size: 1.1rem;
+        padding: 1rem 1rem 0.5rem 1rem;
+
+        .modal-body {
+          padding: 1.5rem;
+          background-image: linear-gradient(rgba(0, 0, 0, 0.9), rgba(0, 0, 0, 0.9)), url(/public/custom/type_2/bg/modal_bg.webp);
+          background-repeat: no-repeat;
+          background-size: cover;
+          background-position: center;
+          border-radius: 5px;
+
+          .row {
+            i {
+              padding-right: 10px;
+            }
+            .type {
+              color: darken($point, 5%);
+              &.bankInfo {
+                padding: 0 0 0 35px !important;
+              }
+            }
+            .value {
+              text-align: right;
+            }
+            .col-4 {
+              padding: 5px !important;
+
+              .historyBtn {
+                font-size: 0.9rem;
+                width: 100%;
+                padding: 10px 6px;
+              }
+            }
+
+            div {
+              margin-bottom: 10px;
+
+              &.bankName {
+                color: $point;
+              }
+
+              &.maintenance {
+                font-size: 0.9rem;
+                font-weight: 300;
+                padding: 0;
+              }
+            }
+          }
+        }
+      }
+    }
+  }
+
+  &.withdraw {
+    .input-group {
+      text-align: center;
+      .input-group-text {
+        background-color: $modal-primary;
+        color: $point;
+        border: 1px solid $point;
+        width: 40%;
+      }
+    }
+    .form-control {
+      border: none;
+    }
+  }
+
+  &.bankTime {
+    .modal-content {
+      .modal-body {
+        .row {
+          div {
+            margin-bottom: 10px;
+
+            &.bankName {
+              color: $point;
+            }
+
+            &.maintenance {
+              font-size: 0.9rem;
+              font-weight: 300;
+              padding: 0;
+            }
+          }
+        }
+      }
+    }
+  }
+
+  &.reward {
+    .modal-content {
+      padding: 1rem 1rem 0.5rem 1rem;
+      .modal-body {
+        padding: 1rem 0.5rem;
+        .row {
+          div {
+            &:nth-child(2),
+            &:nth-child(18),
+            &:nth-child(19) {
+              color: white !important;
+            }
+            &:nth-child(3),
+            &:nth-child(15),
+            &:nth-child(17) {
+              color: $point;
+            }
+          }
+          // #reward-after-text {
+          //   color: $points;
+          // }
+        }
+      }
+    }
+  }
+
+  &.notice {
+    --bs-modal-width: 400px;
+    .modal-content {
+      box-shadow: rgba(0, 0, 0, 0.56) 0px 22px 70px 4px;
+      .modal-header {
+        height: auto;
+        padding: 0;
+        i {
+          font-size: 2.5rem;
+          color: $point;
+        }
+      }
+      .modal-footer {
+        .btn {
+          font-weight: 500;
+        }
+      }
+    }
+
+    &#logoutModal {
+      .modal-content {
+        border: 2px solid #dc3545;
+        i {
+          color: #dc3545;
+        }
+      }
+    }
+  }
+
+  &.question,
+  &.message,
+  &.bankHistory {
+    .modal-content {
+      color: #000;
+      padding: 1.5rem 1rem 0 1rem;
+
+      .modal-body {
+        margin-top: 10px;
+        padding: 20px;
+        background-color: #fff;
+      }
+    }
+
+    &#reqQuestionModal,
+    &#viewQuestionModal,
+    &#viewMessageModal,
+    &#readNoticeModal {
+      .modal-dialog {
+        .modal-content {
+          padding: 1.5rem 1.2rem 1rem 1.2rem;
+          .modal-body {
+            background-color: $modal-secondary;
+          }
+        }
+      }
+    }
+  }
+
+  &.popup {
+    .modal-dialog {
+      padding: 0;
+      .modal-content {
+        background-color: #000;
+        background-image: none;
+        max-width: 460px;
+        height: 760px;
+        padding: 0;
+        border: 1px solid rgba(255, 193, 7, 0.5);
+        font-size: 1.15rem;
+        color: rgb(214, 214, 214);
+
+        .modal-header {
+          display: none;
+        }
+
+        .modal-body {
+          padding: 0;
+        }
+
+        .form-floating {
+          .form-control,
+          .form-select {
+            height: 50px;
+            font-size: 0.9rem;
+          }
+
+          label {
+            padding: 0.75rem 0.75rem;
+          }
+        }
+      }
+    }
+
+    .popup-count-2 {
+      &.popup-order-1 {
+        right: 50%;
+      }
+
+      &.popup-order-2 {
+        left: 50%;
+      }
+    }
+
+    .popup-count-3 {
+      &.popup-order-1 {
+        right: 100%;
+      }
+
+      &.popup-order-3 {
+        left: 100%;
+      }
+    }
+
+    .popup-count-4 {
+      &.popup-order-1 {
+        right: 137.5%;
+      }
+
+      &.popup-order-2 {
+        right: 42.5%;
+      }
+
+      &.popup-order-3 {
+        left: 52.5%;
+      }
+
+      &.popup-order-4 {
+        left: 147.5%;
+      }
+    }
+
+    .popup-count-5 {
+      &.popup-order-1 {
+        right: 137.5%;
+      }
+
+      &.popup-order-2 {
+        right: 42.5%;
+      }
+
+      &.popup-order-3 {
+        left: 52.5%;
+      }
+
+      &.popup-order-4 {
+        left: 147.5%;
+      }
+
+      &.popup-order-5 {
+        left: 147.5%;
+      }
+    }
+
+    #noticePopupImage {
+      width: 100% !important;
+      margin-bottom: 16px;
+    }
+  }
+
+  &#slotModal {
+    .modal-content {
+      background-attachment: fixed;
+    }
+  }
+}
+
+#popup1 {
+  z-index: 1057;
+}
+#popup2 {
+  z-index: 1058;
+}
+#popup3 {
+  z-index: 1059;
+}
+#popup4 {
+  z-index: 1060;
+}
+#popup5 {
+  z-index: 1061;
+}
+
+#attendanceTable {
+  .countinueCounter,
+  #attendanceBtn {
+    font-weight: bold;
+    font-size: 1.1rem;
+    margin-bottom: 8px;
+  }
+
+  table {
+    font-weight: bolder;
+    color: #000;
+    background-color: #fff;
+    tbody {
+      border-radius: 5px;
+      td {
+        width: 80px;
+        height: 100px;
+        padding: 8px;
+        &.checked {
+          background-color: rgba(255, 196, 81, 0.5);
+          background-image: url('/public/images/attendance.png');
+          background-repeat: no-repeat;
+          background-size: 60px 60px;
+          background-position: center 60%;
+        }
+      }
+    }
+  }
+}
+
+.modal-backdrop {
+  opacity: 0.6 !important;
+}
+
+@media screen and (max-width: 992px) {
+  .modal {
+    &.popup {
+      .modal-dialog {
+        .modal-content {
+          height: 670px;
+        }
+      }
+
+      .popup-count-2 {
+        &.popup-order-1 {
+          right: auto;
+        }
+
+        &.popup-order-2 {
+          left: auto;
+        }
+      }
+
+      .popup-count-3 {
+        &.popup-order-1 {
+          right: auto;
+        }
+
+        &.popup-order-3 {
+          left: auto;
+        }
+      }
+
+      .popup-count-4 {
+        &.popup-order-1 {
+          right: auto;
+        }
+
+        &.popup-order-2 {
+          right: auto;
+        }
+
+        &.popup-order-3 {
+          left: auto;
+        }
+
+        &.popup-order-4 {
+          left: auto;
+        }
+      }
+
+      .popup-count-5 {
+        &.popup-order-1 {
+          right: auto;
+        }
+
+        &.popup-order-2 {
+          right: auto;
+        }
+
+        &.popup-order-3 {
+          left: auto;
+        }
+
+        &.popup-order-4 {
+          left: auto;
+        }
+
+        &.popup-order-5 {
+          left: auto;
+        }
+      }
+    }
+  }
+
+  #popup1 {
+    z-index: 1061;
+  }
+  #popup2 {
+    z-index: 1060;
+  }
+  #popup3 {
+    z-index: 1059;
+  }
+  #popup4 {
+    z-index: 1058;
+  }
+  #popup5 {
+    z-index: 1057;
+  }
+}
+
+@media screen and (max-width: 430px) {
+  .modal {
+    font-size: 0.8rem;
+
+    .modal-content {
+      padding: 1rem;
+      margin: 0 1rem;
+
+      .modal-header {
+        .modal-title {
+          font-size: 1.2rem;
+        }
+      }
+
+      .btn {
+        font-size: 0.7rem;
+      }
+
+      .join-text {
+        a {
+          font-size: 0.9rem;
+        }
+      }
+    }
+
+    &.login,
+    &.join {
+      .form-check {
+        padding-top: 0.2rem;
+      }
+
+      a {
+        font-size: 1rem;
+      }
+
+      #login-btn,
+      #join-btn {
+        font-size: 1rem;
+        color: #240057;
+        border: none;
+        background-color: $point;
+
+        &:active {
+          position: relative;
+          top: 1px;
+          left: 1px;
+          box-shadow: inset 0 0 3px rgba(0, 0, 0, 0.42);
+        }
+      }
+    }
+
+    &.deposit,
+    &.withdraw {
+      .modal-content {
+        padding: 0.5rem;
+
+        .modal-title {
+          font-size: 1.2rem;
+        }
+
+        .modal-body {
+          .check {
+            margin-bottom: 2rem;
+
+            h3 {
+              font-size: 1rem;
+            }
+
+            p {
+              font-size: 0.8rem;
+              font-weight: 500;
+            }
+          }
+
+          .form {
+            font-size: 1rem;
+            .row {
+              .input-group {
+                .input-group-text,
+                .form-control {
+                  font-size: 0.8rem;
+                }
+              }
+              .btn {
+                font-size: 0.8rem;
+              }
+            }
+          }
+        }
+      }
+    }
+
+    &.bankTime {
+      .modal-body {
+        .row {
+          div {
+            &.maintenance {
+              font-size: 0.8rem;
+            }
+          }
+        }
+      }
+    }
+  }
+}
+
+/*--------------------------------------------------------------
+# Header
+--------------------------------------------------------------*/
+#header {
+  // position: sticky;
+  // top: 560px;
+  transition: all 0.5s;
+  z-index: 4;
+  padding: 10px 0 !important;
+  background: rgba(0, 0, 0, 0.85);
+  // background: linear-gradient(to right, rgba(0, 0, 0, 1), rgb(168, 49, 49), rgba(0, 0, 0, 1));
+
+  .logo {
+    font-size: 32px;
+    margin: 0;
+    padding: 0 0 0 10px;
+    line-height: 1;
+    font-weight: 700;
+    letter-spacing: 2px;
+
+    a {
+      color: #fff;
+
+      span {
+        color: $point;
+      }
+    }
+  }
+
+  .navbar {
+    .col {
+      font-size: 1.2rem;
+      padding: 0;
+      border-left: 1px solid rgba(255, 196, 81, 0.2);
+      border-right: 1px solid rgba(255, 196, 81, 0.2);
+      &:first-child {
+        border-left: none;
+      }
+      &:last-child {
+        border-right: none;
+      }
+
+      .nav-link {
+        color: #fff;
+        font-size: 1.2rem;
+        cursor: pointer;
+
+        &:hover {
+          color: $point;
+          background-image: linear-gradient(to right, $point, $point);
+          background-repeat: no-repeat;
+          background-size: 50% 2px;
+          background-position: center 100%;
+        }
+      }
+    }
+  }
+
+  .login-buttons {
+    font-size: 1.1rem;
+    font-weight: 500;
+
+    #nav-login,
+    #nav-join,
+    #nav-logout {
+      width: 90px;
+      cursor: pointer;
+      font-weight: bold;
+      color: $point;
+      border-radius: 35px;
+      padding: 5px 0;
+      white-space: nowrap;
+      font-size: 0.95rem;
+      display: inline-block;
+      background: $secondary;
+      transition: all 0.3s;
+      border: 2px solid transparent;
+
+      &:hover {
+        border: 2px solid $point;
+      }
+    }
+
+    .get-started-btn {
+      font-weight: bold;
+      color: $point;
+      border-radius: 3px;
+      padding: 5px 0;
+      white-space: nowrap;
+      font-size: 0.95rem;
+      display: inline-block;
+      background: $secondary;
+      transition: all 0.3s;
+      border: 2px solid transparent;
+
+      &:hover {
+        border: 2px solid $point;
+      }
+    }
+
+    i {
+      border-radius: 5px;
+      display: inline-block;
+      width: 27px;
+      height: 27px;
+      padding: 3px 2px 1px;
+      font-size: 1rem;
+      font-weight: bold;
+      font-style: normal;
+      color: $point;
+
+      background: $secondary;
+    }
+
+    .user-money,
+    .user-point,
+    .user-name {
+      padding: 4px 0 0 10px;
+      color: $point;
+
+      .levelBtn {
+        background-color: $secondary;
+        color: $point;
+        padding: 2px 8px;
+      }
+    }
+  }
+}
+
+.langBtn {
+  cursor: pointer;
+  img {
+    border-radius: 5px;
+    width: 25px;
+    transition: all 0.5s;
+
+    &:hover {
+      transform: scale(1.2);
+    }
+  }
+}
+
+.langLst {
+  visibility: hidden;
+  position: absolute;
+  font-size: 0.9rem;
+  top: 75px;
+  right: 10px;
+  width: 165px;
+  opacity: 0;
+  transition: all 0.5s;
+
+  img {
+    width: 20px;
+  }
+
+  &.show {
+    visibility: visible;
+    opacity: 1;
+  }
+}
+
+@media Screen and (max-width: 992px) {
+  #header {
+    position: relative;
+    background: rgba(0, 0, 0, 0);
+    .logo {
+      img {
+        height: 60px;
+      }
+    }
+    .offcanvas {
+      max-width: 80%;
+      font-family: 'GmarketSansMedium' !important;
+      color: $point;
+      border: 1px solid rgba(255, 193, 7, 0.5);
+      border-left: none;
+      background-color: #000;
+      background-image: linear-gradient(rgba(0, 0, 0, 0.7), rgba(0, 0, 0, 0.7)), url('/public/custom/type_2/bg/bg_offcanvas.webp');
+      background-repeat: no-repeat;
+      background-size: 100%;
+
+      .offcanvas-header {
+        padding-bottom: 0 !important;
+
+        .offcanvas-title {
+          font-family: 'Giants-Bold' !important;
+          font-size: 1.3rem !important;
+        }
+      }
+
+      .offcanvas-body {
+        position: relative;
+        .user-info {
+          .username {
+            font-size: 1.2rem;
+          }
+        }
+
+        .let-login {
+          text-align: center;
+          font-size: 1.2rem;
+          margin: 20px 0;
+          width: 100%;
+          text-shadow: 1px 1px 5px black;
+        }
+        .sidebarMenu {
+          .col-6 {
+            text-align: center;
+            padding: 0 !important;
+            margin-bottom: 10px;
+
+            .btn-grad {
+              height: 25px;
+              background-image: linear-gradient(to right, #c19a6b 0%, #e7c392 51%, #c19a6b 100%);
+              margin: 5px;
+              padding: 20px 5px 15px;
+              text-align: center;
+              text-transform: uppercase;
+              transition: 0.5s;
+              background-size: 200% auto;
+              color: black;
+              // box-shadow: 0 0 20px #eee;
+              border-radius: 10px;
+              display: flex;
+              align-items: center;
+              justify-content: center;
+            }
+
+            .btn-grad:hover {
+              background-position: right center; /* change the direction of the change here */
+              color: #fff;
+              text-decoration: none;
+            }
+          }
+        }
+        .mobile-customer-section {
+          width: 100%;
+          position: absolute;
+          bottom: 30px;
+          font-size: 0.9rem;
+
+          .kakaotalk,
+          .telegram {
+            width: 40%;
+          }
+        }
+      }
+      .offcanvas-footer {
+        font-family: 'GmarketSansMedium' !important;
+        font-weight: bold;
+        .cs-info {
+          text-align: left;
+          margin-top: 1rem;
+          .title {
+            text-align: left;
+            margin-left: 8px;
+            margin-bottom: 0.5rem;
+            font-size: 1.4rem;
+          }
+          .telegram_id {
+            color: #1da1de;
+            margin-left: 5px;
+            font-size: 1rem;
+          }
+          .kakao_id {
+            color: #ffe90a;
+            margin-left: 5px;
+            font-size: 1rem;
+          }
+        }
+      }
+    }
+    .m_login {
+      margin-top: 10px;
+      .mobile-user-logout {
+        margin: 10px 0;
+        div {
+          padding: 0 2px;
+          text-align: center;
+
+          input,
+          input::placeholder {
+            padding: 5px;
+          }
+
+          #mobile-login-btn {
+            padding: 0.5rem 0.25rem;
+            font-size: 1rem;
+            color: $point;
+            background-color: $secondary;
+          }
+          #nav-join {
+            padding: 0.5rem 0.25rem;
+            font-size: 1rem;
+            color: $font-primary;
+            border: 1px solid $point;
+          }
+        }
+        .mobile-login-input {
+          background-color: #222222;
+          border: 1px solid rgba(256, 196, 81, 0.2);
+          width: 95%;
+          height: 32px;
+          border-radius: 5px;
+          color: #ffffff;
+          font-size: 12px;
+        }
+      }
+      .mobile-user-login {
+        margin: 20px 0 10px 0;
+        font-size: 0.9rem;
+        color: whitesmoke;
+
+        .login-symbol {
+          margin-left: 12px;
+          color: $point;
+          background-color: $secondary;
+          width: 22px;
+          height: 22px;
+          padding: 1px 1px 0 0;
+          vertical-align: middle;
+          font-size: 0.8rem;
+        }
+
+        .user-name {
+          font-size: 1.1rem;
+        }
+        .level-btn {
+          background-color: $secondary;
+          color: $point;
+          pointer-events: none;
+        }
+        #mobile-logout-btn {
+          padding: 4px 5px;
+          color: $point;
+          background-color: $secondary;
+        }
+      }
+    }
+  }
+}
+
+@media Screen and (max-width: 430px) {
+  #header {
+    .logo {
+      img {
+        height: 45px;
+      }
+    }
+    .m_login {
+      .mobile-user-logout {
+        div {
+          #mobile-login-btn {
+            padding: 0.25rem 0.5rem;
+            font-size: 0.875rem;
+            color: $point;
+            background-color: $secondary;
+          }
+          #nav-join {
+            padding: 0.25rem 0.3rem;
+            font-size: 0.875rem;
+            color: $font-primary;
+            border: 1px solid $point;
+          }
+        }
+        .mobile-login-input {
+          background-color: #222222;
+          border: 1px solid rgba(256, 196, 81, 0.2);
+          width: 95%;
+          height: 32px;
+          border-radius: 5px;
+          color: #ffffff;
+          font-size: 12px;
+        }
+      }
+    }
+  }
+}
+
+/*--------------------------------------------------------------
+#  Get Startet Button
+--------------------------------------------------------------*/
+
+.get-started-btn {
+  font-weight: bold;
+  color: $point;
+  border-radius: 3px;
+  padding: 5px 0;
+  white-space: nowrap;
+  font-size: 0.95rem;
+  display: inline-block;
+  background: $secondary;
+  transition: all 0.3s;
+  border: 2px solid transparent;
+
+  &:hover {
+    border: 2px solid $point;
+  }
+}
+
+@media (max-width: 992px) {
+  .get-started-btn {
+    padding: 7px 20px 8px 20px;
+    margin-right: 15px;
+  }
+}
+
+/*--------------------------------------------------------------
+#  Game Selector
+--------------------------------------------------------------*/
+
+.game-selector {
+  margin: auto;
+  width: 80%;
+  .nav.nav-tabs {
+    border: none;
+    height: 20rem;
+    margin: 1rem 0;
+    background-image: url(/public/custom/type_2/main/partition.png);
+    background-repeat: no-repeat;
+    background-size: 21px 100%;
+    background-position: center;
+
+    #nav-popular-tab,
+    #nav-new-tab,
+    #nav-casino-tab,
+    #nav-slots-tab,
+    #nav-sport-tab {
+      margin: auto;
+      // width: 323px;
+      // height: 248px;
+      width: 100%;
+      height: 100%;
+      background-repeat: no-repeat;
+      background-size: 100%;
+      border: none;
+      background-color: transparent;
+      transition: all 0.3s ease;
+
+      & + .text {
+        color: #9b9da2;
+        padding-top: 0.5rem;
+        font-size: 1rem;
+      }
+    }
+    .partition-tab {
+      margin: auto;
+      width: 10px;
+      height: 274px;
+      background-image: url(/public/custom/type_2/main/partition.png);
+      background-repeat: no-repeat;
+      background-size: contain;
+    }
+  }
+
+  @mixin tab-image($num) {
+    background-image: url(/public/custom/type_2/icon/tab_banner_0#{$num}.png);
+    filter: brightness(0.5);
+
+    &.active,
+    &:focus,
+    &:active {
+      background-image: url(/public/custom/type_2/icon/tab_banner_0#{$num}.png);
+      filter: drop-shadow(0px 0px 10px #ff3399);
+
+      & + .text {
+        color: $font-primary;
+        font-weight: 700;
+      }
+    }
+  }
+
+  #nav-casino-tab {
+    @include tab-image(1);
+  }
+
+  #nav-slots-tab {
+    @include tab-image(2);
+  }
+
+  #nav-sport-tab {
+    @include tab-image(3);
+  }
+
+  // #nav-popular-tab {
+  //   @include tab-image(3);
+  // }
+
+  // #nav-new-tab {
+  //   @include tab-image(4);
+  // }
+}
+
+.tab-content {
+  // 공통 요소: image-container
+  .image-container {
+    position: relative;
+    border: 1px solid #ffba00;
+    border-radius: 10px;
+
+    .main-image {
+      // position: relative;
+      width: 100% !important;
+      border-radius: 10px;
+    }
+
+    .logo-image {
+      position: absolute;
+      top: 0;
+      left: 0;
+      filter: drop-shadow(3px 3px 3px black);
+    }
+
+    .logo-text {
+      font-size: 1.2rem;
+      font-family: 'GangwonEduPowerExtraBoldA';
+      position: absolute !important;
+      bottom: 5%;
+      left: 6%;
+      -webkit-background-clip: text;
+      background-clip: text;
+      color: transparent;
+      -webkit-text-fill-color: transparent;
+      background-image: linear-gradient(to right, #d4af37, #ffd700);
+      filter: drop-shadow(5px 5px 5px black);
+      transition: all 0.2s ease-in-out;
+    }
+  }
+
+  // 각 탭별 고유 배경 이미지
+  #nav-casino {
+    .image-container {
+      background-image: linear-gradient(to right, rgba(0, 0, 0, 0.5), rgba(0, 0, 0, 0.5)), url('/public/images/casino/casino_bg.jpg');
+
+      .main-image::before {
+        background: linear-gradient(to center, rgba(0, 0, 0, 0.5), rgba(0, 0, 0, 0.5));
+      }
+    }
+  }
+
+  #nav-slots {
+    .image-container {
+      background-image: linear-gradient(to right, rgba(0, 0, 0, 0.5), rgba(0, 0, 0, 0.5)), url('/public/images/slots/slots_bg.jpg');
+
+      .main-image::before {
+        background: linear-gradient(to center, rgba(0, 0, 0, 0.5), rgba(0, 0, 0, 0.5));
+      }
+    }
+  }
+}
+
+/*-------------------------------------------------
+#  Main Section
+-------------------------------------------------*/
+#main-section {
+  background-image: linear-gradient(rgba(0, 0, 0, 0), rgba(0, 0, 0, 0)), url('/public/custom/type_2/bg/main_bg.jpg');
+  background-position: top;
+  background-size: 100%;
+  background-repeat: no-repeat;
+  background-attachment: fixed;
+  min-height: 100vh;
+
+  .container {
+    position: relative;
+    padding: 0;
+    max-width: 75%;
+  }
+
+  .banner-section {
+    margin-top: -7%;
+    position: relative;
+
+    .text-logo {
+      position: absolute;
+      top: 33%;
+      left: 50%;
+      transform: translate(-50%, 0);
+      z-index: 2;
+      width: 13.2292vw;
+      height: auto;
+    }
+
+    .item-card {
+      position: absolute;
+      top: 51%;
+      left: 6%;
+      opacity: 1;
+      z-index: 1;
+      width: 15.8854vw;
+      height: auto;
+    }
+
+    .item-chips {
+      position: absolute;
+      top: 72%;
+      left: 11%;
+      opacity: 1;
+      z-index: 1;
+      width: 8.125vw;
+      height: auto;
+    }
+
+    .item-dice {
+      position: absolute;
+      top: 78%;
+      left: 5%;
+      opacity: 1;
+      z-index: 3;
+      width: 7.6563vw;
+      height: auto;
+    }
+
+    .item-triple {
+      position: absolute;
+      top: 55%;
+      left: 60%;
+      opacity: 1;
+      z-index: 1;
+      width: 23.75vw;
+      height: auto;
+    }
+
+    .item {
+      position: absolute;
+      top: 56%;
+      left: 52%;
+      transform: translate(-50%, -50%) scale(0) rotate(-720deg);
+      opacity: 0;
+      animation-name: stretch;
+      animation-duration: 1s;
+      animation-delay: 1.8s;
+      animation-timing-function: ease-in;
+      animation-fill-mode: forwards;
+    }
+
+    .main-tom,
+    .main-jerry {
+      position: absolute;
+      top: -50%;
+      left: -50%;
+      transform: translate(-50%, -50%);
+      animation-fill-mode: forwards;
+      z-index: 3;
+    }
+
+    .main-tom {
+      animation-duration: 1.5s, 10s;
+      animation-timing-function: ease-in-out, linear;
+      animation-delay: 1s, 2s;
+      animation-name: slideInTom, reverseShake;
+      animation-iteration-count: 1, infinite;
+    }
+
+    .main-jerry {
+      animation-duration: 2s, 10s;
+      animation-timing-function: ease-in-out, linear;
+      animation-name: slideInJerry, shake;
+      animation-delay: 0s, 2s;
+      animation-iteration-count: 1, infinite;
+    }
+  }
+}
+
+/*--------------------------------------------------------------
+# Carousel
+--------------------------------------------------------------*/
+.carousel-cover {
+  position: relative;
+  margin-top: -5.5vh;
+  width: 100%;
+  z-index: 2;
+}
+
+.carousel {
+  position: absolute;
+  z-index: -1;
+  top: 13%;
+  left: 50%;
+  transform: translate(-50%, 0);
+  width: 78%;
+  height: auto;
+
+  .carousel-inner {
+    outline: none;
+    width: 100%;
+    height: 100%;
+
+    img {
+      width: 100%;
+      height: 100%;
+    }
+  }
+  .carousel-control-prev,
+  .carousel-control-next {
+    position: absolute;
+  }
+}
+
+/*--------------------------------------------------------------
+#  Image Overlay
+--------------------------------------------------------------*/
+@mixin overlay($iconSize, $fontSize, $innerPad) {
+  div {
+    overflow: hidden;
+    position: relative;
+
+    img {
+      transition: all 0.3s ease;
+    }
+
+    .overlay {
+      color: white;
+      position: absolute;
+      top: 0;
+      left: 0;
+      height: 100%;
+      width: 100%;
+      opacity: 0;
+      transition: all 0.5s ease;
+      background-color: black;
+      z-index: 1;
+
+      .play,
+      .enter {
+        font-size: $iconSize;
+        position: absolute;
+        top: 50%;
+        left: 50%;
+        transform: translate(-50%, -50%);
+      }
+
+      .name,
+      .provider {
+        font-family: 'Giants-Bold';
+        width: 90%;
+        word-wrap: break-word;
+        text-align: center;
+        position: absolute;
+        font-size: $fontSize;
+        left: 50%;
+        transform: translateX(-50%);
+      }
+
+      .name {
+        width: 90% !important;
+        top: $innerPad;
+      }
+
+      .provider {
+        bottom: $innerPad;
+      }
+    }
+
+    &:hover > img {
+      transform: scale(1.1);
+      opacity: 0.2;
+    }
+
+    &:hover > .logo-text {
+      opacity: 0.2;
+    }
+
+    &:hover > .overlay {
+      opacity: 0.95;
+    }
+  }
+}
+#nav-popular,
+#nav-new {
+  @include overlay(3rem, 1.3rem, 10%);
+}
+
+#nav-slots {
+  @include overlay(3rem, 1.2rem, 10%);
+  div {
+    .overlay {
+      .play,
+      .enter {
+        top: 55%;
+      }
+    }
+  }
+}
+
+#nav-casino {
+  @include overlay(3rem, 1.2rem, 10%);
+  div {
+    .overlay {
+      .play,
+      .enter {
+        top: 58%;
+      }
+    }
+  }
+}
+
+.modal::-webkit-scrollbar {
+  display: none;
+}
+
+body.modal-open {
+  padding-right: 0 !important;
+}
+
+#slotModal {
+  @include overlay(2.5rem, 1.2rem, 10%);
+  .modal-xl {
+    max-width: 80%;
+  }
+
+  div {
+    .slot-icon {
+      max-width: 200px;
+      object-fit: cover;
+    }
+
+    .overlay {
+      object-fit: cover;
+    }
+    &:hover > img {
+      transform: scale(1.4);
+      opacity: 0.2;
+    }
+  }
+}
+
+@media Screen and (max-width: 992px) {
+  #nav-casino {
+    @include overlay(3rem, 1.4rem, 12%);
+    div {
+      .overlay {
+        .play,
+        .enter {
+          top: 62%;
+        }
+      }
+    }
+  }
+
+  #nav-slots {
+    @include overlay(3rem, 1.2rem, 11%);
+    div {
+      .overlay {
+        .play,
+        .enter {
+          top: 58%;
+        }
+      }
+    }
+  }
+
+  #slotModal {
+    .modal-xl {
+      max-width: 100%;
+    }
+    @include overlay(2.5rem, 1rem, 10%);
+    div {
+      .slot-icon {
+        width: 175px !important;
+        height: 160px !important;
+      }
+    }
+  }
+}
+
+@media Screen and (max-width: 430px) {
+  #nav-casino {
+    @include overlay(2.5rem, 1rem, 12%);
+    div {
+      .overlay {
+        .play,
+        .enter {
+          top: 62%;
+        }
+      }
+    }
+  }
+
+  #nav-slots {
+    @include overlay(2.5rem, 0.8rem, 11%);
+    div {
+      .overlay {
+        .play,
+        .enter {
+          top: 58%;
+        }
+      }
+    }
+  }
+
+  #slotModal {
+    .modal-xl {
+      max-width: 100%;
+    }
+    @include overlay(1.5rem, 0.75rem, 9%);
+    div {
+      .slot-icon {
+        width: 100px !important;
+        height: 100px !important;
+        object-fit: fit;
+      }
+    }
+  }
+}
+
+/*--------------------------------------------------------------
+#  Footer Section
+--------------------------------------------------------------*/
+footer {
+  background-color: #000;
+
+  .partners {
+    width: 1200px;
+    height: 180px;
+  }
+
+  .copyright {
+    color: rgb(105, 105, 105);
+    padding: 10px 0;
+    font-size: 1rem;
+  }
+}
+
+@media Screen and (max-width: 992px) {
+  footer {
+    .container {
+      margin: auto;
+      width: 100% !important;
+      .partners {
+        width: 100%;
+        height: 100%;
+      }
+    }
+  }
+}
+
+@media Screen and (max-width: 430px) {
+  footer {
+    .copyright {
+      font-size: 0.8rem;
+    }
+  }
+}
+
+@keyframes pulse {
+  0% {
+    transform: scale(1);
+  }
+  50% {
+    transform: scale(1.1);
+  }
+  100% {
+    transform: scale(1);
+  }
+}
+
+.btn-pulse {
+  animation: pulse 1s infinite;
+  font-size: 0.9rem;
+}
+
+/*-------------------------------------------------
+#  Information Section
+-------------------------------------------------*/
+#information {
+  margin-top: -4.5vh;
+  width: 80%;
+  color: white;
+
+  #lottery-list,
+  #notice-list,
+  #bank-list,
+  #win-list {
+    height: 9vw;
+    border: 3px solid $point;
+    border-radius: 10px;
+  }
+
+  #jackpot {
+    position: relative;
+    height: 13vh;
+    font-family: 'Giants-Bold';
+    font-size: 2rem;
+    background-image: url(/public/custom/type_2/main/main_jackpot_bg.png);
+    background-repeat: no-repeat;
+    background-size: 98%;
+    background-position: center;
+    #counter {
+      position: absolute;
+      right: 17%;
+      top: 50%;
+      transform: translate(0, -50%);
+      font-size: 3rem;
+      font-family: 'Giants-Bold';
+      text-shadow: 3px 5px 2px #818181, 2px 2px 2px rgba(206, 89, 55, 0);
+      color: #f5f5f5;
+    }
+  }
+
+  #lottery-list,
+  #notice-list,
+  #bank-list {
+    background-image: linear-gradient(rgba(0, 0, 0, 0.6), rgba(0, 0, 0, 0.6)), url(/public/custom/type_2/bg/live-bank.jpg);
+    background-repeat: no-repeat;
+    background-size: cover;
+
+    .nav-pills {
+      .nav-link {
+        font-size: 1.1rem;
+        font-family: 'GmarketSansMedium';
+        padding-top: 0.75rem;
+        background-color: transparent;
+        color: $point;
+        border-radius: 0;
+        padding-bottom: 6px;
+        &.active {
+          background-image: linear-gradient(to right, $point, $point);
+          background-repeat: no-repeat;
+          background-size: 65% 2px; /* 밑줄 길이와 두께 조절 */
+          background-position: center 100%; /* 가운데 정렬 및 Y 위치 조절 */
+          padding-bottom: 5px; /* 글자와 밑줄 사이의 간격 조절 */
+        }
+      }
+    }
+
+    .list-group-item {
+      color: white;
+      background-color: transparent;
+    }
+    .marquee {
+      padding-left: 5%;
+      text-align: left;
+      overflow: hidden;
+      &:hover {
+        color: red;
+      }
+    }
+  }
+
+  #notice-list {
+    background-image: linear-gradient(rgba(0, 0, 0, 0.6), rgba(0, 0, 0, 0.6)), url(/public/custom/type_2/bg/spotlight.jpg);
+    .marquee {
+      height: 150px;
+    }
+  }
+
+  #lottery-list {
+    background-image: linear-gradient(rgba(0, 0, 0, 0.6), rgba(0, 0, 0, 0.6)), url(/public/custom/type_2/main/ball_mix.webp),
+      url(/public/custom/type_2/main/ball_case.webp), url(/public/custom/type_2/bg/spotlight.jpg);
+    background-repeat: no-repeat;
+    background-size: cover, 23%, 23%, cover;
+    background-position: center, 95% 50%, 95% 50%, center;
+
+    .lottery-title,
+    .lottery-count {
+      font-size: 1.1rem;
+      font-family: 'GmarketSansMedium';
+      padding-top: 0.75rem;
+      background-color: transparent;
+      color: $point;
+      border-radius: 0;
+      padding-bottom: 6px;
+    }
+
+    .lottery-title {
+      padding-left: 30px;
+    }
+
+    .lottery-count {
+      font-size: 1.4rem;
+      font-weight: bold;
+    }
+
+    .marquee {
+      padding-left: 0;
+      &:hover {
+        color: white;
+      }
+    }
+
+    .ball {
+      font-size: 0.9rem;
+      display: inline-block;
+      width: 27px;
+      height: 27px;
+      line-height: 27px;
+      text-align: center;
+      border-radius: 50%;
+      color: white;
+      margin-right: 5px;
+      text-shadow: 1px 1px 1px black;
+
+      &.yellow {
+        background-color: #fac200;
+      }
+      &.blue {
+        background-color: #5bb4dd;
+      }
+      &.red {
+        background-color: #ff7272;
+      }
+      &.gray {
+        background-color: #aaaaaa;
+      }
+      &.green {
+        background-color: #b0d840;
+      }
+    }
+  }
+
+  #win-list {
+    background-image: linear-gradient(rgba(0, 0, 0, 0.6), rgba(0, 0, 0, 0.6)), url(/public/custom/type_2/bg/spotlight.jpg);
+    background-repeat: no-repeat;
+    background-size: cover;
+  }
+}
+
+@media screen and (max-width: 992px) {
+  #information {
+    width: 100%;
+    margin-top: 0.3rem;
+
+    #jackpot,
+    #bank-list,
+    #notice-list,
+    #live-win,
+    #lottery-list {
+      height: 8rem;
+      .nav-pills {
+        .nav-link {
+          padding-top: 0.25rem;
+        }
+      }
+    }
+
+    #jackpot {
+      font-size: 1.8rem;
+      height: 4rem;
+      #counter {
+        right: 18.5%;
+        font-size: 2rem;
+        text-shadow: 1px 2px 2px #818181, 1px 1px 2px rgba(206, 89, 55, 0);
+      }
+    }
+
+    #lottery-list {
+      .lottery-title,
+      .lottery-count,
+      .lottery {
+        font-size: 0.9rem;
+      }
+      .lottery-title {
+        padding-left: 1rem;
+      }
+      .lottery-count {
+        padding: 1rem 0 0 0.7rem !important;
+        i {
+          font-size: 1rem !important;
+        }
+      }
+      .list-group {
+        .info-ball-group {
+          padding-right: 1rem !important;
+          .ball {
+            margin-right: 10px;
+            margin-bottom: 5px;
+            font-size: 0.9rem;
+            width: 30px;
+            height: 30px;
+            line-height: 30px;
+          }
+        }
+      }
+    }
+    #notice-list {
+      .nav-link {
+        font-size: 0.9rem !important;
+      }
+      .list-group-item {
+        padding: 0 10px;
+        font-size: 0.9rem;
+      }
+    }
+    #bank-list {
+      .nav-link {
+        font-size: 0.9rem !important;
+      }
+      .list-group-item {
+        padding: 0 10px;
+        font-size: 0.7rem;
+      }
+    }
+  }
+}
+
+@media screen and (max-width: 430px) {
+  #information {
+    width: 100%;
+    margin-top: 0;
+
+    #jackpot,
+    #bank-list,
+    #notice-list,
+    #live-win,
+    #lottery-list {
+      height: 6rem;
+    }
+
+    #jackpot {
+      font-size: 1.8rem;
+      height: 3rem;
+      #counter {
+        right: 18.5%;
+        font-size: 0.8rem;
+        text-shadow: 1px 2px 2px #818181, 1px 1px 2px rgba(206, 89, 55, 0);
+      }
+    }
+
+    #lottery-list {
+      .lottery-title,
+      .lottery-count,
+      .lottery {
+        font-size: 0.7rem;
+      }
+      .lottery-title {
+        padding-left: 1rem;
+      }
+      .lottery-count {
+        padding: 0.3px 0 0 0.7rem !important;
+        i {
+          font-size: 1rem !important;
+        }
+      }
+      .list-group {
+        .info-ball-group {
+          padding-right: 1rem !important;
+          .ball {
+            margin-right: 5px !important;
+            margin-bottom: 5px;
+            font-size: 0.7rem;
+            width: 22px;
+            height: 22px;
+            line-height: 22px;
+          }
+        }
+      }
+    }
+    #bank-list {
+      .nav-link {
+        font-size: 0.7rem;
+      }
+      .list-group-item {
+        padding: 0 10px;
+        font-size: 0.7rem;
+      }
+    }
+  }
+}
+
+/*-------------------------------------------------
+#  Lottery event
+-------------------------------------------------*/
+.lottery {
+  .modal-content {
+    padding: 1rem 1rem 0.5rem 1rem;
+    background-image: linear-gradient(rgba(0, 0, 0, 0.9), rgba(0, 0, 0, 0.9)), url(/public/custom/type_2/bg/modal_bg.webp);
+    background-repeat: repeat-y;
+    background-size: 100%;
+
+    table {
+      margin-bottom: 0;
+    }
+
+    .sub-title {
+      font-size: 1.4rem;
+    }
+
+    #lotteryList,
+    #lotteryDetail {
+      .sub-title {
+        font-size: 1.2rem;
+        font-weight: bold;
+      }
+      .count {
+        line-height: 2.5rem;
+        font-size: 1.25rem;
+      }
+
+      #clock {
+        display: flex;
+        align-items: center;
+
+        .countdown {
+          padding: 0 0 0.5rem 1rem;
+          font-size: 2rem;
+        }
+      }
+
+      .ball {
+        font-size: 1.1rem;
+        display: inline-block;
+        width: 40px;
+        height: 40px;
+        line-height: 40px;
+        text-align: center;
+        border-radius: 50%;
+        color: white;
+        margin-right: 5px;
+
+        &.yellow {
+          background-color: #fac200;
+        }
+        &.blue {
+          background-color: #5bb4dd;
+        }
+        &.red {
+          background-color: #ff7272;
+        }
+        &.gray {
+          background-color: #7e7e7e;
+        }
+        &.green {
+          background-color: #b0d840;
+        }
+      }
+    }
+
+    #lotteryDetail {
+      a {
+        pointer-events: none;
+      }
+
+      .lotto-table-title {
+        font-size: 1.4rem;
+        padding-left: 1rem;
+        text-align: left;
+      }
+
+      #lottoNumberTable {
+        border-top: 2px solid black;
+        #lottoNumberGrid {
+          .selected {
+            background-color: $point;
+          }
+        }
+
+        .selected-ball-group {
+          height: 4rem;
+          text-align: center;
+          margin: 3rem auto;
+
+          .ball {
+            font-size: 2rem;
+            display: inline-block;
+            width: 4rem;
+            height: 4rem;
+            line-height: 4rem;
+            text-align: center;
+            border-radius: 50%;
+            color: white;
+            margin-right: 10px;
+            text-shadow: 1px 1px 2px black;
+            box-shadow: 0px 8px 16px rgba(0, 0, 0, 0.8);
+            transition: transform 0.3s ease;
+            position: relative;
+
+            &:before {
+              content: '';
+              position: absolute;
+              top: 10%;
+              left: 0%;
+              width: 60%;
+              height: 30%;
+              background: radial-gradient(circle, rgba(255, 255, 255, 0.8), transparent);
+              border-radius: 50%;
+              transform: scale(1.2) rotate(-45deg); /* 반사 효과 크기 조절 */
+            }
+
+            &:hover {
+              transform: scale(1.05); /* 마우스 오버 시 확대 및 회전 */
+            }
+
+            &.yellow {
+              background-color: #fac200;
+            }
+            &.blue {
+              background-color: #5bb4dd;
+            }
+            &.red {
+              background-color: #ff7272;
+            }
+            &.gray {
+              background-color: #aaaaaa;
+            }
+            &.green {
+              background-color: #b0d840;
+            }
+          }
+
+          /* 색상별 그라데이션 추가 */
+          .yellow {
+            background: linear-gradient(to bottom right, #ffe066, #fac200);
+          }
+          .blue {
+            background: linear-gradient(to bottom right, #9ad4e6, #5bb4dd);
+          }
+          .red {
+            background: linear-gradient(to bottom right, #ffb6b6, #ff7272);
+          }
+          .gray {
+            background: linear-gradient(to bottom right, #d4d4d4, #aaaaaa);
+          }
+          .green {
+            background: linear-gradient(to bottom right, #d4f07c, #b0d840);
+          }
+
+          // .ball {
+          //   font-size: 2rem;
+          //   display: inline-block;
+          //   width: 4rem;
+          //   height: 4rem;
+          //   line-height: 4rem;
+          //   text-align: center;
+          //   border-radius: 50%;
+          //   color: white;
+          //   margin-right: 5px;
+          //   // text-shadow: 1px 1px 1px black;
+
+          //   &.yellow {
+          //     background-color: #fac200;
+          //   }
+          //   &.blue {
+          //     background-color: #5bb4dd;
+          //   }
+          //   &.red {
+          //     background-color: #ff7272;
+          //   }
+          //   &.gray {
+          //     background-color: #aaaaaa;
+          //   }
+          //   &.green {
+          //     background-color: #b0d840;
+          //   }
+          // }
+        }
+        .lotte-btn-group {
+          padding: 2rem 2rem 0 2rem;
+        }
+      }
+
+      #drawnParticipantsTable {
+        .ball-group {
+          .ball {
+            &.yellow {
+              background-color: #fac200;
+            }
+            &.blue {
+              background-color: #5bb4dd;
+            }
+            &.red {
+              background-color: #ff7272;
+            }
+            &.gray {
+              background-color: #7e7e7e;
+            }
+            &.green {
+              background-color: #b0d840;
+            }
+          }
+        }
+
+        .ball {
+          width: 35px;
+          height: 35px;
+          line-height: 35px;
+          font-size: 1rem;
+          &.yellow,
+          &.blue,
+          &.red,
+          &.gray,
+          &.green {
+            background-color: #d4d2d2;
+          }
+          // filter: brightness(0.45);
+          &.win {
+            &.yellow {
+              background-color: #fac200;
+            }
+            &.blue {
+              background-color: #5bb4dd;
+            }
+            &.red {
+              background-color: #ff7272;
+            }
+            &.gray {
+              background-color: #7e7e7e;
+            }
+            &.green {
+              background-color: #b0d840;
+            }
+            // filter: brightness(1);
+          }
+        }
+      }
+
+      #rankingInfoTable {
+        vertical-align: middle;
+        tr {
+          height: 3rem !important;
+          div {
+            max-height: 5rem;
+          }
+        }
+
+        .col-rank {
+          width: 10%;
+        }
+        .col-win-count {
+          width: 10%;
+        }
+        .col-win-id {
+          width: 40%;
+        }
+        .col-win-condition {
+          width: 20%;
+        }
+      }
+    }
+  }
+}
+
+@media screen and (max-width: 430px) {
+  .lottery {
+    .modal-content {
+      #lotteryList,
+      #lotteryDetail {
+        .participant-title {
+          font-size: 0.95rem;
+          text-align: left;
+          padding-left: 1rem;
+        }
+        .sub-title {
+          font-size: 0.9rem;
+          font-weight: bold;
+        }
+        .count {
+          line-height: 1.5rem;
+          font-size: 0.9rem;
+        }
+        .ball-group {
+          text-align: center;
+          .ball {
+            font-size: 0.9rem;
+            display: inline-block;
+            width: 30px;
+            height: 30px;
+            line-height: 30px;
+            text-align: center;
+            border-radius: 50%;
+            color: white;
+            margin-right: 5px;
+          }
+        }
+
+        #clock {
+          display: block;
+          .countdown-desc {
+            font-size: 0.9rem;
+          }
+          .countdown {
+            width: 60%;
+            padding: 0.7rem 0 0 4rem;
+            text-align: center;
+            font-size: 1.8rem;
+          }
+        }
+      }
+
+      #lotteryDetail {
+        #rankingInfoTable {
+          .col-rank {
+            width: 11%;
+          }
+          .col-win-count {
+            width: 13%;
+          }
+          .col-win-id {
+            width: 35%;
+          }
+          .col-win-condition {
+            width: 17%;
+          }
+        }
+
+        #drawnParticipantsTable {
+          th {
+            padding: 0.5rem;
+          }
+
+          .selectedNumber {
+            .ball {
+              margin: 0.1rem;
+              width: 27px;
+              height: 27px;
+              line-height: 27px;
+              font-size: 0.8rem;
+            }
+          }
+
+          .winningCount {
+            width: 2.5rem;
+          }
+
+          .rank {
+            .btn-success,
+            .btn-primary,
+            .btn-danger {
+              width: 2.5rem !important;
+            }
+          }
+        }
+      }
+    }
+  }
+}
+
+/*-------------------------------------------------
+#  ETC Section
+-------------------------------------------------*/
+#btn-back-to-top {
+  position: fixed;
+  bottom: 3.5%;
+  left: 50%;
+  z-index: 100;
+  display: none;
+  transform: translateX(-50%);
+  box-shadow: rgba(0, 0, 0, 0.17) 0px -23px 25px 0px inset, rgba(0, 0, 0, 0.15) 0px -36px 30px 0px inset, rgba(0, 0, 0, 0.1) 0px -79px 40px 0px inset,
+    rgba(0, 0, 0, 0.06) 0px 2px 1px, rgba(0, 0, 0, 0.09) 0px 4px 2px, rgba(0, 0, 0, 0.09) 0px 8px 4px, rgba(0, 0, 0, 0.09) 0px 16px 8px,
+    rgba(0, 0, 0, 0.09) 0px 32px 16px;
+}
+
+@media screen and (max-width: 430px) {
+  #btn-back-to-top {
+    position: fixed;
+    bottom: 2%;
+    left: 50%;
+    z-index: 100;
+    display: none;
+    transform: translateX(-50%);
+    box-shadow: rgba(0, 0, 0, 0.17) 0px -23px 25px 0px inset, rgba(0, 0, 0, 0.15) 0px -36px 30px 0px inset, rgba(0, 0, 0, 0.1) 0px -79px 40px 0px inset,
+      rgba(0, 0, 0, 0.06) 0px 2px 1px, rgba(0, 0, 0, 0.09) 0px 4px 2px, rgba(0, 0, 0, 0.09) 0px 8px 4px, rgba(0, 0, 0, 0.09) 0px 16px 8px,
+      rgba(0, 0, 0, 0.09) 0px 32px 16px;
+  }
+}
+
+.spinner-container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  z-index: 9999;
+  background-color: rgba(0, 0, 0, 0.5);
+}
+
+.spinner-border {
+  width: 3rem;
+  height: 3rem;
+}
+
+body.modal-open {
+  overflow: hidden;
+  padding-right: 15px; /* 스크롤 바의 너비에 맞게 조정하세요 */
+}
+
+.tab-content {
+  .row {
+    .overlay {
+      border: $point 1px solid;
+      border-radius: 0.5rem;
+    }
+  }
+}
+
+.img-thumbnail {
+  padding: 0.1rem !important;
+  // background-color: $point !important;
+  border: $point 3px solid !important;
+}
+
+.text3d-multi {
+  text-shadow: 1px 1px 0 #fff, 2px 2px 0 #dfdfdf, 3px 3px 0 #bfbfbf, 4px 4px 0 #9f9f9f;
+}
+
+#captcha-img {
+  border-top-left-radius: 0.375rem;
+  border-bottom-left-radius: 0.375rem;
+  background-color: #fafafa;
+  cursor: pointer;
+}
+
+@media screen and (max-width: 992px) {
+  #main-section {
+    min-height: initial;
+    background-size: 110%;
+    background-position: center;
+    background-image: linear-gradient(rgba(0, 0, 0, 0.7), rgba(0, 0, 0, 0.7)), url(/public/custom/type_2/bg/m_main_bg.jpg);
+    // #header {
+    //   background-image: linear-gradient(rgba(0, 0, 0, 0.8), rgba(0, 0, 0, 0.8)), url(/public/custom/type_2/bg/m_main_bg.jpg);
+    //   background-repeat: no-repeat;
+    //   background-size: 100%;
+    //   background-position: center top;
+    // }
+
+    .container {
+      margin: 1rem auto;
+      max-width: 90%;
+
+      .carousel-cover {
+        width: 97%;
+        margin-top: 0;
+
+        .carousel {
+          top: 17%;
+          width: 86%;
+          .carousel-inner {
+            width: 100%;
+            img {
+              width: 100%;
+            }
+          }
+        }
+      }
+
+      .game-selector {
+        width: 100%;
+        padding: 0;
+        .nav.nav-tabs {
+          border: none;
+          margin: 1rem 0;
+          background-image: url(/public/custom/type_2/main/partition.png);
+          background-repeat: no-repeat;
+          background-size: auto 80%;
+          background-position: center 20%;
+
+          .col-4 {
+            padding: 0;
+          }
+
+          #nav-casino-tab {
+            width: 100%;
+            margin-right: 0;
+          }
+          #nav-slots-tab {
+            width: 100%;
+            margin-left: 0;
+          }
+        }
+        .tab-content {
+          .image-container {
+            .logo-text {
+              font-size: 0.75rem;
+            }
+          }
+        }
+      }
+    }
+  }
+
+  .m-login-message {
+    color: $alert;
+  }
+}
+
+@media screen and (max-width: 430px) {
+  #main-section {
+    background-position: top;
+    .container {
+      margin: auto;
+      max-width: 95%;
+
+      .banner-section {
+        margin-top: -2%;
+        z-index: 1;
+        background-size: contain;
+
+        .item-main {
+          img {
+            margin-top: -4.5%;
+            width: 75%;
+          }
+        }
+        .text-logo {
+          top: 23%;
+          img {
+            width: 25%;
+          }
+        }
+      }
+
+      .carousel-cover {
+        width: 95%;
+        margin-top: 0;
+
+        .carousel {
+          top: 17%;
+          width: 86%;
+          .carousel-inner {
+            width: 100%;
+            img {
+              width: 100%;
+            }
+          }
+        }
+      }
+
+      .game-selector {
+        padding: 0;
+        .nav.nav-tabs {
+          border: none;
+          height: 6.5rem;
+          margin: 0 0 1rem 0;
+          background-image: url(/public/custom/type_2/main/partition.png);
+          background-repeat: no-repeat;
+          background-size: contain;
+          background-position: center;
+
+          #nav-casino-tab,
+          #nav-slots-tab,
+          #nav-sport-tab {
+            height: 100%;
+          }
+        }
+      }
+
+      .tab-content {
+        .tab-pane {
+          margin-top: 1rem;
+        }
+      }
+    }
+  }
+
+  .m-login-message {
+    color: $alert;
+  }
+}
+
+.sns-pc {
+  width: 12.5rem;
+  position: fixed;
+  right: 50px;
+  bottom: 50px;
+  font-size: 1.6rem;
+  font-weight: bold;
+  img {
+    width: 3rem;
+  }
+  .telegram {
+    border: 3px solid #1da1de;
+    border-radius: 0.5rem;
+    img {
+      background-color: #1da1de;
+    }
+    a {
+      margin-left: 5px;
+      color: #20a3e1;
+    }
+  }
+  .kakao {
+    border: 3px solid #ffe90a;
+    border-radius: 0.5rem;
+    img {
+      background-color: #ffe90a;
+    }
+    span {
+      margin-left: 5px;
+      color: #ffe90a;
+    }
+  }
+}
+
+.sns-mobile {
+  width: 8.2rem;
+  font-size: 1.2rem;
+  font-weight: bold;
+  img {
+    width: 2rem;
+    border-radius: 0.5rem;
+  }
+  .telegram {
+    // border: 2px solid #1da1de;
+    // border-radius: 0.5rem;
+    img {
+      background-color: #1da1de;
+    }
+    a {
+      margin-left: 5px;
+      color: #20a3e1;
+    }
+  }
+  .kakao {
+    // border: 2px solid #FFE90A;
+    // border-radius: 0.5rem;
+    img {
+      background-color: #ffe90a;
+    }
+    span {
+      margin-left: 5px;
+      color: #ffe90a;
+    }
+  }
+}

@@ -1,0 +1,116 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="event">
+// 출석체크 이벤트
+  // 출석체크 초기화(월초)
+    <update id='resetAttendance'>
+      UPDATE attendance_history
+      SET
+        monthlyAttDays = ''
+    </update>
+// 로또 테이블
+  <select id='getLottoData'>
+    SELECT *
+    FROM event_lottery_view
+  </select>
+// 로또 이벤트
+  // 로또 가상 유저 참여 데이터 생성
+    <select id='checkVirtualLotteryDataByRound'>
+      SELECT *
+      FROM event_lottery_history
+      WHERE round = ${round} AND is_virtual = 1
+      LIMIT 1
+    </select>
+
+    <insert id='insertLotteryHistory'>
+      INSERT INTO event_lottery_history
+        (
+          round,
+          submit_datetime,
+          id,
+          selected_numbers,
+          is_virtual
+        )
+      VALUES
+        (
+          #{round},
+          #{submit_datetime},
+          #{id},
+          #{selected_numbers},
+          #{is_virtual}
+        )
+    </insert>
+
+    <insert id='insertVirtualLotteryHistory'>
+      INSERT INTO event_lottery_history
+        (
+          round,
+          submit_datetime,
+          id,
+          selected_numbers,
+          is_virtual
+        )
+      VALUES
+      <foreach collection="lotteryData" item="data"  separator=",">
+        (
+          ${data.round},
+          #{data.submit_datetime},
+          #{data.id},
+          #{data.selected_numbers},
+          #{data.is_virtual}
+        )
+      </foreach>
+    </insert>
+
+    <select id='getRandomVirtualIds'>
+      SELECT id
+      FROM virtual_user
+      ORDER BY RAND()
+      LIMIT 500
+    </select>
+
+    <delete id='deleteOlderRoundData'>
+      DELETE FROM event_lottery_history
+      WHERE round &lt; ${oldRound}
+    </delete>
+
+  // 당첨 번호 추첨
+    <select id='getLotteryHistory'>
+      SELECT *
+      FROM event_lottery_history
+      WHERE round = ${drwNo}
+    </select>
+
+    <update id='updateLotteryHistory'>
+      UPDATE event_lottery_history
+      SET
+        winning_numbers = #{winningNumbers},
+        winning_count = #{winningCount},
+        paid_prize = #{paidPrize},
+        prize_amount = #{prizeAmount}
+      WHERE lottery_id = ${lotteryId}
+    </update>
+
+    <update id='updatePaidPrize'>
+      UPDATE event_lottery_history
+      SET
+        paid_prize = ${paidPrize}
+      WHERE id = #{receiverId}
+    </update>
+
+  // 강제 당첨
+    <select id='randomSelectLotteryHistory'>
+      SELECT *
+      FROM event_lottery_history 
+      WHERE round = ${drwNo} AND is_virtual = 1
+      ORDER BY RAND()
+      LIMIT ${count};
+    </select>
+
+    <update id='forcedUpdateHistory'>
+      UPDATE event_lottery_history
+      SET
+        selected_numbers = #{winningNumbers}        
+      WHERE lottery_id = ${lotteryId}
+    </update>
+</mapper>

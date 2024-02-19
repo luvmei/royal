@@ -1,0 +1,443 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="agent">    
+// 에이전트관리 테이블 뷰
+  <select id="agentInfo">
+    SELECT
+      *
+    FROM
+      agent_info_view
+    <where>
+      <if test="node_id != undefined">
+        AND node_id LIKE CONCAT(#{node_id},'%')
+      </if>
+    </where>
+  </select>
+
+  <select id="agentAsset">
+    SELECT
+      *
+    FROM
+      agent_asset_view
+    <where>
+      <if test="node_id != undefined">
+        AND node_id LIKE CONCAT(#{node_id},'%')
+      </if>
+    </where>;
+  </select>
+
+  <select id="agentCommission">
+    SELECT
+      *
+    FROM
+      agent_commission_view
+    <where>
+      <if test="node_id != undefined">
+        AND node_id LIKE CONCAT(#{node_id},'%')
+      </if>
+    </where>;
+  </select>
+
+   <select id="agentBetting">
+    SELECT
+      *
+    FROM
+      agent_betting_view
+    <where>
+      <if test="node_id != undefined">
+        AND node_id LIKE CONCAT(#{node_id},'%')
+      </if>
+    </where>;
+  </select>
+
+  <select id="agentConnect">
+    SELECT
+      *
+    FROM
+      agent_connect_view
+    <where>
+      SUBSTRING(접속일시, 1, 10) 
+      BETWEEN #{startDate} AND #{endDate}
+      <if test="node_id != undefined">
+        AND node_id LIKE CONCAT(#{node_id},'%')
+      </if>
+    </where>;
+  </select>
+
+  <select id="agentBlock">
+    SELECT
+      *
+    FROM
+      agent_block_view
+    <where>
+      <!-- SUBSTRING(차단일시, 1, 10) 
+      BETWEEN #{startDate} AND #{endDate} -->
+      <if test="node_id != undefined">
+        AND node_id LIKE CONCAT(#{node_id},'%')
+      </if>
+    </where>;
+  </select>
+
+// 에이전트 중복체크
+  <select id='checkAgentId'>
+    SELECT id
+    FROM user
+    WHERE id=#{id} limit 1;
+  </select>
+
+  <select id='checkAgentNick'>
+    SELECT nickname
+    FROM user
+    WHERE nickname=#{nickname} LIMIT 1;
+  </select>
+
+  <select id='counterUser'>
+    SELECT count(*) AS count
+    FROM user
+    WHERE upper_agt=(SELECT user_id
+                    FROM user AS u
+                    WHERE u.id = #{id});
+  </select>
+
+// 에이전트 생성 공통
+  <select id='insertAgentInfo'>
+    INSERT INTO user
+      (
+        id,
+        pw,
+        nickname,
+        phone,
+        bank,
+        bank_num,
+        bank_owner,
+        bank_pw,
+        state,
+        type,
+        upper_agt,
+        reg_code,
+        reg_domain,
+        join_date
+      )
+    VALUES
+      (
+        #{id},
+        #{pw},
+        #{nickname},
+        #{phone},
+        #{bank},
+        #{bank_num},
+        #{bank_owner},
+        #{bank_pw},
+        #{state},
+        #{type},
+        (SELECT user_id
+        FROM user AS u
+        WHERE u.id = #{upper_id}),
+        #{reg_code},
+        #{reg_domain},
+        #{join_date}
+      )
+  </select>
+
+  <select id='insertAssetInfo'>
+    INSERT INTO user_asset_info
+      (
+        user_id
+      )
+    VALUES
+      (
+        (SELECT user_id
+        FROM user 
+        ORDER BY user_id DESC 
+        LIMIT 1)
+      );
+  </select>
+
+  <select id='insertCommisionInfo'>
+    INSERT INTO user_commission_info
+      (
+        user_id,
+        c_roll_rate,
+        s_roll_rate,
+        lose_rate
+      )
+    VALUES
+      (
+        (SELECT user_id
+        FROM user 
+        ORDER BY user_id DESC 
+        LIMIT 1),
+        ${casino_roll},
+        ${slot_roll},
+        ${lose_rate}
+      );
+  </select>  
+
+  <select id='insertBettingInfo'>
+    INSERT INTO user_betting_info
+      (
+        user_id
+      )
+    VALUES
+      (
+        (SELECT user_id
+        FROM user 
+        ORDER BY user_id DESC 
+        LIMIT 1)
+      );
+  </select>
+
+// 플래티넘 생성
+  <select id='countPlatinum'>
+    SELECT count(platinum) AS count
+    FROM system_tree
+    WHERE type = ${type};
+  </select>
+
+  <select id='defaultPlatinum'>
+    INSERT INTO system_tree
+      (
+        user_id,
+        platinum,
+        type
+      )
+    VALUES
+      (
+        (SELECT user_id
+        FROM user AS u
+        WHERE u.id = #{id}),
+        1,
+        ${type}
+      );
+  </select>
+
+  <select id='insertPlatinum'>
+    INSERT INTO system_tree
+      (
+        user_id,
+        platinum,
+        type
+      )
+    VALUES
+      (
+        (SELECT user_id
+        FROM user AS u
+        WHERE u.id = #{id}),
+        (SELECT (SELECT max(platinum) 
+                FROM system_tree AS t) + 1),
+        ${type}
+      )      
+  </select>
+
+// 골드 생성
+  <select id='countGold'>
+    SELECT count(gold) AS count
+    FROM system_tree
+    WHERE platinum = ${platinum} AND type = ${type}
+  </select>
+
+  <select id='defaultGold'>
+    INSERT INTO system_tree
+      (
+        user_id,
+        platinum,
+        gold,
+        type
+      )
+    VALUES
+      (
+        (SELECT user_id
+        FROM user AS u
+        WHERE u.id = #{id}),
+        ${platinum},
+        1,
+        ${type}
+      );
+  </select>
+
+  <select id='insertGold'>
+    INSERT INTO system_tree
+      (
+        user_id,
+        platinum,
+        gold,
+        type
+      )
+    VALUES
+      (
+        (SELECT user_id
+        FROM user AS u
+        WHERE u.id = #{id}),
+        ${platinum},        
+        (SELECT (SELECT MAX(gold)
+                FROM system_tree AS t
+                WHERE t.platinum  = ${platinum}) + 1),
+        ${type}
+      )      
+  </select>
+
+// 실버 생성
+  <select id='countSilver'>
+    SELECT count(silver) AS count
+    FROM system_tree
+    WHERE gold = ${gold} AND type = ${type}
+  </select>
+
+  <select id='defaultSilver'>
+    INSERT INTO system_tree
+      (
+        user_id,
+        platinum,
+        gold,
+        silver,
+        type
+      )
+    VALUES
+      (
+        (SELECT user_id
+        FROM user AS u
+        WHERE u.id = #{id}),
+        ${platinum},
+        ${gold},
+        1,
+        ${type}
+      );
+  </select>
+
+  <select id='insertSilver'>
+    INSERT INTO system_tree
+      (
+        user_id,
+        platinum,
+        gold,
+        silver,
+        type
+      )
+    VALUES
+      (
+        (SELECT user_id
+        FROM user AS u
+        WHERE u.id = #{id}),
+        ${platinum},
+        ${gold},
+        (SELECT (SELECT MAX(silver)
+                FROM system_tree AS t
+                WHERE t.gold  = ${gold}) + 1),
+        ${type}
+      )      
+  </select>
+
+// 브론즈 생성
+  <select id='countBronze'>
+    SELECT count(bronze) AS count
+    FROM system_tree
+    WHERE silver = ${silver} AND type = ${type}
+  </select>
+
+  <select id='defaultBronze'>
+    INSERT INTO system_tree
+      (
+        user_id,
+        platinum,
+        gold,
+        silver,
+        bronze,
+        type
+      )
+    VALUES
+      (
+        (SELECT user_id
+        FROM user AS u
+        WHERE u.id = #{id}),
+        ${platinum},
+        ${gold},
+        ${silver},
+        1,
+        ${type}
+      );
+  </select>
+
+  <select id='insertBronze'>
+    INSERT INTO system_tree
+      (
+        user_id,
+        platinum,
+        gold,
+        silver,
+        bronze,
+        type
+      )
+    VALUES
+      (
+        (SELECT user_id
+        FROM user AS u
+        WHERE u.id = #{id}),
+        ${platinum},    
+        ${gold},    
+        ${silver},    
+        (SELECT (SELECT MAX(bronze)
+                FROM system_tree AS t
+                WHERE t.silver  = ${silver}) + 1),
+        ${type}
+      )      
+  </select>
+
+// node id 생성 및 삽입
+  <select id='findNode'>
+    SELECT platinum, gold, silver, bronze
+    FROM system_tree AS s
+    WHERE s.user_id = (SELECT user_id 
+                      FROM user AS u 
+                      WHERE u.id = #{id})
+  </select>
+
+  <select id='insertNode'>
+    UPDATE system_tree
+    SET node_id = #{nodeId}, node_pid = #{nodePid}
+    WHERE user_id = (SELECT user_id 
+                    FROM user AS u 
+                    WHERE u.id = #{id});
+  </select>
+
+  <select id='insertAgentHierarchy'>
+    INSERT INTO hierarchy
+      (
+        user_id,
+        p_id,
+        g_id,
+        s_id,
+        b_id,
+        p_nick,
+        g_nick,
+        s_nick,
+        b_nick
+      )
+    VALUES 
+      (
+        (SELECT user_id
+        FROM user
+        WHERE id = #{id}),
+        #{p_id},
+        #{g_id},
+        #{s_id},
+        #{b_id},
+        #{p_nick},
+        #{g_nick},
+        #{s_nick},
+        #{b_nick}
+      )
+  </select>
+
+// 비밀번호
+ <select id='getAgentPw'>
+    SELECT pw
+    FROM user
+    WHERE id = #{id}
+  </select>
+
+  <update id='updateAgentPw'>
+    UPDATE user
+    SET pw = #{newPassword}
+    WHERE id = #{id}
+  </update>
+</mapper>

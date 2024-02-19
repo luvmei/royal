@@ -1,0 +1,91 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<%- include('head.ejs') %>
+
+<body class="sb-nav-fixed">
+  <% if (user.type === 9) { %>
+  <%- include('navBar-admin.ejs') %>
+  <% } else { %>
+  <%- include('navBar-agent.ejs') %>
+  <% } %>
+  <%- include('modals.ejs', {user: user}) %>
+  <div id="layoutSidenav">
+    <% if (user.type === 9) { %>
+    <%- include('sideBar-admin.ejs') %>
+    <% } else { %>
+    <%- include('sideBar-agent.ejs') %>
+    <% } %> <div id="layoutSidenav_content">
+      <main>
+        <div class="container-fluid px-4">
+          <h2 class="my-4">에이전트 목록</h2>
+          <div class="card mb-4">
+            <div class="card-body">
+              <table id="agentInfo" class="cell-border hover"" style=" width: 100%">
+                <thead>
+                  <tr>
+                    <th rowspan="2"></th>
+                    <th rowspan="2">node-id</th>
+                    <th rowspan="2">node-pid</th>
+                    <th rowspan="2">타입</th>
+                    <th rowspan="2">아이디</th>
+                    <th rowspan="2">닉네임</th>
+                    <th rowspan="2">보유금</th>
+                    <th rowspan="2">포인트</th>
+                    <th rowspan="2">총 입금</th>
+                    <th rowspan="2">총 출금</th>
+                    <th rowspan="2">총 입출금</th>
+                    <th colspan="5" class="text-center d-none d-lg-table-cell">요율(%)</th>
+                    <th rowspan="2">에이전트 트리</th>
+                    <th rowspan="2">최근 첩속일시</th>
+                    <th rowspan="2">최근 접속페이지</th>
+                    <th rowspan="2">최근 접속IP</th>
+                    <th rowspan="2">
+                      <% if (user.type === 9) { %>
+                      <button class="btn btn-sm asset-danger" id="add-platinum">플래티넘 생성
+                      </button>
+                      <% } %>
+                    </th>
+                    <th rowsapn="2">
+                      메세지
+                    </th>
+                  </tr>
+                  <tr>
+                    <th>카지노<br>롤링</th>
+                    <th>슬롯<br>롤링</th>
+                    <th>루징</th>
+                    <th></th>
+                    <th></th>
+                    <th>플래티넘</th>
+                    <th>골드</th>
+                    <th>실버</th>
+                    <th>브론즈</th>
+                    <th>플래티넘_id</th>
+                    <th>골드_id</th>
+                    <th>실버_id</th>
+                    <th>브론즈_id</th>
+                    <th></th>
+                  </tr>
+                </thead>
+              </table>
+            </div>
+          </div>
+        </div>
+      </main>
+    </div>
+  </div>
+  <%- include('foot.ejs') %>
+  <script src="/public/js/agent.js"></script>
+  <script src="/public/js/plugin/jquery-simple-tree-table.js"></script>
+  <script>
+    $('#add-platinum').on('click', function () {
+      document.querySelector('#modal-title').innerHTML = '에이전트 생성 - 플래티넘';
+      document.querySelector('#upper-agent-info').classList.add('d-none');
+      document.querySelector('#upper-agent-title').classList.add('d-none');
+      document.querySelector('#basic-info').classList.replace('mt-4', 'mt-2');
+
+      $('#addAgentModal').modal('show');
+    });</script>
+</body>
+
+</html>

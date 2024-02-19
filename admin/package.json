@@ -1,0 +1,36 @@
+{
+  "name": "admin-express",
+  "version": "1.0.0",
+  "description": "",
+  "main": "app.js",
+  "scripts": {
+    
+  },
+  "dependencies": {
+    "axios": "^1.3.4",
+    "bcrypt": "^5.1.0",
+    "cors": "^2.8.5",
+    "crypto-js": "^4.1.1",
+    "dotenv": "^16.0.3",
+    "ejs": "^3.1.8",
+    "express": "^4.18.2",
+    "express-mysql-session": "^3.0.0",
+    "express-rate-limit": "^6.7.0",
+    "express-session": "^1.17.3",
+    "helmet": "^6.0.1",
+    "json-bigint": "^1.0.0",
+    "mariadb": "^3.0.2",
+    "memorystore": "^1.6.7",
+    "moment-timezone": "^0.5.41",
+    "multer": "^1.4.5-lts.1",
+    "mybatis-mapper": "^0.7.0",
+    "node-cron": "^3.0.2",
+    "passport": "^0.6.0",
+    "passport-local": "^1.0.0",
+    "path": "^0.12.7",
+    "socket.io": "^4.6.0",
+    "socket.io-client": "^4.6.0",
+    "ua-parser-js": "^2.0.0-alpha.1",
+    "xss": "^1.0.14"
+  }
+}

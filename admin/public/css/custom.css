@@ -1,0 +1,915 @@
+@charset "UTF-8";
+@font-face {
+  font-family: "Pretendard-Regular";
+  src: url("https://cdn.jsdelivr.net/gh/Project-Noonnu/noonfonts_2107@1.1/Pretendard-Regular.woff") format("woff");
+  font-weight: 400;
+  font-style: normal;
+}
+@font-face {
+  font-family: "GmarketSansMedium";
+  src: url("https://cdn.jsdelivr.net/gh/projectnoonnu/noonfonts_2001@1.1/GmarketSansMedium.woff") format("woff");
+  font-weight: normal;
+  font-style: normal;
+}
+body::-webkit-scrollbar,
+html::-webkit-scrollbar {
+  display: none;
+}
+
+input::-webkit-outer-spin-button,
+input::-webkit-inner-spin-button {
+  -webkit-appearance: none;
+  margin: 0;
+}
+
+.asset-danger {
+  color: #b02a37;
+  background-color: #f8d7da !important;
+  border-color: #f1aeb5;
+  transition: all 0.3s;
+}
+.asset-danger:hover {
+  color: #b02a37;
+  background-color: #fff6f7 !important;
+  border-color: #dc3545;
+}
+
+.asset-warning {
+  color: #997404;
+  background-color: #fff3cd !important;
+  border-color: #ffe69c;
+}
+.asset-warning:hover {
+  color: #997404;
+  background-color: #faf8f2 !important;
+  border-color: #ffc107;
+}
+
+.bg-gray {
+  background-color: #e9ecef !important;
+}
+
+.bg-mistyred {
+  background-color: #fdf8f8 !important;
+}
+
+.asset-primary {
+  color: #0a58ca;
+  background-color: #cfe2ff !important;
+  border-color: #9ec5fe;
+}
+.asset-primary:hover {
+  color: #0a58ca;
+  background-color: #eff6ff !important;
+  border-color: #0d6efd;
+}
+
+.bg-mistyblue {
+  background-color: #f8fdff !important;
+}
+
+.asset-secondary {
+  color: #6c757d;
+  background-color: #f8f9fa !important;
+  border-color: #e9ecef;
+}
+.asset-secondary:hover {
+  border-color: #6c757d;
+}
+
+.asset-success {
+  color: #146c43;
+  background-color: #d1e7dd !important;
+  border-color: #a3cfbb;
+}
+.asset-success:hover {
+  color: #146c43;
+  background-color: #effcf6 !important;
+  border-color: #198754;
+}
+
+.bg-mistygreen {
+  background-color: #f5fff8 !important;
+}
+
+.bg-mistyyellow {
+  background-color: #fffdf8 !important;
+}
+
+.asset-dark {
+  color: #676f77;
+  background-color: #dae1e7 !important;
+  border-color: #adb5bd;
+}
+.asset-dark:hover {
+  border-color: #343a40;
+}
+
+.duplicate-ip {
+  background-color: rgba(255, 0, 0, 0.3) !important;
+}
+
+.online-tag {
+  color: #0a58ca;
+  background-color: #cfe2ff !important;
+  border-color: #0d6efd;
+  pointer-events: none;
+}
+
+.local-tag {
+  color: #b02a37;
+  background-color: #f8d7da !important;
+  border-color: #dc3545;
+  pointer-events: none;
+}
+
+.deposit-cancel {
+  transition: all 0.5s;
+}
+
+.deposit-cancel:hover {
+  transform: rotate(360deg) scale(1.2);
+}
+
+.btn.deposit-box,
+.btn.withdraw-box {
+  cursor: none !important;
+}
+
+.description {
+  padding: 3px;
+  margin-bottom: 3px;
+  font-size: 0.9rem;
+}
+
+.form-floating > .form-control {
+  height: calc(3rem + 8px);
+  line-height: 1;
+}
+.form-floating > .form-select {
+  height: calc(3rem + 8px);
+  line-height: 1;
+}
+
+.form-floating > label {
+  padding: 0.75rem;
+}
+
+#add-platinum i,
+.add-gold i,
+.add-gold i,
+.add-silver i,
+.add-bronze i {
+  transition: all 0.3s ease-in-out;
+}
+#add-platinum i:hover,
+.add-gold i:hover,
+.add-gold i:hover,
+.add-silver i:hover,
+.add-bronze i:hover {
+  transform: scale(1.3);
+}
+
+.platinum-bg {
+  background: rgba(255, 179, 186, 0.3) !important;
+}
+
+.gold-bg {
+  background: rgba(255, 255, 186, 0.3) !important;
+}
+
+.silver-bg {
+  background: rgba(186, 255, 201, 0.3) !important;
+}
+
+.bronze-bg {
+  background: rgba(186, 225, 255, 0.3) !important;
+}
+
+.block-bg {
+  background: rgba(0, 0, 0, 0.4) !important;
+}
+
+.card-header {
+  background-color: #212529;
+  color: rgba(255, 255, 255, 0.8);
+  font-weight: bold;
+}
+.card-header.login {
+  background-color: #1e2833 !important;
+}
+
+.card-footer {
+  background-color: rgba(255, 255, 255, 0);
+  border: none;
+  padding: 20px 30px;
+}
+
+.card.platinum .card-header {
+  background-color: #dc3545;
+}
+.card.gold .card-header {
+  background-color: #ffaa07;
+}
+.card.silver .card-header {
+  background-color: #198754;
+}
+.card.bronze .card-header {
+  background-color: #006ac7;
+}
+.card.user .card-header {
+  background-color: #9d3fca;
+}
+
+#expander {
+  margin-left: 1%;
+  float: left;
+  color: #fff;
+  background-color: #dc3545;
+  border-color: #dc3545;
+  font-size: 1rem;
+}
+#expander:hover {
+  color: #fff;
+  background-color: #bb2d3b;
+  border-color: #b02a37;
+}
+
+#collapser {
+  margin-left: 1%;
+  float: left;
+  color: #fff;
+  background-color: #0d6efd;
+  border-color: #0d6efd;
+}
+#collapser:hover {
+  color: #fff;
+  background-color: #0b5ed7;
+  border-color: #0a58ca;
+}
+
+.buttons-excel {
+  float: left;
+  margin-left: 1%;
+}
+
+#userDetail .modal-dialog {
+  max-width: 95% !important;
+  min-height: 1200px !important;
+}
+#userDetail .card-header {
+  background-color: rgba(0, 0, 0, 0.03);
+  color: #000;
+  font-size: 1rem;
+  font-weight: normal;
+}
+#userDetail .card-body .dataTables_scrollBody {
+  font-size: 0.85rem;
+}
+#userDetail .nav-item {
+  flex-grow: 1;
+  text-align: center;
+}
+#userDetail .nav-item .nav-link {
+  width: 100%;
+  color: #000;
+}
+#userDetail .nav-item .nav-link.active {
+  font-size: 0.9rem;
+  background-color: rgba(0, 0, 0, 0.03);
+}
+
+#sendMessageModal .modal-content {
+  box-shadow: rgba(0, 0, 0, 0.56) 0px 22px 70px 4px;
+}
+
+#incomeDepoWithDetailModal .modal-dialog,
+#incomeBetWinDetailModal .modal-dialog {
+  max-width: 85% !important;
+  min-height: 1000px !important;
+}
+#incomeDepoWithDetailModal .modal-dialog th,
+#incomeBetWinDetailModal .modal-dialog th {
+  word-break: keep-all;
+}
+
+#agentAlertModal {
+  --bs-modal-width: 400px;
+}
+#agentAlertModal .modal-content {
+  border: 2px solid #f1aeb5;
+  box-shadow: rgba(0, 0, 0, 0.56) 0px 22px 70px 4px;
+}
+#agentAlertModal .modal-content .modal-header {
+  height: auto;
+  padding: 0;
+}
+#agentAlertModal .modal-content .modal-header i {
+  font-size: 2.5rem;
+  color: #f1aeb5;
+}
+#agentAlertModal .modal-content .modal-footer .btn {
+  font-weight: 500;
+}
+#agentAlertModal#logoutModal .modal-content {
+  border: 2px solid #dc3545;
+}
+#agentAlertModal#logoutModal .modal-content i {
+  color: #dc3545;
+}
+
+body {
+  table-layout: fixed;
+}
+
+.dateWidth {
+  width: 15% !important;
+}
+
+body {
+  font-family: "Pretendard-Regular", sans-serif;
+  font-size: 0.8rem;
+}
+body main .online .card-header {
+  font-size: 0.9rem;
+}
+
+.list-group-item {
+  font-size: 0.85rem;
+}
+.list-group-item.title {
+  font-weight: bold;
+  text-align: center;
+  width: 120px;
+  padding: 5px 10px 1px;
+  margin-right: 10px;
+  background-color: #ced4da;
+  border-radius: 5px 5px 0 0 !important;
+}
+.list-group-item.contents {
+  font-weight: bold;
+  text-align: center;
+  width: 120px;
+  padding: 5px 10px;
+  margin-right: 10px;
+  border-radius: 0 0 5px 5px !important;
+}
+
+#confirmModal {
+  z-index: 1062;
+}
+#confirmModal .modal-content {
+  box-shadow: rgba(0, 0, 0, 0.25) 0px 54px 55px, rgba(0, 0, 0, 0.12) 0px -12px 30px, rgba(0, 0, 0, 0.12) 0px 4px 6px, rgba(0, 0, 0, 0.17) 0px 12px 13px, rgba(0, 0, 0, 0.09) 0px -3px 5px;
+}
+
+#agentDepositModal .modal-dialog,
+#agentWithdrawModal .modal-dialog,
+#giveBalanceModal .modal-dialog,
+#takeBalanceModal .modal-dialog,
+#agentExchangeModal .modal-dialog,
+#agentConfirmModal .modal-dialog {
+  max-width: 400px;
+}
+#agentDepositModal .modal-dialog .modal-content .modal-body .form,
+#agentWithdrawModal .modal-dialog .modal-content .modal-body .form,
+#giveBalanceModal .modal-dialog .modal-content .modal-body .form,
+#takeBalanceModal .modal-dialog .modal-content .modal-body .form,
+#agentExchangeModal .modal-dialog .modal-content .modal-body .form,
+#agentConfirmModal .modal-dialog .modal-content .modal-body .form {
+  font-weight: 500;
+  font-size: 1.1rem;
+}
+#agentDepositModal .modal-dialog .modal-content .modal-body .form .row #deposit-bank-value,
+#agentWithdrawModal .modal-dialog .modal-content .modal-body .form .row #deposit-bank-value,
+#giveBalanceModal .modal-dialog .modal-content .modal-body .form .row #deposit-bank-value,
+#takeBalanceModal .modal-dialog .modal-content .modal-body .form .row #deposit-bank-value,
+#agentExchangeModal .modal-dialog .modal-content .modal-body .form .row #deposit-bank-value,
+#agentConfirmModal .modal-dialog .modal-content .modal-body .form .row #deposit-bank-value {
+  text-align: center;
+  font-size: 0.95rem;
+}
+#agentDepositModal .modal-dialog .modal-content .modal-body .form .row hr,
+#agentWithdrawModal .modal-dialog .modal-content .modal-body .form .row hr,
+#giveBalanceModal .modal-dialog .modal-content .modal-body .form .row hr,
+#takeBalanceModal .modal-dialog .modal-content .modal-body .form .row hr,
+#agentExchangeModal .modal-dialog .modal-content .modal-body .form .row hr,
+#agentConfirmModal .modal-dialog .modal-content .modal-body .form .row hr {
+  color: #adb5bd;
+  text-align: center;
+  opacity: 0.7;
+  width: 110%;
+  margin-left: auto;
+  margin-right: auto;
+}
+#agentDepositModal .modal-dialog .modal-content .modal-body .form .row div,
+#agentWithdrawModal .modal-dialog .modal-content .modal-body .form .row div,
+#giveBalanceModal .modal-dialog .modal-content .modal-body .form .row div,
+#takeBalanceModal .modal-dialog .modal-content .modal-body .form .row div,
+#agentExchangeModal .modal-dialog .modal-content .modal-body .form .row div,
+#agentConfirmModal .modal-dialog .modal-content .modal-body .form .row div {
+  margin: 7px 0;
+}
+#agentDepositModal .modal-dialog .modal-content .modal-body .form .row .btn,
+#agentWithdrawModal .modal-dialog .modal-content .modal-body .form .row .btn,
+#giveBalanceModal .modal-dialog .modal-content .modal-body .form .row .btn,
+#takeBalanceModal .modal-dialog .modal-content .modal-body .form .row .btn,
+#agentExchangeModal .modal-dialog .modal-content .modal-body .form .row .btn,
+#agentConfirmModal .modal-dialog .modal-content .modal-body .form .row .btn {
+  width: 100%;
+  background-color: #ffc451;
+  font-size: 0.9rem;
+  font-weight: 500;
+}
+#agentDepositModal .modal-dialog .modal-content .modal-body .form .row .btn.btn-light,
+#agentWithdrawModal .modal-dialog .modal-content .modal-body .form .row .btn.btn-light,
+#giveBalanceModal .modal-dialog .modal-content .modal-body .form .row .btn.btn-light,
+#takeBalanceModal .modal-dialog .modal-content .modal-body .form .row .btn.btn-light,
+#agentExchangeModal .modal-dialog .modal-content .modal-body .form .row .btn.btn-light,
+#agentConfirmModal .modal-dialog .modal-content .modal-body .form .row .btn.btn-light {
+  background-color: #e9ecef;
+}
+#agentDepositModal .modal-dialog .modal-content .modal-body .form .row #giveTypeSelector,
+#agentWithdrawModal .modal-dialog .modal-content .modal-body .form .row #giveTypeSelector,
+#giveBalanceModal .modal-dialog .modal-content .modal-body .form .row #giveTypeSelector,
+#takeBalanceModal .modal-dialog .modal-content .modal-body .form .row #giveTypeSelector,
+#agentExchangeModal .modal-dialog .modal-content .modal-body .form .row #giveTypeSelector,
+#agentConfirmModal .modal-dialog .modal-content .modal-body .form .row #giveTypeSelector {
+  padding: 0;
+}
+#agentDepositModal .modal-dialog .modal-content .modal-body .form .row #giveTypeSelector .col-12,
+#agentWithdrawModal .modal-dialog .modal-content .modal-body .form .row #giveTypeSelector .col-12,
+#giveBalanceModal .modal-dialog .modal-content .modal-body .form .row #giveTypeSelector .col-12,
+#takeBalanceModal .modal-dialog .modal-content .modal-body .form .row #giveTypeSelector .col-12,
+#agentExchangeModal .modal-dialog .modal-content .modal-body .form .row #giveTypeSelector .col-12,
+#agentConfirmModal .modal-dialog .modal-content .modal-body .form .row #giveTypeSelector .col-12 {
+  padding: 0;
+  margin-bottom: 10px;
+}
+#agentDepositModal .modal-dialog .modal-content .modal-body .form .row #giveTypeSelector .col,
+#agentWithdrawModal .modal-dialog .modal-content .modal-body .form .row #giveTypeSelector .col,
+#giveBalanceModal .modal-dialog .modal-content .modal-body .form .row #giveTypeSelector .col,
+#takeBalanceModal .modal-dialog .modal-content .modal-body .form .row #giveTypeSelector .col,
+#agentExchangeModal .modal-dialog .modal-content .modal-body .form .row #giveTypeSelector .col,
+#agentConfirmModal .modal-dialog .modal-content .modal-body .form .row #giveTypeSelector .col {
+  padding-right: 0;
+}
+
+#agentConfirmModal .modal-dialog {
+  width: 1300px !important;
+}
+
+#writeBannerModal {
+  font-size: 1rem;
+}
+
+#onlineUsersAgent thead tr th {
+  text-align: center;
+}
+
+.spinner-container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  z-index: 9999;
+  background-color: rgba(0, 0, 0, 0.5);
+}
+
+.spinner-border {
+  width: 3rem;
+  height: 3rem;
+}
+
+.mobile-logout {
+  width: 75% !important;
+  left: 50% !important;
+  transform: translateX(-50%);
+  bottom: 5% !important;
+}
+
+.navbar-brand {
+  width: 163px !important;
+}
+
+#userDetail .func-btn-group .btn:first-child,
+#userDetail .func-btn-group .btn:last-child {
+  border-radius: 0;
+  border-color: #0d6efd;
+}
+#userDetail .func-btn-group .btn:nth-child(5) {
+  border-color: #dc3545;
+}
+
+td.child {
+  padding: 15px 20px !important;
+}
+td.child .dtr-details {
+  display: block !important;
+}
+td.child .dtr-details .dtr-data {
+  float: right;
+}
+
+.form-select:disabled,
+.form-control:disabled {
+  background-color: #f5f5f5;
+}
+
+#mobileAgentSummary .card .form-control,
+#mobileAdminSummary .card .form-control {
+  padding: 0.375rem 0;
+}
+#mobileAgentSummary .card .form-control:disabled,
+#mobileAdminSummary .card .form-control:disabled {
+  text-align: center !important;
+}
+
+#notiIconGroup a:not(:last-child),
+#notiIconGroup a:not(:nth-lastchild(2)),
+#notiIconGroup a:not(:nth-lastchild(3)) {
+  box-shadow: rgba(0, 0, 0, 0.16) 0px 3px 6px, rgba(0, 0, 0, 0.23) 0px 3px 6px;
+}
+#notiIconGroup .alramNoti {
+  padding: 0.4rem !important;
+}
+
+table tfoot th {
+  font-weight: bold;
+  font-size: 0.9rem;
+  text-align: right !important;
+  font-style: italic !important;
+}
+
+.select2-selection--single,
+.select2-selection--multiple {
+  min-height: 32px !important;
+}
+
+#boardConfirmModal {
+  z-index: 1056;
+}
+#boardConfirmModal #boardConfirm {
+  word-break: keep-all;
+}
+
+.incomeDescription {
+  font-size: 1.05rem;
+}
+
+.left-border {
+  border-left: 1px solid rgba(0, 0, 0, 0.3) !important;
+}
+
+table tfoot:nth-child(1) th {
+  border-bottom: 1px solid rgba(0, 0, 0, 0.3) !important;
+  padding: 15px 10px !important;
+}
+
+.todayInfo {
+  font-family: "GmarketSansMedium";
+}
+.todayInfo h6 {
+  font-size: 0.9rem;
+  margin-bottom: 0;
+}
+.todayInfo .card {
+  border: none;
+  position: relative;
+}
+.todayInfo .card .total-text {
+  font-size: 1.1rem;
+  margin-top: 10px;
+}
+.todayInfo .card #totalSummary {
+  font-size: 1.2rem;
+  margin-top: 10px;
+  letter-spacing: 2px;
+  font-weight: bold;
+}
+.todayInfo .card-icon {
+  text-align: center;
+  line-height: 50px;
+  color: #000;
+  position: absolute;
+  right: 40px;
+  top: 15px;
+  opacity: 0.1;
+  font-size: 5rem;
+}
+.todayInfo .summary-bg {
+  background-image: radial-gradient(circle farthest-corner at 10% 20%, rgb(161, 255, 206) 0%, rgb(250, 255, 209) 90%);
+}
+.todayInfo .basic-bg {
+  background-image: linear-gradient(174.2deg, rgb(255, 244, 228) 7.1%, rgb(240, 246, 238) 67.4%);
+}
+.todayInfo .minus-bg {
+  background: linear-gradient(to right, rgb(242, 112, 156), rgb(255, 148, 114));
+}
+.todayInfo .plus-bg {
+  background: linear-gradient(to right, #acb6e5, #74ebd5);
+}
+
+#collapseChart {
+  background-color: #fff;
+}
+
+.popover {
+  border-radius: 10px !important;
+}
+
+.agentNav.navbar-nav a > span {
+  padding: 0.4rem !important;
+  left: 78% !important;
+  top: 22% !important;
+}
+
+#agent-list-group {
+  padding: 7px 10px 5px 12px;
+}
+
+#passwordDescription {
+  color: red;
+  font-size: 1rem;
+  min-height: 24px;
+}
+
+table.dataTable thead > tr > th.sorting_desc.no-sort:before,
+table.dataTable thead > tr > th.sorting_desc.no-sort:after {
+  content: "";
+}
+
+#levelAccountSetting .col input,
+#levelAccountSetting .col-2 input,
+#levelAccountSetting .col-3 input {
+  text-align: center !important;
+}
+#levelAccountSetting .col input.title,
+#levelAccountSetting .col-2 input.title,
+#levelAccountSetting .col-3 input.title {
+  cursor: default !important;
+  background-color: #e9ecef;
+}
+#levelAccountSetting .col input.level,
+#levelAccountSetting .col-2 input.level,
+#levelAccountSetting .col-3 input.level {
+  cursor: default !important;
+}
+
+.tooltip-inner {
+  max-width: 200px;
+  padding: 10px !important;
+  word-break: keep-all;
+  background-color: #212529;
+  box-shadow: rgba(100, 100, 111, 0.2) 0px 7px 29px 0px;
+}
+.tooltip-inner #addon button {
+  word-break: break-all !important;
+}
+
+#setMacroModal .modal-dialog {
+  max-width: 80% !important;
+}
+#setMacroModal .modal-dialog .modal-header {
+  padding: 1rem;
+}
+#setMacroModal .modal-dialog .modal-body .card .card-header {
+  background: rgba(33, 40, 50, 0.05);
+  color: #000;
+  font-size: 1rem;
+  font-weight: lighter;
+  border-radius: 10px 10px 0 0;
+}
+
+#detail-pw {
+  cursor: pointer;
+}
+
+.dt-button {
+  margin-left: 16.375px !important;
+  margin-bottom: 0px !important;
+  --bs-btn-padding-x: 0.75rem !important;
+  --bs-btn-padding-y: 0.375rem !important;
+  --bs-btn-font-family: !important;
+  --bs-btn-font-size: 1rem !important;
+  --bs-btn-font-weight: 400 !important;
+  --bs-btn-line-height: 1.5 !important;
+  --bs-btn-color: #212529 !important;
+  --bs-btn-bg: transparent !important;
+  --bs-btn-border-width: var(--bs-border-width) !important;
+  --bs-btn-border-color: transparent !important;
+  --bs-btn-border-radius: 0.375rem !important;
+  --bs-btn-hover-border-color: transparent !important;
+  --bs-btn-box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.15), 0 1px 1px rgba(0, 0, 0, 0.075) !important;
+  --bs-btn-disabled-opacity: 0.65 !important;
+  --bs-btn-focus-box-shadow: 0 0 0 0.25rem rgba(var(--bs-btn-focus-shadow-rgb), 0.5) !important;
+  display: inline-block !important;
+  padding: var(--bs-btn-padding-y) var(--bs-btn-padding-x) !important;
+  font-family: var(--bs-btn-font-family) !important;
+  font-size: var(--bs-btn-font-size) !important;
+  font-weight: var(--bs-btn-font-weight) !important;
+  line-height: var(--bs-btn-line-height) !important;
+  color: var(--bs-btn-color) !important;
+  text-align: center !important;
+  text-decoration: none !important;
+  vertical-align: middle !important;
+  cursor: pointer !important;
+  -webkit-user-select: none !important;
+  -moz-user-select: none !important;
+  -ms-user-select: none !important;
+      user-select: none !important;
+  border: var(--bs-btn-border-width) solid var(--bs-btn-border-color) !important;
+  border-radius: 0.25rem !important;
+  background-color: var(--bs-btn-bg) !important;
+  color: #fff !important;
+  background-color: #198754 !important;
+  border-color: #198754 !important;
+}
+
+#attEventTable table {
+  margin-bottom: 0;
+}
+#attEventTable table th {
+  background-color: #f2f2f2;
+}
+#attEventTable table input {
+  font-size: 0.9rem;
+  border: none;
+}
+#attEventTable table input.continue {
+  text-align: center;
+}
+#attEventTable table input.amount {
+  text-align: right;
+}
+
+#virtualSetTable {
+  margin-bottom: 0;
+}
+#virtualSetTable th {
+  background-color: #f2f2f2;
+}
+#virtualSetTable th:nth-child(1) {
+  vertical-align: middle;
+}
+#virtualSetTable td {
+  vertical-align: middle;
+}
+#virtualSetTable td.type {
+  width: 10%;
+  background-color: #f2f2f2;
+}
+#virtualSetTable td.time {
+  width: 15%;
+}
+#virtualSetTable td.money {
+  width: 30%;
+}
+#virtualSetTable td input {
+  text-align: center;
+  font-size: 0.9rem;
+  border: none;
+}
+
+table.dataTable tbody td {
+  padding: 8px 8px !important;
+}
+
+@media screen and (max-width: 768px) {
+  .btn-sm {
+    min-width: 31px !important;
+  }
+  .dateWidth {
+    width: 100% !important;
+    margin-bottom: 10px;
+  }
+  .dateWidth #dateSelector {
+    width: 70% !important;
+  }
+  table.dataTable thead th {
+    padding: 5px;
+    word-break: keep-all;
+  }
+  table.dataTable tbody td {
+    padding: 5px !important;
+    word-break: keep-all;
+  }
+  table.dataTable tbody td button.btn-sm {
+    padding: 0.25rem 0.25rem !important;
+  }
+  table.dataTable tbody td.dtr-control {
+    text-align: center !important;
+  }
+  table.dataTable.dtr-column > tbody > tr > td.dtr-control:before {
+    font-weight: bold;
+    font-size: 0.8rem;
+    border: 1px solid rgba(0, 0, 0, 0.5);
+    border-radius: 5px;
+    padding: 5px !important;
+    content: "열기";
+  }
+  table.dataTable.dtr-column > tbody > tr.parent td.dtr-control:before {
+    content: "닫기";
+  }
+  .dataTables_wrapper .dataTables_length {
+    margin-top: 0.2em;
+    float: left;
+    font-size: 0.75rem;
+  }
+  .dataTables_wrapper .dataTables_filter {
+    margin: 0 0 0.5em 0;
+    font-size: 0.75rem;
+    float: right;
+    text-align: right;
+  }
+  .dataTables_wrapper .dataTables_filter label {
+    width: 200px;
+  }
+  .dataTables_wrapper .dataTables_filter label input {
+    max-width: 60%;
+  }
+  #userDetail .menu-btn-group .btn {
+    margin: 0;
+    border-radius: 0;
+  }
+  #userDetail .menu-btn-group .btn:nth-child(1) {
+    border-right: 0;
+    border-bottom: 0;
+    border-radius: 0.25rem 0 0 0;
+  }
+  #userDetail .menu-btn-group .btn:nth-child(2) {
+    border-right: 0;
+    border-bottom: 0;
+  }
+  #userDetail .menu-btn-group .btn:nth-child(3) {
+    border-right: 0;
+    border-bottom: 0;
+  }
+  #userDetail .menu-btn-group .btn:nth-child(4) {
+    border-bottom: 0;
+    border-radius: 0 0.25rem 0 0;
+  }
+  #userDetail .menu-btn-group .btn:nth-child(5) {
+    border-right: 0;
+    border-radius: 0 0 0 0.25rem;
+  }
+  #userDetail .menu-btn-group .btn:nth-child(6) {
+    border-right: 0;
+  }
+  #userDetail .menu-btn-group .btn:nth-child(7) {
+    border-right: 0;
+  }
+  #userDetail .menu-btn-group .btn:nth-child(8) {
+    border-radius: 0 0 0.25rem 0;
+  }
+  #userDetail .func-btn-group .btn {
+    padding: 0.375rem 0.9rem;
+  }
+  #detailSummaryBetting-pane {
+    font-size: 0.9rem !important;
+  }
+  .agent-navbar .navbar-brand {
+    width: 100px !important;
+  }
+  .agent-navbar #agentDepositBtn,
+.agent-navbar #agentWithdrawBtn {
+    margin-top: 2px;
+    font-size: 0.8rem !important;
+  }
+  .navbar-brand {
+    width: 30px !important;
+    font-weight: bold;
+  }
+  .modal.exchange .modal-dialog {
+    position: absolute;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 320px;
+  }
+  #notiIconGroup a {
+    padding: 0.25rem 0.6rem;
+    font-size: 0.8rem;
+  }
+  #notiIconGroup a .alramNoti {
+    padding: 0.25rem !important;
+  }
+  .incomeDescription {
+    font-size: 0.8rem;
+  }
+  #deposit tfoot th {
+    font-size: 5px; /* 글자 크기 줄이기 */
+    white-space: normal; /* 줄바꿈 허용 */
+  }
+}
+@media screen and (max-width: 390px) {
+  #notiIconGroup a {
+    font-size: 0.8rem;
+    padding: 5px 6px;
+  }
+  #notiIconGroup a .alramNoti {
+    padding: 0.25rem !important;
+  }
+}/*# sourceMappingURL=custom.css.map */

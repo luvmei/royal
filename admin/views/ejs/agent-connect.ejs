@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<%- include('head.ejs') %>
+
+<body class="sb-nav-fixed">
+  <% if (user.type === 9) { %>
+  <%- include('navBar-admin.ejs') %>
+  <% } else { %>
+  <%- include('navBar-agent.ejs') %>
+  <% } %>
+  <%- include('modals.ejs', {user: user}) %>
+  <div id="layoutSidenav">
+    <% if (user.type === 9) { %>
+    <%- include('sideBar-admin.ejs') %>
+    <% } else { %>
+    <%- include('sideBar-agent.ejs') %>
+    <% } %> <div id="layoutSidenav_content">
+      <main>
+        <div class="container-fluid px-4">
+          <h2 class="my-4">에이전트 접속내역</h2>
+          <div class="card mb-4">
+            <div class="card-body">
+              <table id="agentConnect" class="cell-border hover" style="width: 100%">
+                <thead>
+                  <tr>
+                    <th>IDX</th>
+                    <th>접속일시</th>
+                    <th>접속타입</th>
+                    <th>아이디</th>
+                    <th>닉네임</th>
+                    <th>상위 에이전트</th>
+                    <th>접속 도메인</th>
+                    <th>접속IP</th>
+                    <th>접속 기기</th>
+                    <th>접속 브라우저</th>
+                    <th>에이전트 타입</th>
+                    <th>플래티넘</th>
+                    <th>골드</th>
+                    <th>실버</th>
+                    <th>브론즈</th>
+                  </tr>
+                </thead>
+              </table>
+            </div>
+          </div>
+        </div>
+      </main>
+
+    </div>
+  </div>
+  <%- include('foot.ejs') %>
+  <script src="/public/js/agent.js"></script>
+</body>
+
+</html>

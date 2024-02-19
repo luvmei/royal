@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<%- include('head.ejs') %>
+
+<body class="sb-nav-fixed">
+  <% if (user.type === 9) { %>
+  <%- include('navBar-admin.ejs') %>
+  <% } else { %>
+  <%- include('navBar-agent.ejs') %>
+  <% } %>
+  <%- include('modals.ejs', {user: user}) %>
+  <div id="layoutSidenav">
+    <% if (user.type === 9) { %>
+    <%- include('sideBar-admin.ejs') %>
+    <% } else { %>
+    <%- include('sideBar-agent.ejs') %>
+    <% } %> <div id="layoutSidenav_content">
+      <main>
+        <div class="container-fluid px-4">
+          <h2 class="my-4">관리자 지급내역</h2>
+          <div class="card mb-4">
+            <div class="card-body">
+              <table id="datatablesSimple" class="cell-border hover" style="width: 100%">
+                <thead>
+                  <tr>
+                    <th>지급일시</th>
+                    <th>회원타입</th>
+                    <th>아이디</th>
+                    <th>닉네임</th>
+                    <th>상위 에이전트</th>
+                    <th>지급타입</th>
+                    <th>지급액</th>
+                    <th>지급자</th>
+                    <th>지급사유</th>
+                    <th>지급 전 보유금</th>
+                    <th>지급 후 보유금</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr>
+                    <td>22-09-18 10:04:23</td>
+                    <td>일반</td>
+                    <td>casino888</td>
+                    <td>팔팔이</td>
+                    <td>
+                      <i class="bi bi-record-fill text-primary me-1"></i>장충동
+                    </td>
+                    <td>보유금</td>
+                    <td>50,000</td>
+                    <td>main_admin</td>
+                    <td>접속 장애에 따른 보상</td>
+                    <td>12,050</td>
+                    <td>62,050</td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+          </div>
+        </div>
+      </main>
+    </div>
+  </div>
+  <%- include('foot.ejs') %>
+  <script src="/public/js/scripts.js"></script>
+</body>
+
+</html>

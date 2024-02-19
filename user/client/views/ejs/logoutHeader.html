@@ -1,0 +1,113 @@
+<header id="header" class="fixed-top">
+  <div class="row align-items-center justify-content-lg-between text-center m-0">
+    <button class="navbar-toggler d-block d-lg-none col-2" type="button" data-bs-toggle="offcanvas"
+      data-bs-target="#sidebar">
+      <i class="bi bi-list fs-1 text-white"></i>
+    </button>
+    <a href="/" class="logo col-8 col-lg-1">
+      <img src="/public/custom/type_<%= theme_type %>/logo/logo.png" alt="" class="img-fluid" />
+    </a>
+    <div class="offcanvas offcanvas-start" tabindex="-1" id="sidebar">
+      <div class="offcanvas-header">
+        <h5 class="offcanvas-title"></h5>
+        <button type="button" class="btn-close btn-close-white" data-bs-dismiss="offcanvas"></button>
+      </div>
+      <div class="offcanvas-body">
+        <button class="btn btn-warning w-100 login" data-bs-toggle="modal" data-bs-target="#loginModal">
+          로그인
+        </button>
+        <button class="btn btn-danger w-100 logout d-none" data-bs-toggle="modal" data-bs-target="#logoutModal">
+          로그아웃
+        </button>
+        <div class="user-info d-flex justify-content-between mb-5 mt-3">
+          <span class="nickname"></span>
+          <span class="money"></span>
+        </div>
+        <div class="sidebarMenu text-start">
+          <div class="my-3 notice" data-bs-toggle="modal" data-bs-target="#notLoginModal">공지사항</div>
+          <div class="my-3 deposit" data-bs-toggle="modal" data-bs-target="#notLoginModal">
+            입금
+          </div>
+          <div class="my-3 withdraw" data-bs-toggle="modal" data-bs-target="#notLoginModal">
+            출금
+          </div>
+          <div class="my-3 reward" data-bs-toggle="modal" data-bs-target="#notLoginModal">콤프</div>
+          <div class="my-3 question" data-bs-toggle="modal" data-bs-target="#notLoginModal">문의</div>
+        </div>
+      </div>
+    </div>
+    <nav class="navbar d-none d-lg-block col-4">
+      <div class="row justify-content-center">
+        <div class="col">
+          <a class="nav-link" id="nav-notice" href="#">공지사항</a>
+        </div>
+        <div class="col">
+          <a class="nav-link" id="nav-deposit">입금</a>
+        </div>
+        <div class="col">
+          <a class="nav-link" id="nav-withdraw" data-bs-toggle="modal" data-bs-target="#notLoginModal">출금</a>
+        </div>
+        <div class="col">
+          <a class="nav-link" id="nav-reward" data-bs-toggle="modal" data-bs-target="#notLoginModal">리워드</a>
+        </div>
+        <div class="col">
+          <a class="nav-link" id="nav-question" data-bs-toggle="modal" data-bs-target="#notLoginModal">문의</a>
+        </div>
+      </div>
+    </nav>
+    <div class="login-buttons col-4 d-none d-lg-block" id="pc-login-buttons">
+      <div class="row justify-content-end align-items-center" id="beforeLoginNavbar">
+        <a class="get-started-btn me-3" id="nav-login" data-bs-toggle="modal" data-bs-target="#loginModal">로그인</a>
+        <a class="get-started-btn sign" id="nav-join" data-bs-toggle="modal" data-bs-target="#joinModal">회원가입</a>
+        <div class="col-2 get-started-btn logout d-none" id="nav-logout">
+          로그아웃
+        </div>
+        <div class="col-2 langBtn">
+          <img src="/public/images/flag/1x1/ko.svg" />
+        </div>
+      </div>
+    </div>
+    <div class="list-group text-start langLst">
+      <a href="#" data-value="ko" class="list-group-item list-group-item-action">
+        <img src="/public/images/flag/1x1/ko.svg" />
+        <span class="ps-3">한국어</span>
+      </a>
+      <a href="#" data-value="us" class="list-group-item list-group-item-action">
+        <img src="/public/images/flag/1x1/us.svg" />
+        <span class="ps-3">English</span>
+      </a>
+      <a href="#" data-value="cn" class="list-group-item list-group-item-action">
+        <img src="/public/images/flag/1x1/cn.svg" />
+        <span class="ps-3">中国人</span>
+      </a>
+      <a href="#" data-value="th" class="list-group-item list-group-item-action">
+        <img src="/public/images/flag/1x1/th.svg" />
+        <span class="ps-3">ภาษาไทย</span>
+      </a>
+      <a href="#" data-value="vn" class="list-group-item list-group-item-action">
+        <img src="/public/images/flag/1x1/vn.svg" />
+        <span class="ps-3">Tiếng Việt</span>
+      </a>
+    </div>
+    <div class="langBtn col-2 d-block d-lg-none pe-3">
+      <img src="/public/images/flag/1x1/ko.svg" />
+    </div>
+    <div class="list-group text-start langLst">
+      <a href="#" data-value="ko" class="list-group-item list-group-item-action">
+        <img src="/public/images/flag/1x1/ko.svg" />
+      </a>
+      <a href="#" data-value="us" class="list-group-item list-group-item-action">
+        <img src="/public/images/flag/1x1/us.svg" />
+      </a>
+      <a href="#" data-value="cn" class="list-group-item list-group-item-action">
+        <img src="/public/images/flag/1x1/cn.svg" />
+      </a>
+      <a href="#" data-value="th" class="list-group-item list-group-item-action">
+        <img src="/public/images/flag/1x1/th.svg" />
+      </a>
+      <a href="#" data-value="vn" class="list-group-item list-group-item-action">
+        <img src="/public/images/flag/1x1/vn.svg" />
+      </a>
+    </div>
+  </div>
+</header>

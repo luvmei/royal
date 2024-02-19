@@ -1,0 +1,153 @@
+<nav class="sb-topnav navbar navbar-expand navbar-dark bg-dark">
+  <!-- Navbar Brand-->
+  <i class="fas fa-bars"></i>
+  <button class="btn btn-link order-0 order-lg-1" id="sidebarToggle" href="#!">
+    <i class="fas fa-bars"></i>
+  </button>
+  <a id="navbar-name" class="navbar-brand px-2 text-center order-lg-0" href="/">ROYAL</a>
+  <!-- Sidebar Toggle-->
+  <!-- Navbar-->
+  <div class="d-none d-lg-block order-lg-2">
+    <ul class="list-group ms-2" id="admin-list-group">
+      <ul class="list-group list-group-horizontal">
+        <li class="list-group-item  title">
+          <img src="/public/images/admin.png" alt="platinum" width="21" height="21"> 어드민
+        </li>
+        <li class="list-group-item title">API 보유금</li>
+        <li class="list-group-item title d-none">SD 보유금</li>
+        <li class="list-group-item title">에이전트 보유금</li>
+        <li class="list-group-item title">에이전트 포인트</li>
+        <li class="list-group-item title">유저 보유금</li>
+        <li class="list-group-item title">유저 포인트</li>
+        <li class="list-group-item title d-none">DG 보유금
+        <li class="list-group-item title laptop">회원수</li>
+        <li class="list-group-item title laptop">당일 가입</li>
+        <li class="list-group-item title laptop">접속 중 유저</li>
+      </ul>
+      <ul class="list-group list-group-horizontal">
+        <li class="list-group-item contents" id="navAdminNick"></li>
+        <li class="list-group-item contents" id="navAdminTotalBalance"> 원</li>
+        <li class="list-group-item contents d-none" id="navAdminSdBalance"> 원</li>
+        <li class="list-group-item contents" id="navAdminAgentBalance"> 원</li>
+        <li class="list-group-item contents" id="navAdminAgentPoint"> 원</li>
+        <li class="list-group-item contents" id="navAdminUserBalance"> 원</li>
+        <li class="list-group-item contents" id="navAdminUserPoint"> 원</li>
+        <li class="list-group-item contents d-none" id="navAdminDgBalance"> 원</li>
+        <li class="list-group-item contents laptop" id="navAdminTotalUserNum"></li>
+        <li class="list-group-item contents laptop" id="navAdminNewJoin"></li>
+        <li class="list-group-item contents laptop" id="navAdminOnlineUser"></li>
+      </ul>
+    </ul>
+    <div class="d-none" id="apiSelector">
+      <div class="btn-group ms-5">
+        <button type="button" class="btn asset-dark " style="font-size:0.9rem">에볼 알 선택</button>
+        <button type="button" class="btn btn-light dropdown-toggle dropdown-toggle-split" data-bs-toggle="dropdown"
+          aria-expanded="false">
+          <span class="dropdown-label pe-2" id="pType"></span>
+        </button>
+        <ul class="dropdown-menu" id="dgSelector">
+          <li><a class="dropdown-item" data-ptype="0" href="#">유저별 설정</a></li>
+          <li><a class="dropdown-item" data-ptype="1" href="#">일괄 정품설정 (SD)</a></li>
+          <li><a class="dropdown-item" data-ptype="2" href="#">일괄 파싱설정 (DG)</a></li>
+        </ul>
+      </div>
+    </div>
+  </div>
+  <ul class="navbar-nav ms-auto me-3 order-lg-3" id="notiIconGroup">
+    <li class="nav-item">
+      <a class="nav-link text-secondary" id="alramIcon" href="#">
+        <i class="fa-solid fa-volume-high fa-2x"></i>
+      </a>
+    </li>
+    <li class="nav-item mt-1 ms-2">
+      <a type="button" class="btn btn-light position-relative text-primary fw-bold" id="depositIcon"
+        href="bank-deposit">
+        입금
+        <span class="position-absolute top-0 start-100 translate-middle bg-danger border border-light rounded-circle">
+          <span class="visually-hidden">New alerts</span>
+        </span>
+      </a>
+    </li>
+    <li class="nav-item mt-1 mx-2 mx-lg-3">
+      <a type="button" class="btn btn-light position-relative text-danger fw-bold" id="withdrawIcon"
+        href="bank-withdraw">
+        출금
+        <span class="position-absolute top-0 start-100 translate-middle bg-danger border border-light rounded-circle">
+          <span class="visually-hidden">New alerts</span>
+        </span>
+      </a>
+    </li>
+    <li class="nav-item mt-1">
+      <a type="button" class="btn btn-light position-relative text-black fw-bold" id="messageIcon" href="board">
+        문의
+        <span class="position-absolute top-0 start-100 translate-middle bg-danger border border-light rounded-circle">
+          <span class="visually-hidden">New alerts</span>
+        </span>
+      </a>
+    <li class="nav-item mx-2 mx-lg-3 mt-1">
+      <a type="button" class="btn btn-light position-relative text-black fw-bold" id="approvalIcon" href="user-confirm">
+        승인
+        <span class="position-absolute top-0 start-100 translate-middle bg-danger border border-light rounded-circle">
+          <span class="visually-hidden">New alerts</span>
+        </span>
+      </a>
+    </li>
+    </li>
+    <li class="nav-item pt-1">
+      <a class="nav-link dropdown-toggle fs-6" id="navbarDropdown" href="#" role="button" data-bs-toggle="dropdown"
+        aria-expanded="false"><i class="fas fa-user fa-fw fa-xl"></i></a>
+      <ul class="dropdown-menu dropdown-menu-end text-center" aria-labelledby="navbarDropdown">
+        <li><a class="dropdown-item changePasswordBtn" href="#!">비밀번호 변경</a></li>
+        <li>
+          <hr class="dropdown-divider" />
+        </li>
+        <li><a class="dropdown-item" id="logout-btn">로그아웃</a></li>
+      </ul>
+    </li>
+  </ul>
+  <!-- <ul class="navbar-nav ms-auto me-3 order-lg-3">
+    <li class="nav-item">
+      <a id="dummy" href="#">
+      </a>
+    </li>
+    <li class="nav-item">
+      <a class="nav-link text-secondary" id="alramIcon" href="#">
+        <i class="fa-solid fa-volume-high fa-2x"></i>
+      </a>
+    </li>
+    <li class="nav-item">
+      <a class="nav-link text-secondary" id="depositIcon" href="bank-deposit">        
+        <i class="fa-sharp fa-regular fa-circle-down fa-2x"></i>
+      </a>
+    </li>
+    <li class="nav-item">
+      <a class="nav-link text-secondary" id="withdrawIcon" href="bank-withdraw">
+        <i class="fa-sharp fa-regular fa-circle-up fa-2x"></i>
+      </a>
+    </li>
+    <li class="nav-item">
+      <a class="nav-link text-secondary" id="approvalIcon" href="user-confirm">
+        <i class="fa-sharp fa-regular fa-circle-check fa-2x"></i>
+      </a>
+    </li>
+    <li class="nav-item">
+      <a class="nav-link text-secondary" id="messageIcon" href="board">
+        <i class="fa-sharp fa-regular fa-comment fa-2x"></i>
+      </a>
+    </li>
+    <li class="nav-item pt-1">
+      <a class="nav-link dropdown-toggle" id="navbarDropdown" href="#" role="button" data-bs-toggle="dropdown"
+        aria-expanded="false"><i class="fas fa-user fa-fw fa-xl"></i></a>
+      <ul class="dropdown-menu dropdown-menu-end text-center" aria-labelledby="navbarDropdown">
+        <li><a class="dropdown-item" href="#!">관리자설정</a></li>
+        <li>
+          <hr class="dropdown-divider" />
+        </li>
+        <li><a class="dropdown-item" id="logout-btn">로그아웃</a></li>
+      </ul>
+    </li>
+  </ul> -->
+</nav>
+<div class="spinner-container d-none">
+  <div class="spinner-border text-light" role="status"></div>
+</div>

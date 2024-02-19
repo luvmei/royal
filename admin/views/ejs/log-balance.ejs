@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<%- include('head.ejs') %>
+
+<body class="sb-nav-fixed">
+  <% if (user.type === 9) { %>
+  <%- include('navBar-admin.ejs') %>
+  <% } else { %>
+  <%- include('navBar-agent.ejs') %>
+  <% } %>
+  <%- include('modals.ejs', {user: user}) %>
+  <div id="layoutSidenav">
+    <% if (user.type === 9) { %>
+    <%- include('sideBar-admin.ejs') %>
+    <% } else { %>
+    <%- include('sideBar-agent.ejs') %>
+    <% } %> <div id="layoutSidenav_content">
+      <main>
+        <div class="container-fluid px-4">
+          <h2 class="my-4">보유금 변동내역</h2>
+          <div class="card mb-4">
+            <div class="card-body">
+              <table id="balanceLog" class="cell-border hover" style="width: 100%">
+                <thead>
+                  <tr>
+                    <th>IDX</th>
+                    <th>이벤트 발생일시</th>
+                    <th>회원타입</th>
+                    <th>아이디</th>
+                    <th>닉네임</th>
+                    <th>이벤트 타입</th>
+                    <th>고유번호</th>
+                    <th>변동 전 보유금</th>
+                    <th>변동 금액</th>
+                    <th>변동 후 보유금</th>
+                    <th>플래티넘</th>
+                    <th>골드</th>
+                    <th>실버</th>
+                    <th>브론즈</th>
+                  </tr>
+                </thead>
+              </table>
+            </div>
+          </div>
+        </div>
+      </main>
+    </div>
+  </div>
+  <%- include('foot.ejs') %>
+  <script src="/public/js/log.js"></script>
+</body>
+
+</html>

@@ -1,0 +1,173 @@
+<div id="layoutSidenav_nav">
+  <nav class="sb-sidenav accordion sb-sidenav-dark" id="sidenavAccordion">
+    <div class="sb-sidenav-menu position-relative">
+      <div class="nav">
+        <div class="sb-sidenav-menu-heading">Menu</div>
+        <a class="nav-link" href="/">
+          <div class="sb-nav-link-icon">
+            <i class="fas fa-solid fa-table-columns"></i>
+          </div>
+          대시보드
+        </a>
+        <a class="nav-link collapsed" href="#" data-bs-toggle="collapse" data-bs-target="#collapseLayouts"
+          aria-expanded="false" aria-controls="collapseLayouts">
+          <div class="sb-nav-link-icon"><i class="fas fa-user"></i></div>
+          회원목록 및 정보
+          <div class="sb-sidenav-collapse-arrow">
+            <i class="fas fa-angle-down"></i>
+          </div>
+        </a>
+        <div class="collapse" id="collapseLayouts" aria-labelledby="headingOne" data-bs-parent="#sidenavAccordion">
+          <nav class="sb-sidenav-menu-nested nav">
+            <a class="nav-link" href="user-info-online">요약정보 - 온라인</a>
+            <a class="nav-link" href="user-info-local">요약정보 - 오프라인</a>
+            <a class="nav-link" href="user-info-date">기간별정보</a>
+            <a class="nav-link" href="user-assets">머니정보</a>
+            <!-- <a class="nav-link" href="user-commission">커미션정보</a> -->
+            <a class="nav-link" href="user-betting">베팅정보</a>
+            <a class="nav-link" href="user-connect">접속내역</a>
+            <a class="nav-link" href="user-block">차단내역</a>
+            <a class="nav-link" href="user-confirm">회원 가입승인</a>
+          </nav>
+        </div>
+        <a class="nav-link collapsed" href="#" data-bs-toggle="collapse" data-bs-target="#collapseAgent"
+          aria-expanded="false" aria-controls="collapseAgent">
+          <div class="sb-nav-link-icon">
+            <i class="fas fa-regular fa-handshake"></i>
+          </div>
+          에이전트목록 및 정보
+          <div class="sb-sidenav-collapse-arrow">
+            <i class="fas fa-angle-down"></i>
+          </div>
+        </a>
+        <div class="collapse" id="collapseAgent" aria-labelledby="headingTwo" data-bs-parent="#sidenavAccordion">
+          <nav class="sb-sidenav-menu-nested nav">
+            <a class="nav-link" href="agent-info">요약정보</a>
+            <a class="nav-link" href="agent-assets">머니정보</a>
+            <a class="nav-link" href="agent-commission">커미션정보</a>
+            <a class="nav-link" href="agent-betting">베팅정보</a>
+            <a class="nav-link" href="agent-connect">접속내역</a>
+            <a class="nav-link" href="agent-block">차단내역</a>
+            <a class="nav-link" href="user-confirm">에이전트 가입승인</a>
+        </div>
+        <a class="nav-link collapsed" href="#" data-bs-toggle="collapse" data-bs-target="#collapseCash"
+          aria-expanded="false" aria-controls="collapseCash">
+          <div class="sb-nav-link-icon">
+            <i class="fas fa-solid fa-sack-dollar"></i>
+          </div>
+          입금, 출금, 지급, 회수관리
+          <div class="sb-sidenav-collapse-arrow">
+            <i class="fas fa-angle-down"></i>
+          </div>
+        </a>
+        <div class="collapse" id="collapseCash" aria-labelledby="headingTwo" data-bs-parent="#sidenavAccordion">
+          <nav class="sb-sidenav-menu-nested nav">
+            <a class="nav-link" href="bank-depowith">입출금</a>
+            <a class="nav-link" href="bank-deposit">입금</a>
+            <a class="nav-link" href="bank-withdraw">출금</a>
+            <a class="nav-link" href="bank-give">지급</a>
+            <a class="nav-link" href="bank-take">회수</a>
+            <!-- <a class="nav-link" href="bank-admin-paid">관리자지급</a> -->
+          </nav>
+        </div>
+        <a class="nav-link collapsed" href="#" data-bs-toggle="collapse" data-bs-target="#collapseLog"
+          aria-expanded="false" aria-controls="collapseLog">
+          <div class="sb-nav-link-icon">
+            <i class="fas fa-solid fa-clock-rotate-left"></i>
+          </div>
+          보유금, 포인트 변동내역
+          <div class="sb-sidenav-collapse-arrow">
+            <i class="fas fa-angle-down"></i>
+          </div>
+        </a>
+        <div class="collapse" id="collapseLog" aria-labelledby="headingTwo" data-bs-parent="#sidenavAccordion">
+          <nav class="sb-sidenav-menu-nested nav">
+            <a class="nav-link" href="log-balance">보유금<br>(입금, 출금, 베팅)</a>
+            <a class="nav-link" href="log-point">포인트<br>(롤링, 루징, 콤프)</a>
+          </nav>
+        </div>
+        <a class="nav-link collapsed" href="#" data-bs-toggle="collapse" data-bs-target="#collapseBetting"
+          aria-expanded="false" aria-controls="collapseBetting">
+          <div class="sb-nav-link-icon">
+            <i class="fas fa-sharp fa-solid fa-circle-dollar-to-slot"></i>
+          </div>
+          베팅내역
+          <div class="sb-sidenav-collapse-arrow">
+            <i class="fas fa-angle-down"></i>
+          </div>
+        </a>
+        <div class="collapse" id="collapseBetting" aria-labelledby="headingTwo" data-bs-parent="#sidenavAccordion">
+          <nav class="sb-sidenav-menu-nested nav">
+            <a class="nav-link" href="#" style="pointer-events: none;">- 항목별 세부 베팅</a>
+            <% if (sport == 1) { %>
+            <a class="nav-link ms-3" href="betting-detail-sport">스포츠</a>
+            <% } %>
+            <a class="nav-link ms-3" href="betting-detail-casino">카지노</a>
+            <a class="nav-link ms-3" href="betting-detail-slot">슬롯</a>
+
+            <a class="nav-link" href="#" style="pointer-events: none;">- 기간별 요약 베팅</a>
+            <% if (sport == 1) { %>
+            <a class="nav-link ms-3" href="betting-summary-sport">스포츠</a>
+            <% } %>
+            <a class="nav-link ms-3" href="betting-summary-casino">카지노</a>
+            <a class="nav-link ms-3" href="betting-summary-slot">슬롯</a>
+          </nav>
+        </div>
+        <a class="nav-link collapsed" href="#" data-bs-toggle="collapse" data-bs-target="#collapseBoard"
+          aria-expanded="false" aria-controls="collapseBoard">
+          <div class="sb-nav-link-icon">
+            <i class="fas fa-comments"></i>
+          </div>
+          공지, 이벤트, 메세지, 문의
+          <div class="sb-sidenav-collapse-arrow">
+            <i class="fas fa-angle-down"></i>
+          </div>
+        </a>
+        <div class="collapse" id="collapseBoard" aria-labelledby="headingTwo" data-bs-parent="#sidenavAccordion">
+          <nav class="sb-sidenav-menu-nested nav">
+            <a class="nav-link" href="board">공지, 이벤트, 메세지, 문의</a>
+            <% if (user.lotto == '1') { %>
+            <a class="nav-link" href="event-lotto">로또 이벤트</a>
+            <% } %>
+          </nav>
+        </div>
+        <a class="nav-link collapsed" href="#" data-bs-toggle="collapse" data-bs-target="#collapseIncome"
+          aria-expanded="false" aria-controls="collapseIncome">
+          <div class="sb-nav-link-icon"><i class="fas fa-coins"></i></div>
+          정산관리
+          <div class="sb-sidenav-collapse-arrow">
+            <i class="fas fa-angle-down"></i>
+          </div>
+        </a>
+        <div class="collapse" id="collapseIncome" aria-labelledby="headingTwo" data-bs-parent="#sidenavAccordion">
+          <nav class="sb-sidenav-menu-nested nav">
+            <a class="nav-link" href="income-hq">일일 정산내역</a>
+            <a class="nav-link d-none" href="income-agent-depowith">에이전트 정산내역<br>(입금 - 출금)</a>
+            <a class="nav-link" href="income-agent-betwin">에이전트 정산내역<br>(베팅 - 획득)</a>
+            <a class="nav-link d-none" href="income-agent-death">에이전트 정산내역<br>(죽장)</a>
+            <a class="nav-link d-none" href="income-user-depowith">유저 정산내역<br>(입금 - 출금)</a>
+            <a class="nav-link d-none" href="income-user-betwin">유저 정산내역<br>(베팅 - 획득)</a>
+          </nav>
+        </div>
+        <a class="nav-link collapsed" href="#" data-bs-toggle="collapse" data-bs-target="#collapseSetting"
+          aria-expanded="false" aria-controls="collapseSetting">
+          <div class="sb-nav-link-icon">
+            <i class="fas fa-wrench"></i>
+          </div>
+          환경설정
+          <div class="sb-sidenav-collapse-arrow">
+            <i class="fas fa-angle-down"></i>
+          </div>
+        </a>
+        <div class="collapse" id="collapseSetting" aria-labelledby="headingTwo" data-bs-parent="#sidenavAccordion">
+          <nav class="sb-sidenav-menu-nested nav">
+            <!-- <a class="nav-link" href="charts">레벨별 설정</a> -->
+            <a class="nav-link" href="setting-slot">슬롯 설정</a>
+            <!-- <a class="nav-link" href="tables">카지노 설정</a> -->
+            <a class="nav-link" href="setting-system">시스템 설정</a>
+          </nav>
+        </div>
+      </div>
+    </div>
+  </nav>
+</div>

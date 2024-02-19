@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8" />
+  <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
+  <title><%= title %></title>
+
+  <!-- site favicon -->
+  <link rel="icon" type="image/png" href="/public/custom/type_<%= theme_type %>/favicon/favicon.png" />
+
+  <!-- All stylesheet and icons css -->
+  <!-- <link rel="stylesheet" href="/public/output/styles.css" /> -->
+  <link rel="stylesheet" href="/public/vendor/bootstrap/bootstrap.min.css">
+  <link rel="stylesheet" href="/public/vendor/bootstrap-icons/bootstrap-icons.css" />
+  <link href="https://cdn.datatables.net/v/dt/dt-1.13.7/r-2.5.0/datatables.min.css" rel="stylesheet">
+  <link rel="stylesheet" href="/public/vendor/aos/aos.css" />
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css" />
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.1/animate.min.css" />
+  <link rel="stylesheet" href="/public/custom/type_<%= theme_type %>/css/style_<%= theme_type %>.css" />
+</head>
+<%- include('modal.html') %>
+
+<body>
+  <%- include('header.html') %>
+
+  <div class="landing">
+    <div class="landing-login">
+      <form id="landing-login-data">
+        <div class="form-floating mb-2">
+          <input type="text" class="form-control" id="landing-id" name="landing-id" placeholder="ID">
+          <label for="landingId">ID</label>
+        </div>
+        <div class="form-floating">
+          <input type="password" class="form-control" id="landing-pw" name="landing-pw" placeholder="Password">
+          <label for="landingPw">Password</label>
+        </div>
+        <button class="btn w-100 mt-3 py-2" type="submit" id="landing-login-btn">로그인</button>
+        <button class="btn btn-primary w-100 mt-2 py-2" type="button" data-bs-toggle="modal" data-bs-target="#joinModal"
+          id="landing-join-btn">회원가입</button>
+      </form>
+    </div>
+  </div>
+</body>
+
+<script>
+  document.getElementById('header').classList.add('d-none');
+</script>
+<script src="/public/bundle/bundle.js" defer></script>
+<!-- <script src="/public/vendor/bootstrap/bootstrap.bundle.min.js"></script> -->
+
+</html>

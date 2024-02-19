@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<%- include('head.ejs') %>
+
+<body class="sb-nav-fixed">
+  <% if (user.type === 9) { %>
+  <%- include('navBar-admin.ejs') %>
+  <% } else { %>
+  <%- include('navBar-agent.ejs') %>
+  <% } %>
+  <%- include('modals.ejs', {user: user}) %>
+  <div id="layoutSidenav">
+    <% if (user.type === 9) { %>
+    <%- include('sideBar-admin.ejs') %>
+    <% } else { %>
+    <%- include('sideBar-agent.ejs') %>
+    <% } %> <div id="layoutSidenav_content">
+      <main>
+        <div class="container-fluid px-4">
+          <h2 class="my-4">일일 정산내역</h2>
+          <div class="card mb-4">
+            <div class="card-body">
+              <table id="incomeHeadquarters" class="cell-border hover" style="width: 100%">
+                <thead>
+                  <tr>
+                    <th>IDX</th>
+                    <th>정산일자</th>
+                    <th>입금</th>
+                    <th>출금</th>
+                    <th>입금-출금</th>
+                    <th>베팅</th>
+                    <th>획득</th>
+                    <th>베팅-획득</th>
+                  </tr>
+                </thead>
+                <tfoot>
+                  <tr>
+                    <th></th>
+                    <th class="text-center">합계</th>
+                    <th></th>
+                    <th></th>
+                    <th></th>
+                    <th></th>
+                    <th></th>
+                    <th></th>
+                  </tr>
+                </tfoot>
+              </table>
+            </div>
+          </div>
+        </div>
+      </main>
+    </div>
+  </div>
+  <%- include('foot.ejs') %>
+  <script src="/public/js/income.js"></script>
+</body>
+
+</html>

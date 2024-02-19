@@ -1,0 +1,293 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="user">   
+
+<!--? 회원가입 관련 --> 
+  <select id='checkId'>
+    SELECT id
+    FROM user
+    WHERE id=#{id} LIMIT 1;
+  </select>  
+
+  <select id='checkNick'>
+   SELECT nickname
+   FROM user
+   WHERE nickname=#{nickname} LIMIT 1;
+  </select>
+
+  <select id='checkPhone'>
+    SELECT phone
+    FROM user
+    WHERE phone=#{phone} LIMIT 1;
+  </select>
+
+  <select id='checkCode'>
+    SELECT id
+    FROM user
+    WHERE id = #{join_code} AND type != 4  AND state = '정상' LIMIT 1;
+  </select>
+
+  <select id="checkRecommend">
+    SELECT id
+    FROM user
+    WHERE id = #{join_recommend} AND type = 4 AND state = '정상' LIMIT 1;
+  </select>
+
+  <select id="insertUserInfo">
+    INSERT INTO user
+      (
+        id,
+        pw,
+        name,
+        nickname,
+        phone,
+        bank,
+        bank_num, 
+        bank_owner, 
+        bank_pw, 
+        type,
+        upper_agt,
+        join_code,
+        recommend_id,
+        join_domain,
+        join_ip,
+        join_date
+      )
+    VALUES
+      (
+        #{id}, 
+        #{pw},
+        #{name},
+        #{nickname},
+        #{phone}, 
+        #{bank}, 
+        #{bank_num}, 
+        #{bank_owner}, 
+        #{bank_pw},
+        #{type},
+        (SELECT user_id
+        FROM user AS u
+        WHERE id = #{join_code}),
+        #{join_code},
+        #{recommend},
+        #{join_domain},
+        #{join_ip},
+        #{join_date}
+      );    
+  </select>
+
+  <select id='insertAssetInfo'>
+    INSERT INTO user_asset_info
+      (
+        user_id
+      )
+    VALUES
+      (
+        (SELECT user_id
+        FROM user 
+        ORDER BY user_id DESC 
+        LIMIT 1)
+      );
+  </select>
+
+  <select id='insertCommisionInfo'>
+    INSERT INTO user_commission_info
+      (
+        user_id
+      )
+    VALUES
+      (
+        (SELECT user_id
+        FROM user 
+        ORDER BY user_id DESC 
+        LIMIT 1)
+      );
+  </select>
+
+  <select id='insertBettingInfo'>
+    INSERT INTO user_betting_info
+      (
+        user_id
+      )
+    VALUES
+      (
+        (SELECT user_id
+        FROM user 
+        ORDER BY user_id DESC 
+        LIMIT 1)
+      );
+  </select>
+
+  <update id='insertNotification'>
+    UPDATE notification
+    SET join_confirm_count = join_confirm_count + 1, alram = 1;
+  </update>
+
+<!--? 로그인 관련 -->
+  <select id='findUser'>
+    SELECT id, pw, nickname
+    FROM user
+    WHERE id=#{id} AND type = 4 AND state = '정상' LIMIT 1;
+  </select>
+
+  <select id='getOnlineUser'>
+    SELECT *
+    FROM sessions
+  </select> 
+
+  <select id='findUserInfo'>
+    SELECT u.id,
+      u.nickname,
+      u.level,
+      u.type,
+      u.state,
+      a.balance,
+      a.point
+    FROM   user AS u
+    JOIN user_asset_info AS a
+      ON u.user_id = a.user_id 
+    WHERE u.id=#{id} LIMIT 1;
+  </select>
+
+  <delete id="deleteExpiredSession" parameterType="map">
+    DELETE FROM sessions 
+    WHERE JSON_EXTRACT(data, '$.passport.user') = #{id};
+
+  </delete>
+
+  <select id='insertConnectInfo'>
+    INSERT INTO user_connect_history
+      (
+		    user_id,
+		    time,
+		    type,
+		    ip_adress,
+        connect_domain,
+		    device,
+		    browser
+	    )
+    VALUES 
+	    (
+        (SELECT user_id
+        FROM user 
+        WHERE id = #{id}),
+        #{time},
+        #{type},
+        #{ip_adress},
+        #{domain},
+        #{device},
+        #{browser}
+	    )
+  </select>
+
+   <select id='insertSdAccount'>
+    UPDATE user
+    SET sd_usercode = #{usercode}, sd_token = #{token}
+    WHERE id = #{id};
+  </select>
+
+<!--? 기타 기능 -->
+  <select id='getUserInfo'>
+    SELECT 
+      u.id,
+      u.nickname,
+      u.name,
+      u.level,
+      u.phone,
+      u.bank,
+      u.bank_num,
+      u.bank_owner,
+      a.balance,
+      a.point
+    FROM user AS u
+    JOIN user_asset_info AS a
+      ON u.user_id = a.user_id 
+    WHERE u.id=#{id} LIMIT 1;
+  </select>
+
+  <select id='getAsset'>
+    SELECT balance, point
+    FROM user_asset_info
+    WHERE user_id = (SELECT user_id
+                    FROM user
+                    WHERE id = #{id}); 
+  </select>  
+
+  <select id='checkPassword'>
+    SELECT pw
+    FROM user
+    WHERE user_id = (SELECT user_id
+                    FROM user
+                    WHERE id = #{id})
+  </select>
+
+  <select id='changePassword'>
+    UPDATE user
+    SET pw = #{pw}
+    WHERE user_id = (SELECT user_id
+                    FROM user
+                    WHERE id = #{id})
+  </select>
+
+  <select id='getPopupData'>
+    select *
+    FROM popup_list
+  </select>
+  
+  <select id='getUserType'>
+    select join_code
+    from user
+    where user_id = (select user_id
+                    from user
+                    where id = #{id});
+  </select>
+
+  <select id='getRecommendHistory'>
+    SELECT join_date, id
+    FROM user
+    WHERE recommend_id = #{id}
+    ORDER BY join_date DESC
+  </select>
+
+  <select id='addBlackList'>
+    INSERT IGNORE INTO blacklist
+      (
+        ip,
+        pattern,
+        path,
+        confirm
+      )
+    VALUES
+      (
+        #{ip},
+        #{pattern},
+        'user',
+        0
+      );
+  </select>
+
+  <update id='confirmBlackList'>
+    UPDATE blacklist
+    SET confirm = 1
+    WHERE ip = #{ip};
+  </update>
+
+  <select id='getBlackList'>
+    SELECT ip
+    FROM blacklist
+    WHERE confirm = 1;
+  </select>
+
+<!--? 기타 API관련 -->
+  <select id='getUserCodeToken'>
+    select sd_usercode, sd_token
+    from user
+    where id = #{id};
+  </select>
+
+  <select id='getUserPtype'>
+    select p_set
+    from user
+    where id = #{id};
+  </select>
+</mapper>

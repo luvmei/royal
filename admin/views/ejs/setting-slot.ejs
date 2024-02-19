@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<%- include('head.ejs') %>
+
+<body class="sb-nav-fixed">
+  <% if (user.type === 9) { %>
+  <%- include('navBar-admin.ejs') %>
+  <% } else { %>
+  <%- include('navBar-agent.ejs') %>
+  <% } %>
+  <%- include('modals.ejs', {user: user}) %>
+  <div id="layoutSidenav">
+    <% if (user.type === 9) { %>
+    <%- include('sideBar-admin.ejs') %>
+    <% } else { %>
+    <%- include('sideBar-agent.ejs') %>
+    <% } %> <div id="layoutSidenav_content">
+      <main>
+        <div class="container-fluid px-4">
+          <h2 class="my-4">슬롯 게임설정</h2>
+          <div class="card mb-4">
+            <div class="card-body">
+              <table id="gameSlot" class="cell-border hover" style="width: 100%">
+                <thead>
+                  <tr>
+                    <th rowspan="2">IDX</th>
+                    <th rowspan="2">공급사</th>
+                    <th rowspan="2">코드</th>
+                    <th rowspan="2">게임명</th>
+                    <th rowspan="2">영문 게임명</th>
+                    <th rowspan="2">등록일</th>
+                    <th rowspan="2">플레이 횟수</th>
+                    <th rowspan="2">노출</th>
+                    <th colspan="2" class="text-center">점검예약(예정)</th>
+                  </tr>
+                  <tr>
+                    <th>시작시간</th>
+                    <th>종료시간</th>
+                  </tr>
+                </thead>
+              </table>
+            </div>
+          </div>
+        </div>
+      </main>
+    </div>
+  </div>
+  <%- include('foot.ejs') %>
+  <script src='https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/js/select2.min.js'></script>;
+  <script src="/public/js/game.js"></script>
+</body>
+
+</html>

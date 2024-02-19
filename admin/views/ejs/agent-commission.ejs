@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<%- include('head.ejs') %>
+
+<body class="sb-nav-fixed">
+  <% if (user.type === 9) { %>
+  <%- include('navBar-admin.ejs') %>
+  <% } else { %>
+  <%- include('navBar-agent.ejs') %>
+  <% } %>
+  <%- include('modals.ejs', {user: user}) %>
+  <div id="layoutSidenav">
+    <% if (user.type === 9) { %>
+    <%- include('sideBar-admin.ejs') %>
+    <% } else { %>
+    <%- include('sideBar-agent.ejs') %>
+    <% } %> <div id="layoutSidenav_content">
+      <main>
+        <div class="container-fluid px-4">
+          <h2 class="my-4">에이전트 커미션정보</h2>
+          <div class="card mb-4">
+            <div class="card-body">
+              <table id="agentCommission" class="cell-border hover" style=" width: 100%">
+                <thead>
+                  <tr>
+                    <th rowspan="4"></th>
+                    <th rowspan="4">node-id</th>
+                    <th rowspan="4">node-pid</th>
+                    <th rowspan="4">타입</th>
+                    <th rowspan="4">아이디</th>
+                    <th rowspan="4">닉네임</th>
+                    <th rowspan="4">보유금</th>
+                    <th rowspan="4">포인트</th>
+                    <th rowspan="4"></th>
+                    <th rowspan="4"></th>
+                    <th colspan="6" class="text-center d-none d-lg-table-cell">롤링</th>
+                    <th colspan="3" rowspan="2" class="text-center d-none d-lg-table-cell">루징</th>
+                  </tr>
+                  <tr>
+                    <th colspan="3" class="text-center border-start border-end d-none d-lg-table-cell">카지노</th>
+                    <th colspan="3" class="text-center border-end d-none d-lg-table-cell">슬롯</th>
+                  </tr>
+                  <tr>
+                    <th rowspan="2" class="border-start border-end">요율(%)</th>
+                    <th colspan="2" class="text-center d-none d-lg-table-cell">적립 커미션</th>
+                    <th rowspan="2" class="border-start border-end">요율(%)</th>
+                    <th colspan="2" class="text-center d-none d-lg-table-cell">적립 커미션</th>
+                    <th rowspan="2" class="border-start border-end">요율(%)</th>
+                    <th colspan="2" class="text-center border-end d-none d-lg-table-cell">적립 커미션</th>
+                  </tr>
+                  <tr>
+                    <th>당일</th>
+                    <th>전체</th>
+                    <th>당일</th>
+                    <th>전체</th>
+                    <th>당일</th>
+                    <th class="border-end">전체</th>
+                    <th>플래티넘</th>
+                    <th>골드</th>
+                    <th>실버</th>
+                    <th>브론즈</th>
+                  </tr>
+                </thead>
+              </table>
+            </div>
+          </div>
+        </div>
+      </main>
+
+    </div>
+  </div>
+  <%- include('foot.ejs') %>
+  <script src="/public/js/agent.js"></script>
+  <script src="/public/js/plugin/jquery-simple-tree-table.js"></script>
+</body>
+
+</html>

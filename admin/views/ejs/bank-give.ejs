@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<%- include('head.ejs') %>
+
+<body class="sb-nav-fixed">
+  <% if (user.type === 9) { %>
+  <%- include('navBar-admin.ejs') %>
+  <% } else { %>
+  <%- include('navBar-agent.ejs') %>
+  <% } %>
+  <%- include('modals.ejs', {user: user}) %>
+  <div id="layoutSidenav">
+    <% if (user.type === 9) { %>
+    <%- include('sideBar-admin.ejs') %>
+    <% } else { %>
+    <%- include('sideBar-agent.ejs') %>
+    <% } %> <div id="layoutSidenav_content">
+      <main>
+        <div class="container-fluid px-4">
+          <h2 class="my-4">지급내역</h2>
+          <div class="card mb-4">
+            <div class="card-body">
+              <table id="give" class="cell-border hover" style="width: 100%">
+                <thead>
+                  <tr>
+                    <th>IDX</th>
+                    <th>지급일시</th>
+                    <th>지급매장</th>
+                    <th>유저타입</th>
+                    <th>아이디</th>
+                    <th>지급종류</th>
+                    <th>지급금액</th>
+                    <th>지급 전 보유금</th>
+                    <th>지급 후 보유금</th>
+                    <th>지급_트랜젝션ID</th>
+                    <th>node_id</th>
+                    <th>메모</th>
+                  </tr>
+                </thead>
+              </table>
+            </div>
+          </div>
+        </div>
+      </main>
+    </div>
+  </div>
+  <%- include('foot.ejs') %>
+  <script src="/public/js/bank.js"></script>
+</body>
+
+</html>

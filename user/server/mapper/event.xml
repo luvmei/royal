@@ -1,0 +1,149 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="event">
+  <select id='checkUserEventState'>
+    SELECT 
+      lotto_state, 
+      attendance_state
+    FROM user
+    WHERE id = #{id}
+  </select>
+
+// 출석체크
+  <select id='checkAttendance'>
+    SELECT *
+    FROM attendance_history
+    WHERE user_id = (SELECT user_id
+                    FROM user
+                    WHERE id = #{id})
+  </select>
+
+  <select id='getAttendanceState'>
+    SELECT 
+      attEventAmount,
+      attEventCount
+    FROM setting
+  </select>
+
+  <select id='getAttRewardInfo'>
+    SELECT *
+    FROM attendance_reward
+  </select>
+
+  <select id='getAttendance'>
+    SELECT
+      *
+    FROM
+      attendance_history
+    WHERE
+      user_id = (SELECT user_id 
+                  FROM user 
+                  WHERE id = #{id});
+  </select>
+
+  <update id='grantAttendanceReward'>
+    UPDATE user_asset_info
+    SET
+      point = point + ${rewardPoint}
+    WHERE
+      user_id = #{userId};
+  </update>
+
+  <select id='getTodayDepositSum'>
+    SELECT ifnull(sum(req_money), 0) AS today_deposit_sum
+    FROM deposit_request_history
+    WHERE user_id = (SELECT user_id 
+                    FROM user 
+                    WHERE id = #{id}) 
+                    AND req_status = '입금승인' 
+                    AND DATE(req_time) = CURDATE()
+  </select>
+
+  <select id='insertAttendance'>
+    INSERT INTO attendance_history
+      (
+        user_id,
+        recentAttDate,
+        continueCounter,
+        monthlyAttDays
+      )
+    VALUES
+      (
+        (SELECT user_id
+        FROM user 
+        WHERE id = #{id}),
+        NOW(),
+        1,
+        #{monthlyAttDays}
+      );
+  </select>
+
+  <select id='updateAttendance'>
+    UPDATE attendance_history
+    SET 
+      recentAttDate = NOW(),
+      continueCounter = ${continueCounter},
+      monthlyAttDays = #{monthlyAttDays}
+    WHERE
+      user_id = ${user_id};
+  </select>
+
+  <update id='updateUserAttendanceState'>
+    UPDATE user
+    SET
+      attendance_state = 2
+    WHERE
+      user_id = #{user_id};
+  </update>
+
+  <update id='updateNewAttendanceUserState'>
+    UPDATE user
+    SET
+      attendance_state = 2
+    WHERE
+      id = #{id};
+  </update>
+
+// 로또 이벤트
+  <select id='checkLottoState'>
+    SELECT lotto_state
+    FROM user
+    WHERE id = #{userId}
+  </select>
+
+  <select id='getLottoInfo'>
+    SELECT *
+    FROM event_lottery_history
+    WHERE id = #{userId} and round = #{round}
+  </select>
+
+  <update id='updateLottoState'>
+    UPDATE user
+    SET lotto_state = 2
+    WHERE id = #{userId}
+  </update>
+
+  <insert id='insertLottoHistory'>
+    INSERT INTO event_lottery_history
+    (round, submit_datetime, id, selected_numbers, is_virtual)
+    VALUES
+    (#{round}, current_timestamp(), #{userId}, #{numbers}, #{isVirtual})    
+  </insert>
+
+
+  <select id='getLottoList'>
+    SELECT *
+    FROM event_lottery_list_view
+  </select>
+
+  <select id='getLottoDetail'>
+    SELECT 
+      id,
+      round,
+      selected_numbers,
+      winning_count,
+      winning_numbers
+    FROM event_lottery_history
+    WHERE round = ${round} AND submit_datetime &lt; current_timestamp()
+  </select>
+</mapper>

@@ -1,0 +1,664 @@
+<div class="modal fade" id="userDetail" tabindex="-1">
+  <div class="modal-dialog modal-dialog-centered">
+    <div class="modal-content">
+      <div class="modal-header">
+        <div id="userDetailTitle" class="d-flex justify-content-between" style="flex-grow: 1"></div>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+      <div class="modal-body row" id="detailModalBody">
+        <div class="col-12 col-lg-4">
+          <div class="card" id="basicInfo">
+            <div class="card-header">기본정보</div>
+            <div class="card-body row gx-2 gy-3" id="basicInfoRow">
+              <div class="col-2">
+                <label for="detail-lv" class="form-label">레벨</label>
+                <select class="form-select" id="detail-lv">
+                  <option value="1" selected>1</option>
+                  <option value="2">2</option>
+                  <option value="3">3</option>
+                  <option value="4">4</option>
+                  <option value="5">5</option>
+                </select>
+              </div>
+              <div class="col-6" id="balance">
+                <label for="detail-balance" class="form-label">보유금</label>
+                <div class="input-group mb-3">
+                  <input type="text" class="form-control px-2" id="detail-balance" value="😃정상" disabled />
+                  <button class="btn asset-primary px-2" type="button" id="detailGiveBtn">지급</button>
+                  <button class="btn asset-danger d-none px-2" type="button" id="detailTakeBtn">회수</button>
+                </div>
+              </div>
+              <div class="col-4" id="point">
+                <label for="detail-state" class="form-label">포인트</label>
+                <input type="text" class="form-control px-2" id="detail-point" value="😃정상" disabled />
+              </div>
+              <div class="col-4" id="state">
+                <label for="detail-state" class="form-label">상태</label>
+                <input type="text" class="form-control px-2" id="detail-state" value="😃정상" disabled />
+              </div>
+              <div class="col-4">
+                <label for="detail-id" class="form-label">아이디</label>
+                <input type="text" class="form-control" id="detail-id" disabled />
+              </div>
+              <div class="col-4" id="detail-pw-item">
+                <label for="detail-pw" class="form-label">비밀번호</label>
+                <input type="text" class="form-control" id="detail-pw" maxlength="10" required value="확인" />
+              </div>
+              <div class="col-4" id="detail-nickname-item">
+                <label for="detail-nickname" class="form-label">닉네임</label>
+                <input type="text" class="form-control" id="detail-nickname" maxlength="10" required />
+              </div>
+              <div class="col-4">
+                <label for="detail-name" class="form-label">이름</label>
+                <input type="text" class="form-control" id="detail-name" />
+              </div>
+              <div class="col-4">
+                <label for="detail-phone" class="form-label">전화번호</label>
+                <input type="text" class="form-control" id="detail-phone" maxlength="11" required />
+              </div>
+              <div class="col-2">
+                <label for="detail-bank" class="form-label">출금은행</label>
+                <select class="form-select" id="detail-bank" value="" name="bank" required>
+                  <option value="국민" id="bank-01">국민</option>
+                  <option value="기업" id="bank-02">기업</option>
+                  <option value="농협" id="bank-03">농협</option>
+                  <option value="신한" id="bank-04">신한</option>
+                  <option value="우리" id="bank-05">우리</option>
+                  <option value="하나" id="bank-06">하나</option>
+                  <option value="카카오뱅크" id="bank-07">카카오뱅크</option>
+                  <option value="토스뱅크" id="bank-08">토스뱅크</option>
+                  <option value="케이뱅크" id="bank-09">케이뱅크</option>
+                  <option value="우체국" id="bank-10">우체국</option>
+                  <option value="SC제일" id="bank-11">SC제일</option>
+                  <option value="한국씨티" id="bank-12">한국씨티</option>
+                  <option value="새마을금고" id="bank-13">새마을금고</option>
+                  <option value="수협" id="bank-14">수협</option>
+                  <option value="신협" id="bank-15">신협</option>
+                  <option value="경남" id="bank-16">경남</option>
+                  <option value="부산" id="bank-17">부산</option>
+                  <option value="광주" id="bank-18">광주</option>
+                  <option value="대구" id="bank-19">대구</option>
+                  <option value="제주" id="bank-20">제주</option>
+                  <option value="전북" id="bank-21">전북</option>
+                </select>
+                <!-- <input type="text" class="form-control" id="detail-bank"> -->
+              </div>
+              <!-- todo 계좌번호는 암화화 작업하기 -->
+              <div class="col-4">
+                <label for="detail-banknum" class="form-label">계좌번호</label>
+                <input type="text" class="form-control" id="detail-banknum" maxlength="14" required />
+              </div>
+              <div class="col-3">
+                <label for="detail-bankowner" class="form-label">예금주</label>
+                <input type="text" class="form-control" id="detail-bankowner" maxlength="10" required />
+              </div>
+              <div class="col-3" id="detail-bank-pw">
+                <label for="detail-withdraw-pw" class="form-label">출금 비밀번호</label>
+                <input type="text" class="form-control" id="detail-withdraw-pw" maxlength="10" required value="확인" />
+              </div>
+              <div class="col-4">
+                <label for="detail-joindate" class="form-label">가입일시</label>
+                <input type="text" class="form-control" id="detail-joindate" disabled />
+              </div>
+              <div class="col-4" id="detail-join-code">
+                <label for="detail-code" class="form-label">가입한 코드</label>
+                <input type="text" class="form-control" id="detail-code" disabled />
+              </div>
+              <div class="col-4">
+                <label for="detail-recommend-count" class="form-label">추천인 수</label>
+                <input type="text" class="form-control" id="detail-recommend-count" disabled />
+              </div>
+              <div class="col-6 d-none">
+                <label for="detail-domain" class="form-label">전용 도메인</label>
+                <input type="text" class="form-control" id="detail-domain" disabled />
+              </div>
+              <div class="col-md-12">
+                <label for="detail-memo" class="form-label">메모</label>
+                <textarea class="form-control" id="detail-memo" rows="3" maxlength="147"></textarea>
+              </div>
+            </div>
+          </div>
+          <div class="card d-none mt-3" id="agent-rate">
+            <div class="card-header">요율정보(%)</div>
+            <div class="card-body row">
+              <div class="col-4">
+                <label for="agent-casinoRate" class="form-label">카지노 롤링</label>
+                <input type="text" class="form-control" id="agent-casinoRate" maxlength="5" required disabled />
+              </div>
+              <div class="col-4">
+                <label for="agent-slotRate" class="form-label">슬롯 롤링</label>
+                <input type="text" class="form-control" id="agent-slotRate" maxlength="5" required disabled />
+              </div>
+              <div class="col-4">
+                <label for="agent-loseRate" class="form-label">루징</label>
+                <input type="text" class="form-control" id="agent-loseRate" maxlength="5" required disabled />
+              </div>
+            </div>
+          </div>
+          <div class="card d-none mt-3" id="admin-rate">
+            <div class="card-header">요율정보(%)</div>
+            <div class="card-body">
+              <div class="row basic-rate">
+                <div class="col px-1">
+                  <label for="admin-casinoRate" class="form-label">카지노 롤링</label>
+                  <input type="text" class="form-control" id="admin-casinoRate" maxlength="5" required />
+                </div>
+                <div class="col px-1">
+                  <label for="admin-slotRate" class="form-label">슬롯 롤링</label>
+                  <input type="text" class="form-control" id="admin-slotRate" maxlength="5" required />
+                </div>
+                <div class="col px-1">
+                  <label for="admin-loseRate" class="form-label">루징</label>
+                  <input type="text" class="form-control" id="admin-loseRate" maxlength="5" required />
+                </div>
+                </div>
+                <div class="row mt-2 margin-rate">
+                <div class="col px-1">
+                  <label for="admin-c-betMarginRate" class="form-label">카지노 베팅 마진</label>
+                  <input type="text" class="form-control" id="admin-c-betMarginRate" maxlength="5" required />
+                </div>
+                <div class="col px-1">
+                  <label for="admin-s-betMarginRate" class="form-label">슬롯 베팅 마진</label>
+                  <input type="text" class="form-control" id="admin-s-betMarginRate" maxlength="5" required />
+                </div>
+                <div class="col px-1">
+                  <label for="admin-c-rollMarginRate" class="form-label">롤링 마진</label>
+                  <input type="text" class="form-control" id="admin-c-rollMarginRate" maxlength="5" required />
+                </div>
+                <div class="col px-1">
+                  <label for="admin-s-rollMarginRate" class="form-label">롤링 마진</label>
+                  <input type="text" class="form-control" id="admin-s-rollMarginRate" maxlength="5" required />
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="card mt-3" id="agent-tree">
+            <div class="card-header">에이전트 트리</div>
+            <div class="card-body row justify-content-center align-items-center">
+              <div class="btn-group d-none" role="group" id="agent-detail-grid">
+                <button type="button" class="btn disabled" style="background-color: #e9ecef; border: none"
+                  id="detail-user">유저</button>
+                <button type="button" class="btn disabled" style="background-color: #9eeaf9; border: none"
+                  id="detail-bronze">😃</button>
+                <button type="button" class="btn disabled" style="background-color: #a3cfbb; border: none"
+                  id="detail-silver"></button>
+                <button type="button" class="btn disabled" style="background-color: #ffe69c; border: none"
+                  id="detail-gold"></button>
+                <button type="button" class="btn disabled" style="background-color: #f1aeb5; border: none"
+                  id="detail-platinum"></button>
+              </div>
+              <div class="row text-center align-content-center d-none" id="user-detail-grid">
+                <div class="col-2 border"></div>
+                <div class="col-2 border p-1" id="detail-user-name" style="background-color: rgb(233, 236, 239, 0.4)">유저
+                </div>
+                <div class="col-2 border p-1" id="detail-bronze-name" style="background-color: rgb(158, 234, 249, 0.4)">
+                  브론즈</div>
+                <div class="col-2 border p-1" id="detail-silver-name" style="background-color: rgb(163, 207, 187, 0.4)">
+                  실버</div>
+                <div class="col-2 border p-1" id="detail-gold-name" style="background-color: rgb(255, 230, 156, 0.4)">골드
+                </div>
+                <div class="col-2 border p-1" id="detail-platinum-name"
+                  style="background-color: rgb(241, 174, 181, 0.4)">플래티넘</div>
+                <div class="col-2 border" style="background-color: rgb(233, 236, 239, 0.4)">카-롤링</div>
+                <div class="col-2 border p-1" id="detail-user-c-roll"></div>
+                <div class="col-2 border p-1" id="detail-bronze-c-roll"></div>
+                <div class="col-2 border p-1" id="detail-silver-c-roll"></div>
+                <div class="col-2 border p-1" id="detail-gold-c-roll"></div>
+                <div class="col-2 border p-1" id="detail-platinum-c-roll"></div>
+                <div class="col-2 border" style="background-color: rgb(233, 236, 239, 0.4)">슬-롤링</div>
+                <div class="col-2 border p-1" id="detail-user-s-roll"></div>
+                <div class="col-2 border p-1" id="detail-bronze-s-roll"></div>
+                <div class="col-2 border p-1" id="detail-silver-s-roll"></div>
+                <div class="col-2 border p-1" id="detail-gold-s-roll"></div>
+                <div class="col-2 border p-1" id="detail-platinum-s-roll"></div>
+                <div class="col-2 border" style="background-color: rgb(233, 236, 239, 0.4)">루징</div>
+                <div class="col-2 border p-1" id="detail-user-lose"></div>
+                <div class="col-2 border p-1" id="detail-bronze-lose"></div>
+                <div class="col-2 border p-1" id="detail-silver-lose"></div>
+                <div class="col-2 border p-1" id="detail-gold-lose"></div>
+                <div class="col-2 border p-1" id="detail-platinum-lose"></div>
+                <div class="col-2 border" style="background-color: rgb(233, 236, 239, 0.4)">베팅 마진</div>
+                <div class="col-2 border p-1" id="detail-user-margin"></div>
+                <div class="col-2 border p-1" id="detail-bronze-margin"></div>
+                <div class="col-2 border p-1" id="detail-silver-margin"></div>
+                <div class="col-2 border p-1" id="detail-gold-margin"></div>
+                <div class="col-2 border p-1" id="detail-platinum-margin"></div>
+                <div class="col-2 border" style="background-color: rgb(233, 236, 239, 0.4)">롤링 마진</div>
+                <div class="col-2 border p-1" id="detail-user-roll-margin"></div>
+                <div class="col-2 border p-1" id="detail-bronze-roll-margin"></div>
+                <div class="col-2 border p-1" id="detail-silver-roll-margin"></div>
+                <div class="col-2 border p-1" id="detail-gold-roll-margin"></div>
+                <div class="col-2 border p-1" id="detail-platinum-roll-margin"></div>
+              </div>
+            </div>
+          </div>
+          <div class="card mt-3" id="addon">
+            <div class="card-header">부가기능</div>
+            <div class="card-body text-center">
+              <div class="btn-group func-btn-group me-auto" role="group">
+                <button type="button" class="btn asset-primary msg-btn">메세지 전송</button>
+                <button type="button" class="btn btn-outline-secondary" id="changeUserPassword">비밀번호 변경</button>
+                <button type="button" class="btn btn-outline-secondary" id="changeUserWithdrawPassword">출금비번 변경</button>
+                <button type="button" class="btn btn-outline-secondary" id="forceLogout">강제 접속종료</button>
+                <button type="button" class="btn asset-danger" id="blockBtn">차단하기</button>
+                <button type="button" class="btn asset-primary" id="cancelBlockBtn">차단해제</button>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="col-12 d-none d-lg-block col-lg-8">
+          <ul class="nav nav-tabs justify-content-around" id="myTab" role="tablist">
+            <li class="nav-item" role="presentation">
+              <button class="nav-link" id="detailDeposit-tab" data-bs-toggle="tab" data-bs-target="#detailDeposit-pane"
+                type="button" role="tab">
+                입금신청 내역
+              </button>
+            </li>
+            <li class="nav-item" role="presentation">
+              <button class="nav-link" id="detailWithdraw-tab" data-bs-toggle="tab"
+                data-bs-target="#detailWithdraw-pane" type="button" role="tab">
+                출금신청 내역
+              </button>
+            </li>
+            <li class="nav-item" role="presentation">
+              <button class="nav-link" id="detailGive-tab" data-bs-toggle="tab" data-bs-target="#detailGive-pane"
+                type="button" role="tab">
+                지급받은 내역
+              </button>
+            </li>
+            <li class="nav-item" role="presentation">
+              <button class="nav-link" id="detailTake-tab" data-bs-toggle="tab" data-bs-target="#detailTake-pane"
+                type="button" role="tab">회수된 내역</button>
+            </li>
+            <li class="nav-item" role="presentation">
+              <button class="nav-link" id="detailBalance-tab" data-bs-toggle="tab" data-bs-target="#detailBalance-pane"
+                type="button" role="tab">
+                보유금 흐름
+              </button>
+            </li>
+            <li class="nav-item" role="presentation">
+              <button class="nav-link" id="detailPoint-tab" data-bs-toggle="tab" data-bs-target="#detailPoint-pane"
+                type="button" role="tab">
+                포인트 흐름
+              </button>
+            </li>
+            <li class="nav-item" role="presentation">
+              <button class="nav-link" id="detailBetting-tab" data-bs-toggle="tab" data-bs-target="#detailBetting-pane"
+                type="button" role="tab">
+                상세 베팅내역
+              </button>
+            </li>
+            <li class="nav-item" role="presentation">
+              <button class="nav-link" id="detailSummaryBetting-tab" data-bs-toggle="tab"
+                data-bs-target="#detailSummaryBetting-pane" type="button" role="tab">
+                요약 베팅내역
+              </button>
+            </li>
+            <li class="nav-item" role="presentation">
+              <button class="nav-link" id="detailConnect-tab" data-bs-toggle="tab" data-bs-target="#detailConnect-pane"
+                type="button" role="tab">
+                접속내역
+              </button>
+            </li>
+            <li class="nav-item" role="presentation">
+              <button class="nav-link" id="detailBoard-tab" data-bs-toggle="tab" data-bs-target="#detailBoard-pane"
+                type="button" role="tab">
+                메세지, 문의 내역
+              </button>
+            </li>
+            <li class="nav-item" role="presentation">
+              <button class="nav-link" id="detailRecommend-tab" data-bs-toggle="tab"
+                data-bs-target="#detailRecommend-pane" type="button" role="tab">
+                추천인 목록
+              </button>
+            </li>
+          </ul>
+          <div class="tab-content">
+            <div class="tab-pane" id="detailDeposit-pane" role="tabpanel" tabindex="0">
+              <div class="card">
+                <div class="card-body">
+                  <table id="detailDeposit" class="cell-border hover detailUserTable">
+                    <thead>
+                      <tr>
+                        <th>IDX</th>
+                        <th>신청일시</th>
+                        <th>신청 시 보유금</th>
+                        <th>신청금액</th>
+                        <th>보너스 타입</th>
+                        <th>보너스 금액</th>
+                        <th>승인 후 보유금</th>
+                        <th>신청IP</th>
+                        <th>처리현황</th>
+                        <th>처리일시</th>
+                        <th>메모</th>
+                        <th>플래티넘</th>
+                        <th>골드</th>
+                        <th>실버</th>
+                        <th>브론즈</th>
+                        <th>node</th>
+                      </tr>
+                    </thead>
+                    <tfoot>
+                      <tr>
+                        <th colspan="16"></th>
+                      </tr>
+                    </tfoot>
+                  </table>
+                </div>
+              </div>
+            </div>
+            <div class="tab-pane" id="detailWithdraw-pane" role="tabpanel" tabindex="0">
+              <div class="card">
+                <div class="card-body">
+                  <table id="detailWithdraw" class="cell-border hover detailUserTable">
+                    <thead>
+                      <tr>
+                        <th>IDX</th>
+                        <th>출금 신청일시</th>
+                        <th>신청 시 보유금</th>
+                        <th>신청금액</th>
+                        <th>롤링율</th>
+                        <th>승인 후 보유금</th>
+                        <th>신청IP</th>
+                        <th>처리현황</th>
+                        <th>처리일시</th>
+                        <th>메모</th>
+                        <th>플래티넘</th>
+                        <th>골드</th>
+                        <th>실버</th>
+                        <th>브론즈</th>
+                        <th>node</th>
+                      </tr>
+                    </thead>
+                    <tfoot>
+                      <tr>
+                        <th></th>
+                        <th colspan="14"></th>
+                      </tr>
+                    </tfoot>
+                  </table>
+                </div>
+              </div>
+            </div>
+            <div class="tab-pane" id="detailGive-pane" role="tabpanel" tabindex="0">
+              <div class="card">
+                <div class="card-body">
+                  <table id="detailGive" class="cell-border hover detailUserTable" style="width: 100%">
+                    <thead>
+                      <tr>
+                        <th>IDX</th>
+                        <th>지급일시</th>
+                        <th>지급한 매장</th>
+                        <th>지급 종류</th>
+                        <th>지급받은 금액</th>
+                        <th>지급 전 보유금</th>
+                        <th>지급 후 보유금</th>
+                        <th>지급_트랜젝션ID</th>
+                        <th>node_id</th>
+                        <th>메모</th>
+                      </tr>
+                    </thead>
+                  </table>
+                </div>
+              </div>
+            </div>
+            <div class="tab-pane" id="detailTake-pane" role="tabpanel" tabindex="0">
+              <div class="card">
+                <div class="card-body">
+                  <table id="detailTake" class="cell-border hover detailUserTable" style="width: 100%">
+                    <thead>
+                      <tr>
+                        <th>IDX</th>
+                        <th>회수일시</th>
+                        <th>회수한 매장</th>
+                        <th>회수된 금액</th>
+                        <th>회수 전 보유금</th>
+                        <th>회수 후 보유금</th>
+                        <th>회수_트랜젝션ID</th>
+                        <th>node_id</th>
+                        <th>메모</th>
+                      </tr>
+                    </thead>
+                  </table>
+                </div>
+              </div>
+            </div>
+            <div class="tab-pane" id="detailBalance-pane" role="tabpanel" tabindex="0">
+              <div class="card">
+                <div class="card-body">
+                  <table id="detailBalance" class="cell-border hover detailUserTable" style="width: 100%">
+                    <thead>
+                      <tr>
+                        <th>IDX</th>
+                        <th>이벤트 발생일시</th>
+                        <th>회원타입</th>
+                        <th>아이디</th>
+                        <th>닉네임</th>
+                        <th>이벤트 타입</th>
+                        <th>고유번호</th>
+                        <th>변동 전 보유금</th>
+                        <th>변동 금액</th>
+                        <th>변동 후 보유금</th>
+                        <th>플래티넘</th>
+                        <th>골드</th>
+                        <th>실버</th>
+                        <th>브론즈</th>
+                      </tr>
+                    </thead>
+                  </table>
+                </div>
+              </div>
+            </div>
+            <div class="tab-pane" id="detailPoint-pane" role="tabpanel" tabindex="0">
+              <div class="card">
+                <div class="card-body">
+                  <table id="detailPoint" class="cell-border hover detailUserTable" style="width: 100%">
+                    <thead>
+                      <tr>
+                        <th>IDX</th>
+                        <th>이벤트 발생일시</th>
+                        <th>회원타입</th>
+                        <th>아이디</th>
+                        <th>닉네임</th>
+                        <th>이벤트 타입</th>
+                        <th>고유번호</th>
+                        <th>발생 아이디</th>
+                        <th></th>
+                        <th></th>
+                        <th></th>
+                        <th>롤링 요율<br>(적용 요율)</th>
+                        <th>변동 전 포인트</th>
+                        <th></th>
+                        <th></th>
+                        <th>변동 후 포인트</th>
+                        <th>플래티넘</th>
+                        <th>골드</th>
+                        <th>실버</th>
+                        <th>브론즈</th>
+                      </tr>
+                    </thead>
+                    <tfoot>
+                      <tr>
+                        <th></th>
+                        <th></th>
+                        <th></th>
+                        <th></th>
+                        <th></th>
+                        <th></th>
+                        <th colspan="2"></th>
+                        <th></th>
+                        <th></th>
+                        <th></th>
+                        <th colspan="2"></th>
+                        <th></th>
+                        <th></th>
+                        <th></th>
+                        <th></th>
+                        <th></th>
+                        <th></th>
+                        <th></th>
+                      </tr>
+                    </tfoot>
+                  </table>
+                </div>
+              </div>
+            </div>
+            <div class="tab-pane" id="detailBetting-pane" role="tabpanel" tabindex="0">
+              <div class="card mb-4">
+                <div class="card-body">
+                  <table id="detailBetting" class="cell-border hover responsive detailUserTable" style="width: 100%">
+                    <thead>
+                      <tr>
+                        <th>IDX</th>
+                        <th>발생시간</th>
+                        <th>트랜젝션ID</th>
+                        <th>라운드ID</th>
+                        <th>프로바이더</th>
+                        <th>카테고리</th>
+                        <th>게임명</th>
+                        <th>종류</th>
+                        <th>금액</th>
+                        <th>이전 보유금</th>
+                        <th>적용 보유금</th>
+                        <th>node</th>
+                      </tr>
+                    </thead>
+                    <tfoot>
+                      <tr>
+                        <th colspan="12"></th>
+                      </tr>
+                    </tfoot>
+                  </table>
+                </div>
+              </div>
+            </div>
+            <div class="tab-pane" id="detailSummaryBetting-pane" role="tabpanel" tabindex="0">
+              <div class="card-body">
+                <table id="detailSummaryBetting" class="cell-border hover detailUserTable" style="width: 100%">
+                  <thead>
+                    <tr>
+                      <th rowspan="2">IDX</th>
+                      <th rowspan="2">결과 수신시간</th>
+                      <th rowspan="2">베팅타입</th>
+                      <th rowspan="2">베팅</th>
+                      <th rowspan="2">획득</th>
+                      <th rowspan="2">결과</th>
+                      <th colspan="3" class="text-center" id="summarySlotHeader">베팅마진 적용</th>
+                      <th rowspan="2">플래티넘</th>
+                      <th rowspan="2">골드</th>
+                      <th rowspan="2">실버</th>
+                      <th rowspan="2">브론즈</th>
+                      <th rowspan="2">node</th>
+                    </tr>
+                    <tr>
+                      <th class="text-danger-emphasis">베팅</th>
+                      <th class="text-danger-emphasis">획득</th>
+                      <th class="text-danger-emphasis">결과</th>
+                    </tr>
+                  </thead>
+                  <tfoot>
+                    <tr>
+                      <th colspan="14"></th>
+                    </tr>
+                  </tfoot>
+                </table>
+              </div>
+            </div>
+            <div class="tab-pane" id="detailConnect-pane" role="tabpanel" tabindex="0">
+              <div class="card-body">
+                <table id="detailConnect" class="cell-border hover detailUserTable" style="width: 100%">
+                  <thead>
+                    <tr>
+                      <th>IDX</th>
+                      <th>접속일시</th>
+                      <th>접속타입</th>
+                      <th>접속 도메인</th>
+                      <th>접속IP</th>
+                      <th>접속 기기</th>
+                      <th>접속 브라우저</th>
+                      <th>플래티넘</th>
+                      <th>골드</th>
+                      <th>실버</th>
+                      <th>브론즈</th>
+                      <th>node</th>
+                    </tr>
+                  </thead>
+                </table>
+              </div>
+            </div>
+            <div class="tab-pane" id="detailBoard-pane" role="tabpanel" tabindex="0">
+              <div class="row mt-3">
+                <div class="col-lg-6">
+                  <div class="card mb-3">
+                    <div class="card-header" style="font-size: 1rem"><i class="bi bi-envelope-open me-1"></i> 메세지</div>
+                    <div class="card-body">
+                      <table id="detailMessage" class="display detailUserTable" style="width: 100%">
+                        <thead>
+                          <tr>
+                            <th>IDX</th>
+                            <th>받은일시</th>
+                            <th>종류</th>
+                            <th>제목</th>
+                            <th>내용</th>
+                            <th>읽음여부</th>
+                          </tr>
+                        </thead>
+                      </table>
+                    </div>
+                  </div>
+                </div>
+                <div class="col-lg-6">
+                  <div class="card mb-3">
+                    <div class="card-header" style="font-size: 1rem"><i class="bi bi-envelope-open me-1"></i> 문의</div>
+                    <div class="card-body">
+                      <table id="detailQna" class="display detailUserTable" style="width: 100%">
+                        <thead>
+                          <tr>
+                            <th>IDX</th>
+                            <th>문의시간</th>
+                            <th>종류</th>
+                            <th>문의유저</th>
+                            <th>제목</th>
+                            <th>내용</th>
+                            <th>답변</th>
+                            <th>상태</th>
+                          </tr>
+                        </thead>
+                      </table>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div class="tab-pane" id="detailRecommend-pane" role="tabpanel" tabindex="0">
+              <div class="card">
+                <div class="card-body">
+                  <table id="detailRecommend" class="cell-border hover detailUserTable">
+                    <thead>
+                      <tr>
+                        <th>가입일시</th>
+                        <th>레벨</th>
+                        <th>아이디</th>
+                        <th>닉네임</th>
+                        <th>이름</th>
+                        <th>가입코드</th>
+                        <th>총 입금액<br>총 출금액<br>차익</th>
+                        <th>카지노 총 롤링<br>슬롯 총 롤링<br>합계</th>
+                        <th>카지노 총 베팅<br>카지노 총 획득<br>차익</th>
+                        <th>슬롯 총 베팅<br>슬롯 총 획득<br>차익</th>
+                      </tr>
+                    </thead>
+                  </table>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn asset-dark" data-bs-dismiss="modal">닫기</button>
+        <button type="button" class="btn asset-secondary" id="modifyUserBtn" disabled>수정하기</button>
+      </div>
+    </div>
+  </div>
+</div>

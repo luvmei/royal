@@ -1,0 +1,480 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="income">    
+// 본사 정산
+  <select id='headquarters'>
+    SELECT 
+      *
+    FROM
+      (SELECT
+        *
+      FROM
+        income_hq_view
+      UNION
+      SELECT
+        *
+      FROM
+        income_headquarters) AS ut
+    WHERE SUBSTR(정산일자, 1, 10)  
+      BETWEEN #{startDate} AND #{endDate}
+  </select>
+
+// 에이전트 정산
+  <select id='agentDepoWith'>
+    SELECT 
+        IDX as 'IDX',
+        date as '정산일자',
+        node_id,
+        node_pid,
+        type as '타입',
+        id as '아이디',
+        nickname as '닉네임',
+        Sum(deposit) as '입금',
+        Sum(withdraw) as '출금',
+        Sum(deposit_withdraw) as '입금-출금',
+        c.c_roll_rate as '카지노 롤링요율',
+        c.s_roll_rate as '슬롯 롤링요율',
+        c.lose_rate as '루징요율',
+        c.bet_margin_rate as '베팅마진요율',
+        Sum(yesterday_balance) as '전일보유금',
+        Sum(balance) as '보유금',
+	      Sum(yesterday_point) as '전일포인트',
+        Sum(point) as '포인트',
+        Sum(losing) as '루징',
+        Sum(total_income) as '총정산금',
+        Sum(real_income) as '실정산금',
+        Sum(betting) as '베팅',
+        Sum(win) as '획득',
+        Sum(betting_win) as '베팅-획득',
+        Sum(casino_rolling) as '카지노롤링',
+        Sum(slot_rolling) as '슬롯롤링',
+        h.p_nick as '플래티넘',
+        h.g_nick as '골드',
+        h.s_nick as '실버',
+        h.b_nick as '브론즈'
+    FROM (SELECT *
+        FROM income_agent_depowith_view
+        UNION
+        SELECT *
+        FROM income_agent_depowith) AS ut
+    JOIN royal.hierarchy AS h
+        ON ut.id = (SELECT id 
+                    FROM user 
+                    WHERE user_id = h.user_id)
+    JOIN royal.user_commission_info as c
+        ON ut.id = (select id 
+                    from user 
+                    where user_id = c.user_id)
+    <where>
+      ut.date BETWEEN #{startDate} AND #{endDate}
+      <if test="node_id != undefined">
+        AND node_id LIKE CONCAT(#{node_id},'%')
+      </if>
+    </where>
+    GROUP BY ut.node_id;
+  </select>
+
+  <select id='agentDeath'>
+    SELECT 
+        IDX as 'IDX',
+        date as '정산일자',
+        node_id,
+        node_pid,
+        type as '타입',
+        id as '아이디',
+        nickname as '닉네임',        
+        balance AS '보유금',
+        point AS '포인트',
+        c.c_roll_rate as '카지노 롤링요율',
+        c.s_roll_rate as '슬롯 롤링요율',
+        c.lose_rate as '루징요율',
+        c.bet_margin_rate as '베팅마진요율',
+        c.roll_margin_rate as '롤링마진요율',
+        Sum(c_today_betting) as '카지노베팅',
+        Sum(c_today_win) as '카지노획득',
+        Sum(c_today_winlose) as '카지노윈루즈',
+        Sum(c_m_today_betting) as '카지노마진베팅',
+        Sum(c_m_today_win) as '카지노마진획득',
+        Sum(c_m_today_winlose) as '카지노마진윈루즈',
+        Sum(s_today_betting) as '슬롯베팅',
+        Sum(s_today_win) as '슬롯획득',
+        Sum(s_today_winlose) as '슬롯윈루즈',
+        Sum(s_m_today_betting) as '슬롯마진베팅',
+        Sum(s_m_today_win) as '슬롯마진획득',
+        Sum(s_m_today_winlose) as '슬롯마진윈루즈',        
+        Sum(casino_rolling) as '카지노롤링',
+        Sum(m_casino_rolling) as '카지노마진롤링',
+        Sum(slot_rolling) as '슬롯롤링',
+        Sum(m_slot_rolling) as '슬롯마진롤링',
+        Sum(today_deposit) as '당일입금',
+        Sum(today_withdraw) as '당일출금',
+        Sum(today_death) as '당일죽장금',  
+        h.p_nick as '플래티넘',
+        h.g_nick as '골드',
+        h.s_nick as '실버',
+        h.b_nick as '브론즈'
+    FROM (SELECT *
+        FROM income_agent_death_view
+        UNION
+        SELECT *
+        FROM income_agent_death) AS ut
+    JOIN royal.hierarchy AS h
+        ON ut.id = (SELECT id 
+                    FROM user 
+                    WHERE user_id = h.user_id)
+    JOIN royal.user_commission_info as c
+        ON ut.id = (select id 
+                    from user 
+                    where user_id = c.user_id)
+    <where>
+      ut.date BETWEEN #{startDate} AND #{endDate}
+      <if test="node_id != undefined">
+        AND node_id LIKE CONCAT(#{node_id},'%')
+      </if>
+    </where>
+    GROUP BY ut.node_id;
+  </select>
+
+  <select id='agentBetWin'>
+    SELECT 
+        IDX as 'IDX',
+        date as '정산일자',
+        node_id,
+        node_pid,
+        type as '타입',
+        id as '아이디',
+        nickname as '닉네임',        
+        balance AS '보유금',
+        point AS '포인트',
+        c.c_roll_rate as '카지노 롤링요율',
+        c.s_roll_rate as '슬롯 롤링요율',
+        c.lose_rate as '루징요율',
+        c.bet_margin_rate as '베팅마진요율',
+        c.roll_margin_rate as '롤링마진요율',
+        Sum(c_today_betting) as '카지노베팅',
+        Sum(c_today_win) as '카지노획득',
+        Sum(c_today_winlose) as '카지노윈루즈',
+        Sum(c_m_today_betting) as '카지노마진베팅',
+        Sum(c_m_today_win) as '카지노마진획득',
+        Sum(c_m_today_winlose) as '카지노마진윈루즈',
+        Sum(s_today_betting) as '슬롯베팅',
+        Sum(s_today_win) as '슬롯획득',
+        Sum(s_today_winlose) as '슬롯윈루즈',
+        Sum(s_m_today_betting) as '슬롯마진베팅',
+        Sum(s_m_today_win) as '슬롯마진획득',
+        Sum(s_m_today_winlose) as '슬롯마진윈루즈',        
+        Sum(casino_rolling) as '카지노롤링',
+        Sum(m_casino_rolling) as '카지노마진롤링',
+        Sum(slot_rolling) as '슬롯롤링',
+        Sum(m_slot_rolling) as '슬롯마진롤링',        
+        Sum(under_losing) as '하부합산루징금',
+        Sum(real_losing) as '최종루징금',
+        Sum(real_income) as '최종정산금',
+        h.p_nick as '플래티넘',
+        h.g_nick as '골드',
+        h.s_nick as '실버',
+        h.b_nick as '브론즈'
+    FROM (SELECT *
+        FROM income_agent_betwin_view
+        UNION
+        SELECT *
+        FROM income_agent_betwin) AS ut
+    JOIN royal.hierarchy AS h
+        ON ut.id = (SELECT id 
+                    FROM user 
+                    WHERE user_id = h.user_id)
+    JOIN royal.user_commission_info as c
+        ON ut.id = (select id 
+                    from user 
+                    where user_id = c.user_id)
+    <where>
+      ut.date BETWEEN #{startDate} AND #{endDate}
+      <if test="node_id != undefined">
+        AND node_id LIKE CONCAT(#{node_id},'%')
+      </if>
+    </where>
+    GROUP BY ut.node_id;
+  </select>
+
+  <select id='agentBetWinAcc'>
+    SELECT 
+        IDX as 'IDX',
+        date as '정산일자',
+        node_id,
+        node_pid,
+        type as '타입',
+        id as '아이디',
+        nickname as '닉네임',        
+        balance AS '보유금',
+        point AS '포인트',
+        c.c_roll_rate as '카지노 롤링요율',
+        c.s_roll_rate as '슬롯 롤링요율',
+        c.lose_rate as '루징요율',
+        c.bet_margin_rate as '베팅마진요율',
+        c.roll_margin_rate as '롤링마진요율',
+        Sum(c_today_betting) as '카지노베팅',
+        Sum(c_today_win) as '카지노획득',
+        Sum(c_today_winlose) as '카지노윈루즈',
+        Sum(c_m_today_betting) as '카지노마진베팅',
+        Sum(c_m_today_win) as '카지노마진획득',
+        Sum(c_m_today_winlose) as '카지노마진윈루즈',
+        Sum(s_today_betting) as '슬롯베팅',
+        Sum(s_today_win) as '슬롯획득',
+        Sum(s_today_winlose) as '슬롯윈루즈',
+        Sum(s_m_today_betting) as '슬롯마진베팅',
+        Sum(s_m_today_win) as '슬롯마진획득',
+        Sum(s_m_today_winlose) as '슬롯마진윈루즈',        
+        Sum(casino_rolling) as '카지노롤링',
+        Sum(m_casino_rolling) as '카지노마진롤링',
+        Sum(slot_rolling) as '슬롯롤링',
+        Sum(m_slot_rolling) as '슬롯마진롤링',        
+        Sum(under_losing) as '하부합산루징금',
+        Sum(real_losing) as '최종루징금',
+        Sum(real_income) as '최종정산금',
+        h.p_nick as '플래티넘',
+        h.g_nick as '골드',
+        h.s_nick as '실버',
+        h.b_nick as '브론즈'
+    FROM (SELECT *
+        FROM income_agent_betwin_acc_view
+        UNION
+        SELECT *
+        FROM income_agent_betwin) AS ut
+    JOIN royal.hierarchy AS h
+        ON ut.id = (SELECT id 
+                    FROM user 
+                    WHERE user_id = h.user_id)
+    JOIN royal.user_commission_info as c
+        ON ut.id = (select id 
+                    from user 
+                    where user_id = c.user_id)
+    <where>
+      ut.date BETWEEN #{startDate} AND #{endDate}
+      <if test="node_id != undefined">
+        AND node_id LIKE CONCAT(#{node_id},'%')
+      </if>
+    </where>
+    GROUP BY ut.node_id;
+  </select>
+
+// 에이전트 세부 정산 모달
+  <select id='detailIncomeDepoWith'>
+    SELECT 
+	    IDX,
+	    date AS '정산일자',
+	    node_id,
+	    node_pid,
+	    type AS '타입',
+	    user_id,
+	    id as '아이디',
+      nickname as '닉네임',
+      Sum(deposit) as '입금',
+      Sum(withdraw) as '출금',
+      Sum(deposit_withdraw) as '입금-출금',
+      Sum(yesterday_balance) as '전일보유금',
+      Sum(balance) as '보유금',
+	    Sum(yesterday_point) as '전일포인트',
+      Sum(point) as '포인트',
+      Sum(losing) as '루징',
+      upper_lose_rate AS '상위루징요율',
+      lose_rate AS '루징요율',
+      apply_lose_rate AS '적용루징요율',
+      upper_income AS '상위정산금'
+    FROM (SELECT *
+          FROM income_detail_depowith_view 
+          UNION
+          SELECT *
+    	    FROM income_detail_depowith) AS ut   
+    WHERE ut.date BETWEEN #{startDate} AND #{endDate}
+    GROUP BY ut.node_id
+    <if test="node_id != undefined || '타입' != 3">
+      HAVING node_pid = #{node_id}
+    </if>
+  </select>
+
+  <select id='detailIncomeBetWin'>
+    SELECT 
+	    IDX,
+	    date AS '정산일자',
+	    node_id,
+	    node_pid,
+	    TYPE AS '타입',
+	    user_id,
+	    id AS '아이디',
+	    nickname AS '닉네임',	    
+	    Sum(c_today_betting) AS '카지노베팅',
+	    Sum(c_today_win) AS '카지노획득',
+	    Sum(c_today_winlose) AS '카지노윈루즈',
+	    Sum(c_m_today_betting) AS '카지노마진베팅',
+	    Sum(c_m_today_win) AS '카지노마진획득',
+	    Sum(c_m_today_winlose) AS '카지노마진윈루즈',
+	    Sum(s_today_betting) AS '슬롯베팅',
+	    Sum(s_today_win) AS '슬롯획득',
+	    Sum(s_today_winlose) AS '슬롯윈루즈',
+	    Sum(s_m_today_betting) AS '슬롯마진베팅',
+	    Sum(s_m_today_win) AS '슬롯마진획득',
+	    Sum(s_m_today_winlose) AS '슬롯마진윈루즈',
+	    Sum(c_roll) AS '상위카지노롤링',
+	    Sum(c_m_roll) AS '상위카지노마진롤링',
+	    Sum(s_roll) AS '상위슬롯롤링',
+	    Sum(s_m_roll) AS '상위슬롯마진롤링',
+	    Sum(real_losing) as '하부합산루징금',
+	    Sum(real_income) as '최종루징금'
+    FROM (SELECT *
+          FROM income_detail_betwin_view 
+          UNION
+          SELECT *
+    	    FROM income_detail_betwin) AS ut   
+    WHERE ut.date BETWEEN #{startDate} AND #{endDate}
+    GROUP BY ut.node_id
+    <if test="node_id != undefined || '타입' != 3">
+      HAVING node_pid = #{node_id}
+    </if>
+  </select>
+
+  <select id='detailIncomeBetWinAcc'>
+    SELECT 
+	    IDX,
+	    date AS '정산일자',
+	    node_id,
+	    node_pid,
+	    TYPE AS '타입',
+	    user_id,
+	    id AS '아이디',
+	    nickname AS '닉네임',	    
+	    Sum(c_today_betting) AS '카지노베팅',
+	    Sum(c_today_win) AS '카지노획득',
+	    Sum(c_today_winlose) AS '카지노윈루즈',
+	    Sum(c_m_today_betting) AS '카지노마진베팅',
+	    Sum(c_m_today_win) AS '카지노마진획득',
+	    Sum(c_m_today_winlose) AS '카지노마진윈루즈',
+	    Sum(s_today_betting) AS '슬롯베팅',
+	    Sum(s_today_win) AS '슬롯획득',
+	    Sum(s_today_winlose) AS '슬롯윈루즈',
+	    Sum(s_m_today_betting) AS '슬롯마진베팅',
+	    Sum(s_m_today_win) AS '슬롯마진획득',
+	    Sum(s_m_today_winlose) AS '슬롯마진윈루즈',
+	    Sum(c_roll) AS '상위카지노롤링',
+	    Sum(c_m_roll) AS '상위카지노마진롤링',
+	    Sum(s_roll) AS '상위슬롯롤링',
+	    Sum(s_m_roll) AS '상위슬롯마진롤링',
+	    Sum(real_losing) as '하부합산루징금',
+	    Sum(real_income) as '최종루징금'
+    FROM (SELECT *
+          FROM income_detail_betwin_acc_view 
+          UNION
+          SELECT *
+    	    FROM income_detail_betwin) AS ut   
+    WHERE ut.date BETWEEN #{startDate} AND #{endDate}
+    GROUP BY ut.node_id
+    <if test="node_id != undefined || '타입' != 3">
+      HAVING node_pid = #{node_id}
+    </if>
+  </select>
+
+// 유저 정산
+  <select id='userDepoWith'>
+    SELECT 
+        IDX as 'IDX',
+        date as '정산일자',
+        type as '타입',
+        id as '아이디',
+        nickname as '닉네임',        
+        balance AS '보유금',
+        point AS '포인트',
+        c.c_roll_rate as '카지노 롤링요율',
+        c.s_roll_rate as '슬롯 롤링요율',
+        c.lose_rate as '루징요율',        
+        Sum(deposit) as '입금',
+        Sum(withdraw) as '출금',
+        Sum(deposit_withdraw) as '입출금',
+        Sum(c_roll) as '카지노마진롤링',
+        Sum(s_roll) as '슬롯마진롤링',        
+        Sum(losing) as '최종루징금',
+        Sum(income) as '최종정산금',
+        h.p_nick as '플래티넘',
+        h.g_nick as '골드',
+        h.s_nick as '실버',
+        h.b_nick as '브론즈'
+    FROM (SELECT *
+        FROM income_user_depowith_view
+        UNION
+        SELECT *
+        FROM income_user_depowith) AS ut
+    JOIN royal.hierarchy AS h
+        ON ut.id = (SELECT id 
+                    FROM user 
+                    WHERE user_id = h.user_id)
+    JOIN royal.user_commission_info as c
+        ON ut.id = (select id 
+                    from user 
+                    where user_id = c.user_id)
+    <where>
+      ut.date BETWEEN #{startDate} AND #{endDate}
+      AND ut.type = 4
+      <if test="node_id != undefined">
+        AND node_id LIKE CONCAT(#{node_id},'%')
+      </if>
+    </where>
+    GROUP BY ut.id;  
+  </select>
+
+  <select id='userBetWin'>
+    SELECT 
+        IDX as 'IDX',
+        date as '정산일자',
+        type as '타입',
+        id as '아이디',
+        nickname as '닉네임',        
+        balance AS '보유금',
+        point AS '포인트',
+        c.c_roll_rate as '카지노 롤링요율',
+        c.s_roll_rate as '슬롯 롤링요율',
+        c.lose_rate as '루징요율',
+        c.bet_margin_rate as '베팅마진요율',
+        c.roll_margin_rate as '롤링마진요율',
+        Sum(c_today_betting) as '카지노베팅',
+        Sum(c_today_win) as '카지노획득',
+        Sum(c_today_winlose) as '카지노윈루즈',
+        Sum(c_m_today_betting) as '카지노마진베팅',
+        Sum(c_m_today_win) as '카지노마진획득',
+        Sum(c_m_today_winlose) as '카지노마진윈루즈',
+        Sum(s_today_betting) as '슬롯베팅',
+        Sum(s_today_win) as '슬롯획득',
+        Sum(s_today_winlose) as '슬롯윈루즈',
+        Sum(s_m_today_betting) as '슬롯마진베팅',
+        Sum(s_m_today_win) as '슬롯마진획득',
+        Sum(s_m_today_winlose) as '슬롯마진윈루즈',        
+        Sum(casino_rolling) as '카지노롤링',
+        Sum(m_casino_rolling) as '카지노마진롤링',
+        Sum(slot_rolling) as '슬롯롤링',
+        Sum(m_slot_rolling) as '슬롯마진롤링',        
+        Sum(real_losing) as '최종루징금',
+        Sum(real_income) as '최종정산금',
+        h.p_nick as '플래티넘',
+        h.g_nick as '골드',
+        h.s_nick as '실버',
+        h.b_nick as '브론즈'
+    FROM (SELECT *
+        FROM income_user_betwin_view
+        UNION
+        SELECT *
+        FROM income_user_betwin) AS ut
+    JOIN royal.hierarchy AS h
+        ON ut.id = (SELECT id 
+                    FROM user 
+                    WHERE user_id = h.user_id)
+    JOIN royal.user_commission_info as c
+        ON ut.id = (select id 
+                    from user 
+                    where user_id = c.user_id)
+    <where>
+      ut.date BETWEEN #{startDate} AND #{endDate}
+      AND ut.type = 4
+      <if test="node_id != undefined">
+        AND node_id LIKE CONCAT(#{node_id},'%')
+      </if>
+    </where>
+    GROUP BY ut.id;
+  </select>
+</mapper>

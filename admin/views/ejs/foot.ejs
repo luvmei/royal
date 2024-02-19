@@ -1,0 +1,365 @@
+<script src="/public/js/plugin/bootstrap.bundle.min.js"></script>
+<script src="/public/js/plugin/jquery-3.6.1.min.js"></script>
+<script
+  src="https://cdn.datatables.net/v/dt/jszip-3.10.1/dt-1.13.6/b-2.4.2/b-colvis-2.4.2/b-html5-2.4.2/r-2.5.0/sl-1.7.0/datatables.min.js"></script>
+<script src="/public/js/plugin/popper.min.js"></script>
+<script src="/public/js/plugin/socket_IO_460.js"></script>
+<script type="text/javascript" src="https://cdn.jsdelivr.net/momentjs/latest/moment.min.js"></script>
+<script
+  src="https://cdnjs.cloudflare.com/ajax/libs/moment-timezone/0.5.33/moment-timezone-with-data-10-year-range.min.js"></script>
+<script type="text/javascript" src="https://cdn.jsdelivr.net/npm/daterangepicker/daterangepicker.min.js"></script>
+<script src="/public/js/func.js"></script>
+
+<script>
+  // #region 소켓관련 함수
+  let notificationCount;
+  let alram;
+  let clientId;
+  let clientType;
+  let clientNode;
+  let treeInfo;
+  let socket;
+
+  function getClientId() {
+    $.ajax({
+      method: 'POST',
+      url: '/clientId',
+      async: false,
+    })
+      .done(function (result) {
+        clientId = result.id;
+        clientType = result.type;
+        if (result.type != 9) {
+          clientNode = result.node_id;
+        }
+      })
+      .fail(function (err) {
+        console.log('전송오류');
+        console.log(err);
+      });
+  }
+  getClientId();
+
+  if (clientType == 9) {
+    countNotification();
+
+    setInterval(() => {
+      countNotification();
+    }, 1000 * 5);
+  }
+
+  if (clientId) {
+    socket = io({ query: { clientId: clientId, clientType: clientType } });
+
+    //? 소켓 응답
+    socket.on('updateOnlineUsers', (data) => {
+      $('#onlineUsers, #userInfoOnline, #userInfoLocal, #userAsset, #userAsset #agentInfo, #userCommission, #dashboardAgentBank, #onlineUsersAgent').DataTable().ajax.reload(null, false);
+    });
+
+    socket.on('requestUserDeposit', (data) => {
+      countNotification();
+      let audio = new Audio('../../public/mp3/userDeposit.mp3');
+      audio.play();
+      // console.log(data + ' 회원의 입금이 신청되었습니다');
+
+      $('#deposit, #dashboardBank, #dashboardAgentBank, #dashboardWait, #depositWithdraw').DataTable().ajax.reload(null, false);
+    });
+
+    socket.on('requestAgentDeposit', (data) => {
+      countNotification();
+      let audio = new Audio('../../public/mp3/agentDeposit.mp3');
+      audio.play();
+      // console.log(data + ' 에이전트의 입금이 신청되었습니다');
+
+      $('#deposit, #dashboardBank, #dashboardAgentBank, #dashboardWait, #depositWithdraw').DataTable().ajax.reload(null, false);
+    });
+
+    socket.on('requestUserWithdraw', (data) => {
+      let audio = new Audio('../../public/mp3/userWithdraw.mp3');
+      audio.play();
+      countNotification();
+      // console.log(data + ' 회원의 출금이 신청되었습니다');
+
+      $('#withdraw, #dashboardBank, #dashboardAgentBank, #dashboardWait, #depositWithdraw').DataTable().ajax.reload(null, false);
+    });
+
+    socket.on('requestAgentWithdraw', (data) => {
+      let audio = new Audio('../../public/mp3/agentWithdraw.mp3');
+      audio.play();
+      countNotification();
+      // console.log(data + ' 에이전트의 출금이 신청되었습니다');
+
+      $('#withdraw, #dashboardBank, #dashboardAgentBank, #dashboardWait, #depositWithdraw').DataTable().ajax.reload(null, false);
+    });
+
+    socket.on('to_user', (data) => {
+      if (data == 'confirmDeposit') {
+        getNavModalData();
+        let audio = new Audio('../../public/mp3/deposit_confirm.mp3');
+        audio.play();
+        document.querySelector('#confirm-text').innerHTML = `<div class='fs-4 fw-bold my-2'>신청하신 입금이 처리되었습니다</div>`;
+        $('#agentConfirmModal').modal('show');
+        $('#deposit, #depositWithdraw, #dashboardBank,#dashboardWait, #dashboardAgentBank').DataTable().ajax.reload(null, false);
+        console.log(data + ' 에이전트의 입금이 처리되었습니다');
+      } else if (data == 'confirmWithdraw') {
+        let audio = new Audio('../../public/mp3/withdraw_confirm.mp3');
+        audio.play();
+        document.querySelector('#confirm-text').innerHTML = `<div class='fs-4 fw-bold my-2'>신청하신 출금이 처리되었습니다</div>`;
+        $('#agentConfirmModal').modal('show');
+        $('#withdraw, #depositWithdraw, #dashboardBank,#dashboardWait, #dashboardAgentBank').DataTable().ajax.reload(null, false);
+        console.log(data + ' 에이전트의 출금이 처리되었습니다');
+
+        $('#deposit, #depositWithdraw').DataTable().ajax.reload(null, false);
+      } else if (data == 'answerQuestion') {
+        let audio = new Audio('../../public/mp3/answer.mp3');
+        audio.play();
+        $('#agentQna').DataTable().ajax.reload(null, false);
+        agentCheckNoti();
+      }
+    });
+
+    socket.on('requestQuestion', (data) => {
+      let audio = new Audio('../../public/mp3/question.mp3');
+      audio.play();
+      countNotification();
+      console.log('회원의 문의가 등록되었습니다');
+
+      $('#qna').DataTable().ajax.reload(null, false);
+    });
+
+    socket.on('update_icon', (data) => {
+      let type;
+      countNotification();
+      switch (data) {
+        case 'confirmDeposit':
+          type = '#deposit, #dashboardBank, #dashboardAgentBank, #dashboardWait, #depositWithdraw';
+          break;
+        case 'confirmDepositAttendant':
+          type = '#deposit, #dashboardBank, #dashboardAgentBank, #dashboardWait, #depositWithdraw';
+          break;
+        case 'confirmWithdraw':
+          type = '#withdraw, #dashboardBank, #dashboardAgentBank, #dashboardWait, #depositWithdraw';
+          break;
+        case 'answerQuestion':
+          type = '#qna';
+          break;
+        case 'confirmJoin':
+          type = '#userJoinConfirm';
+          break;
+      }
+      $(`${type}`).DataTable().ajax.reload(null, false);
+    });
+
+    socket.on('requestJoin', (data) => {
+      let audio = new Audio('../../public/mp3/join.mp3');
+      audio.play();
+      countNotification();
+      console.log(data + ' 회원의 가입승인 요청이 있습니다');
+      $('#userJoinConfirm').DataTable().ajax.reload(null, false);
+    });
+
+    socket.on('error', (data) => {
+      document.querySelector('#notice-text').innerHTML = `${data}`;
+      $('#confirmCancel').modal('hide');
+      $('#alertModal').modal('show');
+      $('table').not('#incomeDetail').DataTable().ajax.reload(null, false);
+    });
+
+    // 하트비트 관련 코드 현재 사용안함
+    // setInterval(() => {
+    //   socket.emit('heartbeat', { timestamp: Date.now() });
+    // }, 10000); // 예를 들어 10초마다 하트비트를 보냅니다.
+  }
+
+  function countNotification() {
+    $.ajax({
+      method: 'POST',
+      url: '/notification',
+    })
+      .done(function (result) {
+        if (result.user) {
+          if (result.user.type == 9) {
+            notificationCount = result.result[0];
+
+            if (result.result[0].deposit > 0) {
+              document.querySelector('#depositIcon > span').classList.add('alramNoti');
+              document.querySelector('#depositIcon > span').classList.remove('d-none');
+            } else {
+              result.result[0].deposit = 9;
+              document.querySelector('#depositIcon > span').classList.add('d-none');
+              document.querySelector('#depositIcon > span').classList.remove('alramNoti');
+            }
+
+            if (result.result[0].withdraw > 0) {
+              document.querySelector('#withdrawIcon > span').classList.add('alramNoti');
+              document.querySelector('#withdrawIcon > span').classList.remove('d-none');
+            } else {
+              result.result[0].withdraw = 0;
+              document.querySelector('#withdrawIcon > span').classList.add('d-none');
+              document.querySelector('#withdrawIcon > span').classList.remove('alramNoti');
+            }
+
+            if (result.result[0].join > 0) {
+              document.querySelector('#approvalIcon > span').classList.add('alramNoti');
+              document.querySelector('#approvalIcon > span').classList.remove('d-none');
+            } else {
+              result.result[0].join = 0;
+              document.querySelector('#approvalIcon > span').classList.add('d-none');
+              document.querySelector('#approvalIcon > span').classList.remove('alramNoti');
+            }
+
+            if (result.result[0].question > 0) {
+              document.querySelector('#messageIcon > span').classList.add('alramNoti');
+              document.querySelector('#messageIcon > span').classList.remove('d-none');
+            } else {
+              result.result[0].question = 0;
+              document.querySelector('#messageIcon > span').classList.add('d-none');
+              document.querySelector('#messageIcon > span').classList.remove('alramNoti');
+            }
+
+            if (result.result[0].alram == 1) {
+              document.querySelector('#alramIcon').innerHTML = `<i class="fa-solid fa-volume-high fa-2x">`;
+              document.querySelector('#alramIcon').classList.add('text-white');
+              playAlram();
+            } else {
+              document.querySelector('#alramIcon').innerHTML = `<i class="fa-solid fa-volume-xmark fa-2x">`;
+              document.querySelector('#alramIcon').classList.remove('text-white');
+            }
+          }
+        } else {
+          window.location.href = '/';
+        }
+      })
+      .fail(function (err) {
+        console.log('전송오류');
+        console.log(err);
+      });
+  }
+
+  function playAlram() {
+    let bell = new Audio('../../public/mp3/alram.mp3');
+    bell.play();
+  }
+
+  if (document.querySelector('#alramIcon')) {
+    document.querySelector('#alramIcon').addEventListener('click', () => {
+      offAlram();
+    });
+  }
+
+  function offAlram() {
+    $.ajax({
+      method: 'POST',
+      url: '/offalram',
+    })
+      .done(function (result) {
+        countNotification();
+        // document.querySelector('#alramIcon').innerHTML = `<i class="fa-solid fa-volume-xmark fa-2x">`;
+        // document.querySelector('#alramIcon').classList.remove('text-white');
+      })
+      .fail(function (err) {
+        console.log('전송오류');
+        console.log(err);
+      });
+  }
+  // #endregion
+
+  // #region dataRangePicker관련 함수
+  let startDate = moment().format('YYYY-MM-DD');
+  let endDate = moment().format('YYYY-MM-DD');
+  let startDateTime = moment().format('YYYY-MM-DD 00:00');
+  let endDateTime = moment().format('YYYY-MM-DD 23:59');
+
+  const commonOptions = {
+    minYear: moment().year() - 1,
+    maxYear: moment().year() + 2,
+    ranges: {
+      오늘: [moment().startOf('day'), moment().endOf('day')],
+      어제: [moment().subtract(1, 'days').startOf('day'), moment().subtract(1, 'days').endOf('day')],
+      '7일 전': [moment().subtract(6, 'days').startOf('day'), moment().endOf('day')],
+      '15일 전': [moment().subtract(14, 'days').startOf('day'), moment().endOf('day')],
+      '30일 전': [moment().subtract(29, 'days').startOf('day'), moment().endOf('day')],
+      '이번 달': [moment().startOf('month'), moment().endOf('month')],
+      '저번 달': [moment().subtract(1, 'month').startOf('month'), moment().subtract(1, 'month').endOf('month')],
+    },
+    autoApply: true,
+    showDropdowns: true,
+    alwaysShowCalendars: true,
+    locale: {
+      format: 'YYYY-MM-DD',
+      separator: ' ~ ',
+      applyLabel: '확인',
+      cancelLabel: '취소',
+      fromLabel: 'From',
+      toLabel: 'To',
+      daysOfWeek: ['일', '월', '화', '수', '목', '금', '토'],
+      monthNames: ['1월', '2월', '3월', '4월', '5월', '6월', '7월', '8월', '9월', '10월', '11월', '12월'],
+    },
+  };
+
+  let dateFormatCallback = function (start, end, label) {
+    startDate = start.format('YYYY-MM-DD');
+    endDate = end.format('YYYY-MM-DD');
+    $('table.dataTable').DataTable().ajax.reload();
+  };
+
+  let datetimeFormatCallback = function (start, end, label) {
+    startDateTime = start.format('YYYY-MM-DD HH:mm');
+    endDateTime = end.format('YYYY-MM-DD HH:mm');
+    $('table.dataTable').DataTable().ajax.reload();
+  };
+
+  let detailCallback = function (start, end, label) {
+    startDateTime = start.format('YYYY-MM-DD HH:mm');
+    endDateTime = end.format('YYYY-MM-DD HH:mm');
+    $('table.detailUserTable').DataTable().ajax.reload();
+  };
+
+  $(function () {
+    $('#dateSelector').daterangepicker(commonOptions, dateFormatCallback);
+  });
+
+  $(function () {
+    $('#dateTimeSelector').daterangepicker(
+      {
+        ...commonOptions,
+        timePicker: true,
+        timePicker24Hour: true,
+      },
+      datetimeFormatCallback
+    );
+  });
+
+  $(function () {
+    $('.detailDateSelector').daterangepicker(
+      {
+        ...commonOptions,
+        timePicker: true,
+        timePicker24Hour: true,
+      },
+      detailCallback
+    );
+  });
+
+
+  $('#providerModal').on('shown.bs.modal', function () {
+    $('#reserveDateSelector').daterangepicker(
+      $.extend({}, commonOptions, {
+        timePicker: true,
+        locale: $.extend({}, commonOptions.locale, {
+          format: 'YY-MM-DD hh:mm A',
+        }),
+      }),
+      dateFormatCallback
+    );
+  });
+
+  $('#dateSeletor, #dataTimeSelector, #reserveDateSelector, .detailDateSelector ').daterangepicker('setDate', 'today');
+  // #endregion
+
+  // popover sanitize
+  const myDefaultAllowList = bootstrap.Tooltip.Default.allowList;
+  myDefaultAllowList.button = [];
+</script>
+
+<script src="/public/js/detail.js"></script>

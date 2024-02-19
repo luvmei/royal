@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<%- include('head.ejs') %>
+
+<body class="sb-nav-fixed">
+  <% if (user.type === 9) { %>
+  <%- include('navBar-admin.ejs') %>
+  <% } else { %>
+  <%- include('navBar-agent.ejs') %>
+  <% } %>
+  <%- include('modals.ejs', {user: user}) %>
+  <div id="layoutSidenav">
+    <% if (user.type === 9) { %>
+    <%- include('sideBar-admin.ejs') %>
+    <% } else { %>
+    <%- include('sideBar-agent.ejs') %>
+    <% } %> <div id="layoutSidenav_content">
+      <main>
+        <div class="container-fluid px-4">
+          <h2 class="my-4">로또 이벤트 내역</h2>
+          <div class="card mb-4">
+            <div class="card-body">
+              <table id="eventLotto" class="cell-border hover" style="width: 100%">
+                <thead>
+                  <tr>
+                    <th>IDX</th>
+                    <th>회차</th>
+                    <th>참여시간</th>
+                    <th>아이디</th>
+                    <th>닉네임</th>
+                    <th>보유금</th>
+                    <th>선택번호</th>
+                    <th>당첨번호</th>
+                    <th>당첨갯수</th>
+                    <th>등수</th>
+                    <th>당첨금</th>
+                    <th>지급여부</th>
+                  </tr>
+                </thead>
+              </table>
+            </div>
+          </div>
+        </div>
+      </main>
+    </div>
+  </div>
+  <%- include('foot.ejs') %>
+  <script src="/public/js/event.js"></script>
+</body>
+
+</html>

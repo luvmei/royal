@@ -1,0 +1,272 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="dashboard">
+  <select id='getAdminNavData'>
+    SELECT 
+	    id '아이디',
+	    nickname '닉네임',
+	    type '타입',
+	    sd_balance '보유금',
+	    dg_balance 'DG보유금',
+      p_type 'P타입'
+    FROM admin_user  
+  </select>
+
+  <select id='getAdminSummaryData'>
+    SELECT 
+      au.id '아이디',
+      au.nickname '닉네임',
+      au.type '타입',
+      au.sd_balance 'SD보유금',	    
+      IFNULL(sum(a.today_deposit),0) '당일입금',
+      IFNULL(sum(a.today_withdraw),0) '당일출금',
+      IFNULL(sum(a.today_deposit - a.today_withdraw),0) '당일입출금',
+      IFNULL(sum(CASE WHEN u.type &lt;&gt; 4 THEN b.c_m_today_betting ELSE 0 END),0) '당일카지노베팅',
+      IFNULL(sum(CASE WHEN u.type &lt;&gt; 4 THEN b.c_m_today_win ELSE 0 END),0) '당일카지노획득',
+      IFNULL(sum(CASE WHEN u.type &lt;&gt; 4 THEN b.c_m_today_betting - b.c_m_today_win ELSE 0 END),0) '당일카지노벳윈',
+      IFNULL(sum(CASE WHEN u.type &lt;&gt; 4 THEN b.s_m_today_betting ELSE 0 END),0) '당일슬롯베팅',
+      IFNULL(sum(CASE WHEN u.type &lt;&gt; 4 THEN b.s_m_today_win ELSE 0 END),0) '당일슬롯획득',
+      IFNULL(sum(CASE WHEN u.type &lt;&gt; 4 THEN b.s_m_today_betting - b.s_m_today_win ELSE 0 END),0) '당일슬롯벳윈',
+      IFNULL(sum(c.c_m_today_roll),0) '당일카지노롤링',
+      IFNULL(sum(c.s_m_today_roll),0) '당일슬롯롤링',
+      IFNULL(sum(c.c_m_today_roll + c.s_m_today_roll),0) '당일롤링합계',      
+      (SELECT COUNT(*) FROM user) '회원수',
+      (SELECT SUM(a.balance) FROM user_asset_info AS a JOIN user AS u	ON a.user_id = u.user_id WHERE u.type &lt;&gt; 4) '에이전트 보유금',
+      (SELECT SUM(a.point) FROM user_asset_info AS a JOIN user AS u	ON a.user_id = u.user_id WHERE u.type &lt;&gt; 4) '에이전트 포인트',
+      (SELECT SUM(a.balance) FROM user_asset_info AS a JOIN user AS u	ON a.user_id = u.user_id WHERE u.type = 4) '유저 보유금',
+      (SELECT SUM(a.point) FROM user_asset_info AS a JOIN user AS u	ON a.user_id = u.user_id WHERE u.type = 4) '유저 포인트'
+    FROM user AS u
+    LEFT JOIN admin_user AS au ON u.user_id = au.admin_user_id
+    JOIN user_commission_info AS c ON u.user_id = c.user_id 
+    JOIN user_asset_info AS a ON u.user_id = a.user_id 
+    JOIN user_betting_info AS b ON u.user_id = b.user_id 
+  </select>
+
+  <select id='getAgentSummaryData'>
+    SELECT 
+	    u.id '아이디',
+	    u.nickname '닉네임',
+	    u.type '타입',	    
+	    IFNULL(a.today_combine_deposit, 0) '당일입금',
+	    IFNULL(a.today_combine_withdraw, 0) '당일출금',
+	    IFNULL(a.today_combine_deposit - a.today_combine_withdraw, 0) '당일입출금',
+      IFNULL(sum(b.c_m_today_betting),0) '당일카지노베팅',
+      IFNULL(sum(b.c_m_today_win),0) '당일카지노획득',
+      IFNULL(sum(b.c_m_today_betting - b.c_m_today_win),0) '당일카지노벳윈',
+      IFNULL(sum(b.s_m_today_betting),0) '당일슬롯베팅',
+      IFNULL(sum(b.s_m_today_win),0) '당일슬롯획득',
+      IFNULL(sum(b.s_m_today_betting - b.s_m_today_win),0) '당일슬롯벳윈',
+	    IFNULL(sum(c.c_m_today_roll),0) '당일카지노롤링',
+	    IFNULL(sum(c.s_m_today_roll),0) '당일슬롯롤링',
+      IFNULL(sum(c.c_m_today_roll + c.s_m_today_roll),0) '당일롤링합계',      
+      (SELECT COUNT(*) FROM user) '회원수'
+    FROM user AS u      
+      JOIN user_commission_info AS c ON u.user_id = c.user_id 
+      JOIN user_asset_info AS a ON u.user_id = a.user_id 
+      JOIN user_betting_info AS b ON u.user_id = b.user_id 
+      JOIN hierarchy AS h ON u.user_id = h.user_id
+    WHERE u.TYPE != 4
+    <if test="type == 0">
+    GROUP BY h.p_nick HAVING h.p_nick = (SELECT nickname FROM user WHERE id = #{id})
+    </if>
+    <if test="type == 1">
+    GROUP BY h.g_nick HAVING h.g_nick = (SELECT nickname FROM user WHERE id = #{id})
+    </if>
+    <if test="type == 2">
+    GROUP BY h.s_nick HAVING h.s_nick = (SELECT nickname FROM user WHERE id = #{id})
+    </if>
+    <if test="type == 3">
+    GROUP BY h.b_nick HAVING h.b_nick = (SELECT nickname FROM user WHERE id = #{id})
+    </if>    
+  </select>
+
+  <select id='getAdminGiveTakeData'>
+    CALL getTodayGiveTake();
+  </select>
+
+  <select id='getAgentGiveTakeData'>
+    SELECT 
+	    IFNULL(
+        (SELECT SUM(req_money)
+	      FROM give_balance_history AS g
+	      JOIN hierarchy AS h ON g.sender_id = h.user_id 
+	      JOIN system_tree AS gt ON g.sender_id = gt.user_id 
+        <if test="type != 9">
+        WHERE node_id LIKE CONCAT(#{node_id},'%') AND date(g.event_time) = curdate()
+        </if>      
+        ), 0) AS 당일지급,
+      IFNULL(
+	      (SELECT SUM(req_money)
+	      FROM take_balance_history AS t
+	      JOIN hierarchy AS h ON t.sender_id = h.user_id
+	      JOIN system_tree AS tt ON t.sender_id = tt.user_id
+        <if test="type != 9">
+	      WHERE node_id LIKE CONCAT(#{node_id},'%') AND date(t.event_time) = curdate()
+        </if>
+        ), 0) AS 당일회수
+  </select>
+
+  <select id='getAgentNavData'>
+    SELECT 
+    	u.user_id , 
+    	u.id '아이디', 
+      u.nickname '닉네임',
+      u.type '타입',
+      u.bank '은행',
+      u.bank_num '계좌번호',
+      u.bank_owner '예금주',
+    	a.balance '보유금', 
+      a.point '포인트', 
+    	a.today_combine_deposit '당일입금', 
+    	a.today_combine_withdraw '당일출금',
+      a.today_combine_deposit - a.today_combine_withdraw '당일입출금',
+      (b.c_today_combine_betting + b.s_today_combine_betting) '당일베팅',
+      (b.c_today_combine_win + b.s_today_combine_win) '당일획득',
+      (b.c_today_combine_betting + b.s_today_combine_betting - b.c_today_combine_win - b.s_today_combine_win) '당일윈루즈',
+    	c.c_today_roll '카지노롤링',
+    	c.s_today_roll '슬롯롤링',
+      count(*) '회원수',
+      c.c_roll_rate '카지노롤링요율',
+      c.s_roll_rate '슬롯롤링요율',
+      c.lose_rate '루징요율'
+    FROM user AS u
+    JOIN user_asset_info AS a ON u.user_id = a.user_id
+    JOIN user_commission_info AS c ON u.user_id = c.user_id 
+    JOIN hierarchy AS h ON u.user_id = h.user_id
+    JOIN user_betting_info AS b ON u.user_id = b.user_id   
+    <if test="type == 0">
+    GROUP BY h.p_nick HAVING h.p_nick = (SELECT nickname FROM user WHERE id = #{id})
+    </if>
+    <if test="type == 1">
+    GROUP BY h.g_nick HAVING h.g_nick = (SELECT nickname FROM user WHERE id = #{id})
+    </if>
+    <if test="type == 2">
+    GROUP BY h.s_nick HAVING h.s_nick = (SELECT nickname FROM user WHERE id = #{id})
+    </if>
+    <if test="type == 3">
+    GROUP BY h.b_nick HAVING h.b_nick = (SELECT nickname FROM user WHERE id = #{id})
+    </if>    
+  </select>
+
+  <select id="countTodayJoinUser">
+    SELECT 
+    	count(*) AS '당일가입'	
+    FROM user AS u
+    JOIN hierarchy AS h
+    	ON u.user_id = h.user_id
+    WHERE
+      CAST(u.join_date AS DATE) = curdate()           
+    <if test="type == 0">
+      AND h.p_nick = (SELECT nickname FROM user WHERE id = #{id}) AND CAST(u.join_date AS DATE) = curdate()
+    </if>
+    <if test="type == 1">
+      AND h.g_nick = (SELECT nickname FROM user WHERE id = #{id}) AND CAST(u.join_date AS DATE) = curdate()
+    </if>
+    <if test="type == 2">
+      AND h.s_nick = (SELECT nickname FROM user WHERE id = #{id}) AND CAST(u.join_date AS DATE) = curdate()
+    </if>
+    <if test="type == 3">
+      AND h.b_nick = (SELECT nickname FROM user WHERE id = #{id}) AND CAST(u.join_date AS DATE) = curdate()
+    </if>
+  </select>
+
+  <select id='adminOnlineUsers'>
+    SELECT  
+      u.level as '레벨', 
+      u.id as '아이디', 
+      u.nickname '닉네임', 
+      u2.nickname as '상위 에이전트', 
+      u.type as '타입',
+      a.balance '보유금', 
+      a.point '포인트', 
+      b.c_today_betting '카_베팅', 
+      b.c_today_win '카_윈',
+      b.s_today_betting '슬_베팅',
+      b.s_today_win '슬_윈',
+      u.join_code as '가입코드'
+    FROM user AS u 
+    JOIN user AS u2 
+      ON u.upper_agt = u2.user_id
+    JOIN user_asset_info AS a 
+      ON u.user_id = a.user_id
+    JOIN user_betting_info AS b 
+      ON u.user_id = b.user_id 
+    JOIN system_tree AS t 
+      ON u.upper_agt = t.user_id 
+    WHERE u.type = 4 AND u.id IN 
+    <foreach collection='ids' item='id' open='(' close=')' separator=','>
+      #{id}
+    </foreach>
+    <if test="node_id != undefined">
+      AND node_id LIKE CONCAT(#{node_id},'%')
+    </if>
+  </select>
+
+  <select id='agentOnlineUsers'>
+    SELECT  
+      u.level as '레벨',
+      u.type as '타입',
+      u.id as '아이디', 
+      u.nickname '닉네임', 
+      u2.nickname as '상위 에이전트', 
+      a.balance '보유금', 
+      a.point '포인트', 
+      b.c_today_betting '카_베팅', 
+      b.c_today_win '카_윈',
+      b.s_today_betting '슬_베팅',
+      b.s_today_win '슬_윈',
+      b.c_temp_betting '카_임시베팅',
+      b.c_temp_betting * c.c_roll_rate / 100 '카_임시롤링',
+      b.s_temp_betting '슬_임시베팅',
+      b.s_temp_betting * c.s_roll_rate / 100 '슬_임시롤링',
+      u.join_code as '가입코드',
+      u.user_id
+    FROM user AS u 
+    JOIN user AS u2 
+      ON u.upper_agt = u2.user_id
+    JOIN user_asset_info AS a 
+      ON u.user_id = a.asset_id
+    JOIN user_betting_info AS b 
+      ON u.user_id = b.user_id 
+    JOIN user_commission_info AS c 
+      ON u.upper_agt = c.user_id 
+    JOIN system_tree AS t 
+      ON u.upper_agt = t.user_id 
+    WHERE u.type = 4 AND u.id IN 
+    <foreach collection='ids' item='id' open='(' close=')' separator=','>
+      #{id}
+    </foreach>
+    <if test="node_id != undefined">
+      AND node_id LIKE CONCAT(#{node_id},'%')
+    </if>
+  </select>
+  
+  <select id='getBankChart'>
+    SELECT Substr(신청일시, 1, 10) AS date,
+      Sum(CASE
+          WHEN 신청타입 = '입금' THEN 신청금액
+            ELSE 0
+           end) AS depositTotal,
+      Sum(CASE
+            WHEN 신청타입 = '출금' THEN 신청금액
+            ELSE 0
+          end) AS withdrawTotal
+      FROM  deposit_withdraw_view
+      WHERE  Str_to_date(신청일시, '%Y-%m-%d %H:%i') 
+      BETWEEN Date_sub(Now(),INTERVAL 7 day) AND Now()
+      GROUP BY date; 
+  </select>
+
+  <select id='getAgentSummary'>
+    SELECT
+      *
+    FROM 
+      dashboard_users_view;
+  </select>
+
+  <select id='clearTempBettingInfo'>
+    UPDATE user_betting_info
+    SET c_temp_betting = 0, s_temp_betting = 0
+    WHERE user_id = #{user_id}
+  </select>
+</mapper>

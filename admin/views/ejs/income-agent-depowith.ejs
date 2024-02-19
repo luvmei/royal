@@ -1,0 +1,123 @@
+<!DOCTYPE html>
+<html lang="en">
+<%- include('head.ejs') %>
+
+<body class="sb-nav-fixed">
+  <% if (user.type === 9) { %> <%- include('navBar-admin.ejs') %> <% } else { %> <%- include('navBar-agent.ejs') %> <%
+    } %> <%- include('modals.ejs', {user: user}) %>
+  <div id="layoutSidenav">
+    <% if (user.type === 9) { %> <%- include('sideBar-admin.ejs') %> <% } else { %> <%- include('sideBar-agent.ejs')
+      %> <% } %>
+    <div id="layoutSidenav_content">
+      <main>
+        <div class="container-fluid px-4">
+          <h2 class="my-4">에이전트 정산내역 (입금 - 출금)</h2>
+          <div class="incomeDescription">
+            <div class="alert alert-secondary d-inline-block fw-bold py-2 mb-2" role="alert">
+              <div>
+                루징(H): 입출금[입금(B) + 전일(누적) 보유금(D) + 전일(누적) 포인트(F) - 출금(C)] - 당일 보유금(E) -
+                당일 포인트(G)
+              </div>
+            </div>
+            <div class="alert alert-secondary d-inline-block fw-bold py-2 mx-lg-3 me-1 mt-2" role="alert">
+              <div>총 정산금: 루징(H) * 루징요율(A) / 100</div>
+            </div>
+            <div class="alert alert-secondary d-inline-block fw-bold py-2" role="alert">
+              <div>실 정산금: 세부내역 참조</div>
+            </div>
+          </div>
+          <div class="card mb-4">
+            <div class="card-body">
+              <table id="incomeAgentDepoWith" class="cell-border hover incomeAgentDepoWith" style="width: 100%">
+                <thead>
+                  <tr>
+                    <th rowspan="2"></th>
+                    <th rowspan="2">IDX</th>
+                    <th rowspan="2">정산일자</th>
+                    <th rowspan="2">node_id</th>
+                    <th rowspan="2">node_pid</th>
+                    <th rowspan="2">타입</th>
+                    <th rowspan="2">아이디</th>
+                    <th rowspan="2">닉네임</th>
+                    <th colspan="4" class="text-center d-none d-lg-table-cell">요율(%)</th>
+                    <th colspan="3" class="text-center d-none d-lg-table-cell">입출금</th>
+                    <th colspan="2" class="text-center d-none d-lg-table-cell">총 보유금</th>
+                    <th colspan="2" class="text-center d-none d-lg-table-cell">포인트 (롤링)</th>
+                    <th colspan="3" class="text-center d-none d-lg-table-cell">정산</th>
+                    <th colspan="3" class="text-center d-none d-lg-table-cell">베팅-획득</th>
+                    <th colspan="2" class="text-center d-none d-lg-table-cell">획득 롤링</th>
+                    <th rowspan="2">플래티넘</th>
+                    <th rowspan="2">골드</th>
+                    <th rowspan="2">실버</th>
+                    <th rowspan="2">브론즈</th>
+                  </tr>
+                  <tr>
+                    <th class="bg-gray">카</th>
+                    <th class="bg-gray">슬</th>
+                    <th class="bg-gray">루(A)</th>
+                    <th class="bg-gray">공</th>
+                    <th>입금(B)</th>
+                    <th>출금(C)</th>
+                    <th>입금 - 출금</th>
+                    <th class="bg-gray">전일(누적)(D)</th>
+                    <th class="bg-gray">당일(E)</th>
+                    <th>전일(누적)(F)</th>
+                    <th>당일(G)</th>
+                    <th class="bg-gray">루징(H)</th>
+                    <th class="bg-gray">총 정산금</th>
+                    <th class="bg-gray">실 정산금</th>
+                    <th>베팅</th>
+                    <th>획득</th>
+                    <th>베팅-획득</th>
+                    <th class="bg-gray">카지노</th>
+                    <th class="bg-gray">슬롯</th>
+                  </tr>
+                </thead>
+                <tfoot>
+                  <tr>
+                    <th></th>
+                    <th></th>
+                    <th></th>
+                    <th></th>
+                    <th></th>
+                    <th class="text-center">합계</th>
+                    <th></th>
+                    <th></th>
+                    <th></th>
+                    <th></th>
+                    <th></th>
+                    <th></th>
+                    <th></th>
+                    <th></th>
+                    <th></th>
+                    <th></th>
+                    <th></th>
+                    <th></th>
+                    <th></th>
+                    <th></th>
+                    <th></th>
+                    <th></th>
+                    <th></th>
+                    <th></th>
+                    <th></th>
+                    <th></th>
+                    <th></th>
+                    <th></th>
+                    <th></th>
+                    <th></th>
+                    <th></th>
+                  </tr>
+                </tfoot>
+              </table>
+            </div>
+          </div>
+        </div>
+      </main>
+    </div>
+  </div>
+  <%- include('foot.ejs') %>
+  <script src="/public/js/income.js"></script>
+  <script src="/public/js/plugin/jquery-simple-tree-table.js"></script>
+</body>
+
+</html>

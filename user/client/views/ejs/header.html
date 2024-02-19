@@ -1,0 +1,276 @@
+<header id="header" class="fixed-top">
+  <div class="row align-items-center justify-content-lg-between text-center m-0">
+    <button class="navbar-toggler d-block d-lg-none col-2" type="button" data-bs-toggle="offcanvas"
+      data-bs-target="#sidebar">
+      <i class="bi bi-list fs-1 text-white"></i>
+    </button>
+    <a href="/" class="logo <% if (theme_type === 1) { %>col-9<% } else { %>col-8<% } %> d-lg-none">
+      <img src="/public/custom/type_<%= theme_type %>/logo/m_logo.webp" alt="" class="m-text-logo" />
+    </a>
+    <div class="langBtn col-2 d-block d-lg-none pe-3">
+      <img src="/public/images/flag/1x1/ko.svg" />
+    </div>
+
+    <div class="offcanvas offcanvas-start" tabindex="-1" id="sidebar">
+      <div class="offcanvas-header text-center">
+        <h5 class="offcanvas-title"><%= title %></h5>
+        <button type="button" class="btn-close btn-close-white" data-bs-dismiss="offcanvas"></button>
+      </div>
+      <div class="offcanvas-body" id="offcanvas-body">
+        <% if (isLogin) { %>
+        <div class="login d-none"></div>
+        <div class="logout d-none"></div>
+        <div class="user-info text-start my-2 row">
+          <div class="col-6 money"><i class="bi bi-coin pe-1"></i> <%= user[0].balance.toLocaleString('ko-KR') %>
+          </div>
+          <div class="col-6 point"><span class="mx-1">P</span> <%= user[0].point.toLocaleString('ko-KR') %></div>
+          <div class="col-12 username d-flex my-2">
+            <i class="bi bi-person-circle pe-2"></i><span><%= user[0].nickname %> [<%= user[0].id %>]</span>
+            <span class="ms-2">님</span>
+            <span class="dropdown me-auto ms-3">
+              <i class="bi bi-gear-fill user-point-icon" data-bs-toggle="dropdown" aria-expanded="false"></i>
+              <ul class="dropdown-menu dropdown-menu-dark">
+                <!-- <li><button class="dropdown-item changeNick" type="button">닉네임 변경</button></li> -->
+                <li><button class="dropdown-item changePassword" type="button">비밀번호 변경</button></li>
+              </ul>
+            </span>
+          </div>
+        </div>
+        <% } else { %>
+        <div class="login d-none"></div>
+        <div class="logout d-none"></div>
+        <div class="let-login">
+          로그인 후 이용해 주세요
+        </div>
+        <% } %>
+        <div class="sidebarMenu row">
+          <div class="col-6">
+            <img src="/public/custom/type_2/icon/icon_notice.webp" width="100%" />
+            <a type="button" class="btn-grad notice" id="mobileNotice">공지사항</a>
+          </div>
+          <div class="col-6">
+            <img src="/public/custom/type_2/icon/icon_userInfo.webp" width="100%" />
+            <a type="button" class="btn-grad" id="mobileUserInfo">유저정보</a>
+          </div>
+          <div class="col-6">
+            <img src="/public/custom/type_2/icon/icon_deposit.webp" width="100%" />
+            <a class="btn-grad deposit" id="mobileDeposit">입금신청</a>
+          </div>
+          <div class="col-6">
+            <img src="/public/custom/type_2/icon/icon_withdraw.webp" width="100%" />
+            <a type="button" class="btn-grad withdraw" id="mobileWithdraw">출금신청</a>
+          </div>
+          <div class="col-6">
+            <img src="/public/custom/type_2/icon/icon_comp.webp" width="100%" />
+            <a type="button" class="btn-grad reward" id="mobileReward">콤프신청</a>
+          </div>
+          <div class="col-6 px-3">
+            <img src="/public/custom/type_2/icon/icon_qna.webp" width="100%" />
+            <a type="button" class="btn-grad question" id="mobileQuestion">문의하기</a>
+          </div>
+          <div class="col-6">
+            <img src="/public/custom/type_2/icon/icon_message.webp" width="100%" />
+            <a type="button" class="btn-grad" id="mobileMessage">메세지</a>
+          </div>
+          <div class="col-6 <% if (lotto == '0') { %> d-none <% } %>">
+            <img src="/public/custom/type_2/icon/icon_lotto.webp" width="100%" />
+            <a type="button" class="btn-grad" id="mobileLotteryList">로또</a>
+          </div>
+          <div class="col-6 <% if (attendance == '0') { %> d-none <% } %>">
+            <img src="/public/custom/type_2/icon/icon_attendance.webp" width="100%" />
+            <a type="button" class="btn-grad attendance" id="mobileAttendance">출석체크</a>
+          </div>
+        </div>
+      </div>
+      <div class="offcanvas-footer d-none">
+        <div class="cs-info mb-3">
+          <a href="https://t.me/onecasino1" target="_blank">
+            <img src="/public/images/telegram.png" width="25px" alt="telegram">
+            <span class="telegram_id">HEAVENCS</span>
+          </a>
+          <img src="/public/images/kakao.png" width="25px" alt="kakao" class="ms-3">
+          <span class="kakao_id">HEAVENCS</span>
+        </div>
+      </div>
+    </div>
+    <div class="m_login d-block d-lg-none">
+      <% if (!isLogin) { %>
+      <form id="mobile-login-data" class="row justify-content-evenly mobile-user-logout">
+        <!-- <div class="col-4">
+          <input name="id" id="login_id" type="text" class="mobile-login-input" placeholder="아이디" maxlength="20"
+            autocomplete="off" required>
+        </div>
+        <div class="col-4">
+          <input name="pw" id="login_pw" type="password" class="mobile-login-input" placeholder="비밀번호"
+            autocomplete="off" required>
+        </div> -->
+        <div class="col-6 col-md-2">
+          <button type="button" class="btn btn-sm px-2" id="mobile-login-btn" data-bs-toggle="modal"
+            data-bs-target="#loginModal">
+            로그인
+          </button>
+        </div>
+        <div class="col-6 col-md-2">
+          <button class="btn btn-sm px-2" id="nav-join" type="button" data-bs-toggle="modal"
+            data-bs-target="#joinModal">
+            회원가입
+          </button>
+        </div>
+        <!-- <div class="col-4">
+          <div class="input-group mt-2">
+            <img src="/user/captcha" id="captcha-img" alt="CAPTCHA" onclick="loadCaptcha()">sud
+            <input type="text" class="form-control" id="captcha-input" placeholder="" name="captcha" maxlength="3"
+              required />
+          </div>
+        </div> -->
+        <!-- <div class="col-8" style="padding-top:0.8rem">
+          <div class="m-login-message">
+            <br />
+          </div>
+        </div> -->
+      </form>
+      <% } else { %>
+      <div class="row justify-content-around align-items-center mobile-user-login">
+        <button class="btn col-1 login-symbol">
+          <div class="user-money-icon">￦</div>
+        </button>
+        <div class="col-4 col-md-2 user-money text-start" id="userBalance">
+          <%= user[0].balance.toLocaleString('ko-KR') %>
+        </div>
+        <div class="col-1 d-md-none"></div>
+        <button class="btn col-1 login-symbol">
+          <div class="user-point-icon">P</div>
+        </button>
+        <div class="col-4 col-md-2 user-point text-start" id="userPoint">
+          <%= user[0].point.toLocaleString('ko-KR') %>
+        </div>
+        <!-- 유저 레벨에 따른 표시 -->
+        <div class="col-2 col-md-1 mt-3 mt-md-0 p-0">
+          <button type="button" class="btn btn-sm level-btn">
+            LV. <%= user[0].level %>
+          </button>
+        </div>
+        <div class="col-6 col-md-3 mt-3 mt-md-0 pt-1 ps-0 user-name text-start">
+          <span><%= user[0].nickname %> [<%= user[0].id %>]</span>
+          <span> 님</span>
+        </div>
+        <div class="col-3 col-md-2 mt-3 mt-md-0 text-end">
+          <button class="btn btn-sm" id="mobile-logout-btn" type="submit">
+            로그아웃
+          </button>
+        </div>
+      </div>
+      <% } %>
+    </div>
+    <nav class="navbar d-none  <% if (theme_type == '2') { %> d-lg-block <% } %> col-6 pe-3">
+      <div class="row justify-content-center">
+        <div class="col">
+          <a class="nav-link" id="nav-notice">공지</a>
+        </div>
+        <div class="col">
+          <a class="nav-link" id="nav-deposit">입금</a>
+        </div>
+        <div class="col">
+          <a class="nav-link" id="nav-withdraw">출금</a>
+        </div>
+        <div class="col">
+          <a class="nav-link" id="nav-reward">콤프</a>
+        </div>
+        <div class="col">
+          <a class="nav-link" id="nav-question">문의</a>
+        </div>
+        <div class="col">
+          <a class="nav-link" id="nav-message">메세지</a>
+        </div>
+        <div class="col<% if (attendance == '0') { %> d-none <% } %>">
+          <a class="nav-link" id="nav-attendance">출석체크</a>
+        </div>
+        <div class="col<% if (lotto == '0') { %> d-none <% } %>">
+          <a class="nav-link" id="nav-lotteryList">로또</a>
+
+        </div>
+        <div class="col">
+          <a class="nav-link" id="nav-userInfo">회원정보</a>
+        </div>
+      </div>
+    </nav>
+    <div class="login-buttons col-6 d-none d-lg-block" id="pc-login-buttons">
+      <!-- <div class="login-buttons col-7 d-none d-lg-block" id="pc-login-buttons"> -->
+      <% if (isLogin) { %>
+      <div class="row justify-content-around align-items-center" id="afterLoginNavbar">
+        <i class="col-1 bi bi-currency-dollar login-icons"></i>
+        <div class="col-2 user-money text-start" id="navBalance"><%= user[0].balance.toLocaleString('ko-KR') %></div>
+        <i class="col-1 login-icons">P</i>
+        <div class="col-2 user-point text-start" id="navPoint"><%= user[0].point.toLocaleString('ko-KR') %></div>
+        <div class="col-3 user-name px-0" id="nav-user">
+          <sapn class="btn levelBtn me-2">LV. <%= user[0].level %></sapn>
+          <span><%= user[0].nickname %> [<%= user[0].id %>]</span>
+          <span> 님</span>
+          <span class="dropdown ms-2 d-none">
+            <i class="bi bi-gear-fill login-icons" data-bs-toggle="dropdown" aria-expanded="false"></i>
+            <ul class="dropdown-menu dropdown-menu-dark">
+              <!-- <li><button class="dropdown-item changeNick" type="button">닉네임 변경</button></li> -->
+              <li><button class="dropdown-item changePassword" type="button">비밀번호 변경</button></li>
+            </ul>
+          </span>
+        </div>
+        <a class="me-3 d-none" id="nav-login" data-bs-toggle="modal" data-bs-target="#loginModal">로그인</a>
+        <a class="sign d-none" id="nav-join" data-bs-toggle="modal" data-bs-target="#joinModal">회원가입</a>
+        <div class="col-2 logout ms-3" data-bs-toggle="modal" data-bs-target="#logoutModal" id="nav-logout">로그아웃</div>
+        <div class="col-1 langBtn">
+          <img src="/public/images/flag/1x1/ko.svg" />
+        </div>
+      </div>
+      <% } else { %>
+      <div class="row justify-content-end align-items-center" id="beforeLoginNavbar">
+        <a class="me-3" id="nav-login" data-bs-toggle="modal" data-bs-target="#loginModal">로그인</a>
+        <a class="sign" id="nav-join" data-bs-toggle="modal" data-bs-target="#joinModal">회원가입</a>
+        <div class="col-2 logout d-none" id="nav-logout">로그아웃</div>
+        <div class="col-1 langBtn">
+          <img src="/public/images/flag/1x1/ko.svg" />
+        </div>
+      </div>
+      <% } %>
+    </div>
+    <div class="list-group text-start langLst">
+      <a href="#" data-value="ko" class="list-group-item list-group-item-action">
+        <img src="/public/images/flag/1x1/ko.svg" />
+      </a>
+      <a href="#" data-value="us" class="list-group-item list-group-item-action">
+        <img src="/public/images/flag/1x1/us.svg" />
+      </a>
+      <a href="#" data-value="cn" class="list-group-item list-group-item-action">
+        <img src="/public/images/flag/1x1/cn.svg" />
+      </a>
+      <a href="#" data-value="th" class="list-group-item list-group-item-action">
+        <img src="/public/images/flag/1x1/th.svg" />
+      </a>
+      <a href="#" data-value="vn" class="list-group-item list-group-item-action">
+        <img src="/public/images/flag/1x1/vn.svg" />
+      </a>
+    </div>
+
+    <div class="list-group text-start langLst">
+      <a href="#" data-value="ko" class="list-group-item list-group-item-action">
+        <img src="/public/images/flag/1x1/ko.svg" />
+        <span class="ps-3">한국어</span>
+      </a>
+      <a href="#" data-value="us" class="list-group-item list-group-item-action">
+        <img src="/public/images/flag/1x1/us.svg" />
+        <span class="ps-3">English</span>
+      </a>
+      <a href="#" data-value="cn" class="list-group-item list-group-item-action">
+        <img src="/public/images/flag/1x1/cn.svg" />
+        <span class="ps-3">中国人</span>
+      </a>
+      <a href="#" data-value="th" class="list-group-item list-group-item-action">
+        <img src="/public/images/flag/1x1/th.svg" />
+        <span class="ps-3">ภาษาไทย</span>
+      </a>
+      <a href="#" data-value="vn" class="list-group-item list-group-item-action">
+        <img src="/public/images/flag/1x1/vn.svg" />
+        <span class="ps-3">Tiếng Việt</span>
+      </a>
+    </div>
+  </div>
+</header>

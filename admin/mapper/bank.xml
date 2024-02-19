@@ -1,0 +1,887 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="bank">
+// 입출금관리 테이블 뷰
+  <select id='depositwithdraw'>
+    SELECT
+      *
+    FROM
+      deposit_withdraw_view
+    <where>
+      SUBSTR(신청일시, 1, 10) 
+      BETWEEN #{startDate} AND #{endDate}
+      <if test="node_id != undefined">
+        AND (node_id LIKE CONCAT(#{node_id},'%')
+        OR node_pid LIKE CONCAT(#{node_id},'%'))
+      </if>
+      <if test="tableType == 'wait'">
+        AND (처리현황 = '입금대기' OR 처리현황 = '입금확인' OR 처리현황 = '출금대기')
+      </if>
+    </where>;
+  </select>  
+
+  <select id='deposit'>
+    SELECT
+      *
+    FROM
+      deposit_request_view
+    <where>
+      SUBSTR(입금신청일시, 1, 10) 
+      BETWEEN #{startDate} AND #{endDate}
+      <if test="node_id != undefined">
+        AND node_id LIKE CONCAT(#{node_id},'%')
+      </if>
+    </where>;
+  </select>
+
+  <select id='withdraw'>
+    SELECT
+      *
+    FROM
+      withdraw_request_view
+    <where>    
+      SUBSTR(출금신청일시, 1, 10) 
+      BETWEEN #{startDate} AND #{endDate}
+      <if test="node_id != undefined">
+        AND node_id LIKE CONCAT(#{node_id},'%')
+      </if>
+    </where>; 
+  </select>
+
+  <select id='give'>
+    SELECT
+      *
+    FROM
+      give_balance_view
+    <where>    
+      SUBSTR(지급일시, 1, 10) 
+      BETWEEN #{startDate} AND #{endDate}
+      <if test="node_id != undefined">
+        AND node_id LIKE CONCAT(#{node_id},'%')
+      </if>
+    </where>; 
+  </select>
+
+  <select id='take'>
+    SELECT
+      *
+    FROM
+      take_balance_view
+    <where>    
+      SUBSTR(회수일시, 1, 10) 
+      BETWEEN #{startDate} AND #{endDate}
+      <if test="node_id != undefined">
+        AND node_id LIKE CONCAT(#{node_id},'%')
+      </if>
+    </where>; 
+  </select>
+
+  <select id='giveTake'>
+    SELECT
+      *
+    FROM
+      give_take_view
+    <where>    
+      SUBSTR(지급일시, 1, 10) 
+      BETWEEN #{startDate} AND #{endDate}
+      <if test="node_id != undefined">
+        AND node_id LIKE CONCAT(#{node_id},'%')
+      </if>
+    </where>;
+  </select>
+
+  <select id='getUserBalance'>
+    SELECT balance
+    FROM user_asset_info
+    WHERE user_id = (SELECT user_id
+                    FROM user
+                    WHERE id = #{id})
+  </select>  
+   
+// 상태변경 관련
+  <select id='updateDepositStatus'>
+    UPDATE deposit_request_history 
+    SET req_status =
+    CASE 
+      WHEN req_status ='입금신청' THEN '입금대기'
+      WHEN req_status ='입금대기' THEN '입금확인'
+      WHEN req_status ='입금확인' THEN'입금승인'      
+    END
+    WHERE 
+      deposit_id = #{IDX} AND req_status = #{currentStatus};
+  </select>
+
+   <select id='updateDepositConfirmCancel'>
+    UPDATE deposit_request_history 
+    SET req_status = '승인취소'     
+    WHERE 
+      deposit_id = #{IDX} AND 
+      req_status = '입금승인';      
+  </select> 
+
+  <select id='updateDepositCancel'>
+    UPDATE deposit_request_history 
+    SET req_status = '신청취소'     
+    WHERE 
+      deposit_id = #{IDX};      
+  </select>
+
+  <select id='updateWithdrawStatus'>
+    UPDATE withdraw_request_history 
+    SET req_status =
+    CASE 
+      WHEN req_status ='출금신청' THEN '출금대기'
+      WHEN req_status ='출금대기' THEN '출금승인'      
+    END
+    WHERE 
+      withdraw_id = #{IDX} AND 
+      req_money = #{reqMoney} AND req_status = #{currentStatus};
+  </select>  
+
+  <select id='updateWithdrawConfirmCancel'>
+    UPDATE withdraw_request_history 
+    SET req_status = '승인취소'     
+    WHERE 
+      withdraw_id = #{IDX} AND 
+      req_status = '출금승인';
+  </select>
+
+  <select id='updateWithdrawCancel'>
+    UPDATE withdraw_request_history 
+    SET req_status = '신청취소'     
+    WHERE 
+      withdraw_id = #{IDX};
+  </select>
+
+  <update id='updateReqState'>
+    UPDATE user
+    SET bank_req_state = #{bankState}
+    WHERE id = #{id};    
+  </update>
+
+// 승인 관련
+  <select id='updateAssetDepositConfirm'>
+    UPDATE user_asset_info AS a
+    SET a.balance = a.balance + ${reqMoney} + ${bonusMoney},   
+        a.recent_deposit = ${reqMoney} + ${bonusMoney},
+        a.today_deposit = a.today_deposit + ${reqMoney},
+        a.total_deposit = a.total_deposit + ${reqMoney},
+        a.today_bonus = a.today_bonus + ${bonusMoney},
+        a.total_bonus = a.total_bonus + ${bonusMoney}
+    WHERE  a.user_id = (SELECT user_id
+                        FROM   user
+                        WHERE  id = #{id}); 
+  </select>  
+
+  <select id='insertDepositMemo'>
+    UPDATE deposit_request_history
+    SET deposit_memo = #{deposit_memo}
+    WHERE  deposit_id = ${IDX};
+  </select>  
+
+  <select id='confirmDepositTime'>
+    UPDATE deposit_request_history
+    SET confirm_time = #{confirmTime}
+    WHERE  deposit_id = ${IDX};
+  </select>   
+
+  <select id='updateAssetWithdrawConfirm'>
+    UPDATE user_asset_info AS a
+    SET a.balance = a.balance - ${reqMoney},
+        a.recent_withdraw = ${reqMoney},        
+        a.today_withdraw = a.today_withdraw + ${reqMoney},
+        a.total_withdraw = a.total_withdraw + ${reqMoney}
+    WHERE  a.user_id = (SELECT user_id
+                        FROM   user
+                        WHERE  id = #{id}); 
+  </select>  
+
+  <select id='insertWithdrawMemo'>
+    UPDATE withdraw_request_history
+    SET withdraw_memo = #{withdraw_memo}
+    WHERE  withdraw_id = #{IDX};
+  </select>
+
+  <select id='confirmWithdrawTime'>
+    UPDATE withdraw_request_history
+    SET confirm_time = #{confirmTime}
+    WHERE  withdraw_id = #{IDX};
+  </select>
+
+  <select id='insertDepositId'>
+    UPDATE deposit_request_history
+    SET api_id = #{transactionId}
+    WHERE deposit_id = #{IDX}
+  </select>
+
+  <select id='insertWithdrawId'>
+    UPDATE withdraw_request_history
+    SET api_id = #{transactionId}
+    WHERE withdraw_id = #{IDX}
+  </select>
+
+  <select id='updateLineDeposit'>
+    UPDATE user_asset_info
+    SET today_combine_deposit = today_combine_deposit + ${reqMoney},
+        total_combine_deposit = total_combine_deposit + ${reqMoney}
+    WHERE user_id = #{user_id};
+  </select>
+  
+  <select id='updateLineWithdraw'>
+    UPDATE user_asset_info
+    SET today_combine_withdraw = today_combine_withdraw + ${reqMoney},
+        total_combine_withdraw = total_combine_withdraw + ${reqMoney}
+    WHERE user_id = #{user_id};
+  </select>
+
+  <select id='rollbackLineDeposit'>
+    UPDATE user_asset_info
+    SET today_combine_deposit = today_combine_deposit - ${reqMoney},
+        total_combine_deposit = total_combine_deposit - ${reqMoney}
+    WHERE user_id = #{user_id};
+  </select>
+
+  <select id='rollbackLineWithdraw'>
+    UPDATE user_asset_info
+    SET today_combine_withdraw = today_combine_withdraw - ${reqMoney},
+        total_combine_withdraw = total_combine_withdraw - ${reqMoney}
+    WHERE user_id = #{user_id};
+  </select>
+
+  <select id='agentHierarchy'>
+    call agent_Hierarchy(#{id});
+  </select>
+
+  <update id='updateBonus'>
+    UPDATE user_asset_info
+    SET bonus_type = ${bonusType}
+    WHERE user_id = (SELECT user_id
+                    FROM user
+                    WHERE id = #{id});
+  </update>
+
+  <select id='getUserBonusType'>
+  SELECT bonus_type
+  FROM user_asset_info
+  WHERE user_id = (SELECT user_id
+                  FROM user
+                  WHERE id = #{id});
+  </select>
+
+// 취소 관련
+  <select id='updateAssetDepositCancel'>
+    UPDATE user_asset_info AS a
+    SET a.balance = a.balance - ${reqMoney},
+        a.recent_deposit =  (SELECT ifnull((SELECT req_money
+                                            FROM deposit_request_history 
+                                            WHERE user_id = (SELECT user_id
+                                                            FROM   user
+                                                            WHERE  id = #{id}) AND req_status = '입금승인'
+                                            ORDER BY deposit_id DESC LIMIT 1), 0)),
+        a.today_deposit = a.today_deposit - ${reqMoney},
+        a.total_deposit = a.total_deposit - ${reqMoney}
+    WHERE  a.user_id = (SELECT user_id
+                        FROM   user
+                        WHERE  id = #{id}); 
+  </select>
+
+  <select id='updateAssetWithdrawCancel'>
+    UPDATE user_asset_info AS a
+    SET a.balance = a.balance + ${reqMoney},
+        a.recent_withdraw = (SELECT ifnull((SELECT req_money
+                                            FROM withdraw_request_history 
+                                            WHERE user_id = (SELECT user_id
+                                                            FROM   user
+                                                            WHERE  id = #{id}) AND req_status = '출금승인'
+                                            ORDER BY withdraw_id DESC LIMIT 1), 0)),        
+        a.today_withdraw = a.today_withdraw - ${reqMoney},
+        a.total_withdraw = a.total_withdraw - ${reqMoney}
+    WHERE  a.user_id = (SELECT user_id
+                        FROM   user
+                        WHERE  id = #{id}); 
+  </select>
+
+  <select id='rollbackWithdrawRequestBalance'>
+    UPDATE user_asset_info AS a
+    SET a.balance = a.balance + ${reqMoney}        
+    WHERE  a.user_id = (SELECT user_id
+                        FROM   user
+                        WHERE  id = #{id}); 
+  </select>
+
+// 로그생성 관련
+  <select id='insertConfirmDepositLog'>
+    INSERT INTO log_balance
+      (
+        time,
+        user_id,
+        event_type,
+        event_id,
+        amount,
+        before_balance,
+        after_balance
+      )
+    VALUES
+      (
+        #{confirmTime},
+        (SELECT user_id
+        FROM user 
+        WHERE id = #{id}),
+        #{confirmStatus},
+        ${IDX},
+        ${reqMoney} + ${bonusMoney},
+        ${currentBalance},
+        ${afterBalance}
+      )
+  </select>
+
+  <select id='insertCancelDepositLog'>
+    INSERT INTO log_balance
+      (
+        time,
+        user_id,
+        event_type,
+        event_id,
+        amount,
+        before_balance,
+        after_balance
+      )
+    VALUES
+      (
+        #{confirmTime},
+        (SELECT user_id
+        FROM user 
+        WHERE id = #{id}),
+        '입금승인취소',
+        ${IDX},
+        ${reqMoney},
+        ${afterBalance},
+        ${currentBalance}
+      )
+  </select>
+
+  <select id='insertConfirmWithdrawLog'>
+    INSERT INTO log_balance
+      (
+        time,
+        user_id,
+        event_type,
+        event_id,
+        amount,
+        before_balance,
+        after_balance
+      )
+    VALUES
+      (
+        #{confirmTime},
+        (SELECT user_id
+        FROM user 
+        WHERE id = #{id}),
+        '출금승인',
+        ${IDX},
+        ${reqMoney},
+        ${currentBalance},
+        ${afterBalance}
+      )
+  </select>
+
+  <select id='insertCancelWithdrawLog'>
+    INSERT INTO log_balance
+      (
+        time,
+        user_id,
+        event_type,
+        event_id,
+        amount,
+        before_balance,
+        after_balance
+      )
+    VALUES
+      (
+        #{confirmTime},
+        (SELECT user_id
+        FROM user 
+        WHERE id = #{id}),
+        '출금승인취소',
+        ${IDX},
+        ${reqMoney},
+        ${afterBalance},
+        ${currentBalance}
+      )
+  </select>
+
+// 유저개별 검색
+  <select id='getUserId'>
+    SELECT user_id
+    FROM user
+    WHERE id=#{id}
+  </select>
+
+  <select id='getTodayDepositSum'>
+    SELECT ifnull(sum(req_money), 0) AS today_deposit_sum
+    FROM deposit_request_history
+    WHERE user_id = (SELECT user_id 
+                    FROM user 
+                    WHERE id = #{id}) 
+                    AND req_status = '입금승인' 
+                    AND DATE(req_time) = CURDATE()
+  </select>
+
+  <select id='getWeeklyDepositSum'>
+    SELECT ifnull(sum(req_money), 0) AS weekly_deposit_sum
+    FROM deposit_request_history
+    WHERE user_id = (SELECT user_id 
+                    FROM user 
+                    WHERE id = #{id}) 
+                    AND req_status = '입금승인' 
+                    AND DATE(req_time) >= '#{weeklyStart}'
+                    AND DATE(req_time) < '#{weeklyEnd}';
+  </select>
+
+// 에이전트 입금, 출금, 전환 관련
+  <select id='getBankNum'>
+    SELECT 
+      id,
+      u.level,
+      u.type,
+      l.bank,
+      l.bank_num,
+      l.bank_owner
+    FROM   user AS u
+    JOIN user_level_info AS l
+      ON u.level = l.user_level_id
+    WHERE  id = #{id}; 
+  </select>
+
+  <select id='checkBankState'>
+    SELECT bank_req_state
+    FROM user
+    WHERE id = #{id};
+  </select>
+
+  <select id='insertReqDeposit'>
+    INSERT INTO deposit_request_history
+      (
+        user_id,
+        req_time,
+        at_req_balance,
+        req_type,
+        req_money,        
+        req_ip_adress
+      )
+    VALUES
+      (
+        (SELECT user_id
+        FROM user 
+        WHERE id = #{id}),
+        #{time},
+        ${balance},
+        #{type},
+        ${reqMoney},
+        #{ip}
+      );
+  </select>  
+
+  <select id='insertReqWithdraw'>
+    INSERT INTO withdraw_request_history
+      (
+        user_id,
+        req_time,
+        at_req_balance,
+        req_type,
+        req_money,
+        req_ip_adress
+      )
+    VALUES
+      (
+        (SELECT user_id
+        FROM user 
+        WHERE id = #{id}),
+        #{time},
+        ${balance},
+        #{type},
+        ${reqMoney},
+        #{ip}
+      );
+  </select>
+
+  <select id='exchangePoint'>
+    UPDATE user_asset_info
+    SET balance = balance + ${curPoint},
+        point = 0        
+    WHERE user_id = (SELECT user_id
+                    FROM user 
+                    WHERE id = #{id});
+  </select>
+
+  <insert id='exchangeBalanceLog'>
+    INSERT INTO log_balance
+      (
+        time,
+        user_id,
+        event_type,
+        amount,
+        before_balance,
+        after_balance
+      )
+    VALUES
+      (
+        #{time},
+        (SELECT user_id
+        FROM user 
+        WHERE id = #{id}),
+        '포인트 전환',
+        ${curPoint},
+        ${balance},
+        ${balance} + ${curPoint}
+      )
+  </insert>
+
+  <insert id='exchangePointLog'>
+    INSERT INTO log_point
+      (
+        time,
+        user_id,
+        event_type,
+        point_amount,
+        before_point,
+        after_point
+      )
+    VALUES
+      (
+        #{time},
+        (SELECT user_id
+        FROM user 
+        WHERE id = #{id}),
+        '포인트 전환',
+        -${curPoint},
+        ${curPoint},
+        0
+      )
+  </insert>
+
+  <select id='getBalanceInfo'>
+    SELECT balance
+    FROM user_asset_info
+    WHERE user_id = (SELECT user_id
+                    FROM user 
+                    WHERE id = #{id});
+  </select>
+
+// 지급, 회수 관련
+  <select id='getGiveIdx'>
+    SELECT COUNT(*) AS recent_id
+    FROM give_balance_history
+  </select>
+
+  <select id='getTakeIdx'>
+    SELECT COUNT(*) AS recent_id
+    FROM take_balance_history
+  </select>
+
+  <select id='insertGiveHistory'>
+    INSERT INTO give_balance_history
+      (        
+        sender_id,
+        receiver_id,
+        give_type,
+        event_time,
+        at_sender_balance,
+        at_receiver_balance,
+        req_money,
+        req_ip_adress,
+        memo
+      )
+    VALUES
+      (        
+        <if test="senderId == 'admin'">
+        0,
+        </if>
+        <if test="senderId != 'admin'">
+          (SELECT user_id
+          FROM user 
+          WHERE id = #{senderId}),
+        </if>        
+        (SELECT user_id
+        FROM user 
+        WHERE id = #{receiverId}),
+        #{giveType},
+        #{time},
+        ${balance},
+        ${userBalance},
+        ${reqMoney},
+        #{ip},
+        #{memo}
+      ) 
+  </select>
+
+  <select id='insertTakeHistory'>
+    INSERT INTO take_balance_history
+      (        
+        sender_id,
+        receiver_id,
+        event_time,
+        at_sender_balance,
+        at_receiver_balance,
+        req_money,
+        req_ip_adress,
+        memo
+      )
+    VALUES
+      (
+        <if test="senderId == 'admin'">
+        0,
+        </if>
+        <if test="senderId != 'admin'">
+          (SELECT user_id
+          FROM user 
+          WHERE id = #{senderId}),
+        </if>  
+        (SELECT user_id
+        FROM user 
+        WHERE id = #{receiverId}),
+        #{time},
+        ${balance},
+        ${userBalance},
+        ${reqMoney},
+        #{ip},
+        #{memo}
+      ) 
+  </select>  
+
+  <select id='updateSenderGiveBalance'>
+    UPDATE user_asset_info 
+	  SET balance = balance - ${reqMoney}
+	  WHERE user_id = (SELECT user_id	
+                    FROM user 
+                    WHERE id = #{senderId})
+  </select>
+
+  <select id='updateReceiverGiveBalance'>    
+    UPDATE user_asset_info 
+	  SET balance = balance + ${reqMoney}
+	  WHERE user_id = (SELECT user_id	
+                    FROM user 
+                    WHERE id = #{receiverId})
+  </select>
+
+  <update id='updateSenderTakeBalance'>
+    UPDATE user_asset_info 
+	  SET balance = balance + ${reqMoney}
+	  WHERE user_id = (SELECT user_id	
+                    FROM user 
+                    WHERE id = #{senderId})
+  </update>
+
+  <update id='updateReceiverTakeBalance'>    
+    UPDATE user_asset_info 
+	  SET balance = balance - ${reqMoney}
+	  WHERE user_id = (SELECT user_id	
+                    FROM user 
+                    WHERE id = #{receiverId})
+  </update>
+
+  <select id='updateGiveTransaction'>
+    UPDATE give_balance_history
+    SET api_id = #{transactionId}
+    ORDER BY give_id DESC LIMIT 1
+  </select>
+
+  <select id='updateTakeTransaction'>
+    UPDATE take_balance_history
+    SET api_id = #{transactionId}
+    ORDER BY take_id DESC LIMIT 1
+  </select>
+
+  <select id='insertGiveSenderBalanceLog'>
+    INSERT INTO log_balance
+      (
+        time,
+        user_id,
+        event_type,
+        event_id,
+        amount,
+        before_balance,
+        after_balance
+      )
+    VALUES
+      (
+        #{time},
+        <if test="senderId == 'admin'">
+        0,        
+        </if>
+        <if test="senderId != 'admin'">
+        (SELECT user_id
+          FROM user 
+          WHERE id = #{senderId}),
+        </if>
+        CONCAT('지급함(',#{giveType}, '): ',#{eventType}),  
+        #{transactionId},
+        ${reqMoney},
+        ${balance},
+        ${balance} - ${reqMoney}
+      )
+  </select>
+
+  <select id='insertTakeSenderBalanceLog'>
+    INSERT INTO log_balance
+      (
+        time,
+        user_id,
+        event_type,
+        event_id,
+        amount,
+        before_balance,
+        after_balance
+      )
+    VALUES
+      (
+        #{time},
+        <if test="senderId == 'admin'">
+        0,
+        </if>
+        <if test="senderId != 'admin'">
+        (SELECT user_id
+          FROM user 
+          WHERE id = #{senderId}),
+        </if>  
+        CONCAT('회수함: ',#{eventType}),  
+        #{transactionId},
+        ${reqMoney},
+        ${balance},
+        ${balance} + ${reqMoney}
+      )
+  </select>
+
+  <select id='insertGiveReceiverBalanceLog'>
+    INSERT INTO log_balance
+      (
+        time,
+        user_id,
+        event_type,
+        event_id,
+        amount,
+        before_balance,
+        after_balance
+      )
+    VALUES
+      (
+        #{time},
+        (SELECT user_id
+          FROM user 
+          WHERE id = #{receiverId}),        
+        CONCAT('지급받음(',#{giveType}, '): ',#{eventType}),  
+        #{transactionId},
+        ${reqMoney},
+        ${userBalance},
+        ${userBalance} + ${reqMoney}
+      )
+  </select>
+
+  <select id='insertTakeReceiverBalanceLog'>
+    INSERT INTO log_balance
+      (
+        time,
+        user_id,
+        event_type,
+        event_id,
+        amount,
+        before_balance,
+        after_balance
+      )
+    VALUES
+      (
+        #{time},        
+        (SELECT user_id
+          FROM user 
+          WHERE id = #{receiverId}),
+        CONCAT('회수됨: ',#{eventType}),
+        #{transactionId},
+        ${reqMoney},
+        ${userBalance},
+        ${userBalance} - ${reqMoney}
+      )
+  </select>  
+
+// 가상 관련
+  <select id='getVirtualSetValue'>
+    SELECT 
+      virtualAutoState,
+      depoAutoMinTime, 
+      depoAutoMaxTime,
+      depoAutoMinMoney,
+      depoAutoMaxMoney,
+      withAutoMinTime,
+      withAutoMaxTime,
+      withAutoMinMoney,
+      withAutoMaxMoney
+    FROM setting
+  </select>
+
+  <select id='countVirtualDeposit'>
+    SELECT COUNT(*) FROM deposit_virtual_list
+  </select>
+
+  <select id='insertVirtualDeposit'>
+    INSERT INTO deposit_virtual_list
+      (
+        submit_time,
+        virtual_id,
+        virtual_money
+      )
+    VALUES
+      (
+        #{submitTime},
+        #{randomId},
+        ${randomMoney}
+      )    
+  </select>
+
+  <select id='deleteOverLimitVirtualDeposit'>
+    DELETE FROM deposit_virtual_list
+    WHERE virtual_id NOT IN (
+        SELECT virtual_id
+        FROM (
+              SELECT virtual_id
+              FROM deposit_virtual_list
+              ORDER BY submit_time DESC
+              LIMIT 30
+        ) AS alias
+    );
+  </select>
+
+
+  <select id='countVirtualWithdraw'>
+    SELECT COUNT(*) FROM withdraw_virtual_list
+  </select>
+
+  <select id='insertVirtualWithdraw'>
+    INSERT INTO withdraw_virtual_list
+      (
+        submit_time,
+        virtual_id,
+        virtual_money
+      )
+    VALUES
+      (
+        #{submitTime},
+        #{randomId},
+        ${randomMoney}
+      )
+  </select>
+
+  <select id="deleteOverLimitVirtualWithdraw">
+    DELETE FROM withdraw_virtual_list
+    WHERE virtual_id NOT IN (
+        SELECT virtual_id
+        FROM (
+              SELECT virtual_id
+              FROM withdraw_virtual_list
+              ORDER BY submit_time DESC
+              LIMIT 30
+        ) AS alias
+    );
+  </select>
+
+
+</mapper>

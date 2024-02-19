@@ -1,0 +1,158 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="board">
+//데이터 가져오기
+  <select id='getNoticeList'>
+    SELECT
+      notice_id as IDX,      
+      DATE_FORMAT(time, '%Y-%m-%d') as '작성일자',
+      notice_range as '범위',
+      notice_type as '종류',
+      title as '제목',
+      content as '내용',
+      filename as '파일이름'
+    FROM board_notice
+    WHERE notice_range = 4
+  </select>
+
+  <select id='getNoticeContent'>
+    SELECT
+      notice_id as IDX,      
+      DATE_FORMAT(time, '%Y-%m-%d') as '작성일자',
+      notice_range as '범위',
+      notice_type as '종류',
+      title as '제목',
+      content as '내용',
+      filename as '파일이름'
+    FROM board_notice
+    WHERE title = #{title}
+  </select>
+
+  <select id='getQuestionList'>
+    SELECT 
+      qna_id        as 'IDX',
+	    question_time as '문의일시',
+	    type          as '종류',
+	    title         as '제목',
+	    content       as '내용',
+	    state         as '상태',
+      reply         as '답변',
+      answer_time   as '답변일시'
+    FROM board_qna
+    WHERE user_id = (SELECT user_id
+                    FROM user
+                    WHERE id = #{id})
+  </select>
+
+  <select id='getMessageList'>
+    SELECT 
+      message_id    as 'IDX',
+      receive_time  as '받은일시',
+      type          as '종류',
+      title         as '제목',
+      content       as '내용',
+      is_read       as '읽음여부'
+    FROM board_receive_message
+    WHERE receiver = (SELECT user_id
+                    FROM user
+                    WHERE id = #{id})        
+          AND is_delete = 0
+  </select>
+
+  <select id='getLotteryParticipationList'>
+    SELECT 
+      DATE_FORMAT(submit_datetime, '%y-%m-%d %H:%i') AS submit_datetime, round,
+      id,
+      selected_numbers
+    FROM event_lottery_history 
+    WHERE round = (SELECT MAX(round) FROM event_lottery_history)
+    AND submit_datetime &lt; current_timestamp()
+    ORDER BY submit_datetime DESC
+  </select>
+
+  <select id='getLotteryLastRound'>
+    SELECT MAX(round) AS latestRound
+    FROM event_lottery_history
+  </select>
+
+// 문의
+  <select id='insertQuestion'>
+    INSERT INTO board_qna
+      (
+        question_time,
+        type,
+        user_id,
+        user_type,
+        title,
+        content
+      )
+    VALUES
+      (
+        #{time},
+        #{type},
+        (SELECT user_id
+        FROM user
+        WHERE id = #{id}),
+        #{user_type},
+        #{title},
+        #{content}      
+      );
+  </select> 
+
+  <select id='updateQuestionState'>
+    UPDATE board_qna
+    SET state = #{state}
+    WHERE qna_id = #{IDX}
+  </select>  
+
+// 메세지
+  <select id='updateMessageState'>
+    UPDATE board_receive_message
+    SET is_read = 1
+    WHERE message_id = #{IDX}
+  </select>
+
+  <select id='findUnreadMessage'>
+    SELECT COUNT(*) AS 'count'
+    FROM board_receive_message        
+    WHERE is_read = 0 AND message_id IN
+    <foreach collection="idx" item="IDX" open="(" separator="," close=")">
+      #{IDX}
+    </foreach>
+  </select>
+
+  <select id='readAllMessage'>
+    UPDATE board_receive_message
+    SET is_read = 1
+    WHERE message_id IN 
+    <foreach collection="idx" item="IDX" open="(" separator="," close=")">
+      #{IDX}
+    </foreach>
+  </select>
+
+  <select id='deleteAllMessage'>
+    DELETE FROM board_receive_message
+    WHERE receiver = (SELECT user_id
+                    FROM user
+                    WHERE id = #{id})
+  </select>
+
+// 알림확인
+  <select id='checkQuestion'>
+    SELECT COUNT(*) AS 'count'
+    FROM board_qna
+    WHERE user_id = (SELECT user_id
+                    FROM user
+                    WHERE id = #{id})
+          AND state = '답변완료'
+  </select>
+
+  <select id='checkMessage'>
+    SELECT COUNT(*) AS 'count'
+    FROM board_receive_message
+    WHERE receiver = (SELECT user_id
+                    FROM user
+                    WHERE id = #{id})
+          AND is_read = 0
+  </select>
+</mapper>

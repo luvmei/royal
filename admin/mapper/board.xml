@@ -1,0 +1,390 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="board">
+// 커뮤니티 테이블 뷰
+  <select id='notice'>
+    SELECT
+      notice_id as IDX,
+      category as '카테고리',
+      DATE_FORMAT(time, '%Y-%m-%d') as '작성일자',
+      notice_type as '종류',
+      notice_range as '범위',
+      title as '제목',
+      content as '내용',
+      popup as '팝업',
+      display as '공개여부',
+      filename as '파일명'
+    FROM board_notice
+    <if test="noticeRange != null and noticeRange != 9">
+      WHERE notice_range >= ${noticeRange}
+    </if>
+  </select>
+
+  <select id='message'>
+    SELECT
+      send_message_id as IDX,
+      send_time as '보낸시간',
+      type as '종류',
+      title as '제목',
+      content as '내용',
+      receiver as '받는유저'
+    FROM board_send_message
+  </select>
+
+  <select id='qna'>
+    SELECT
+      *
+    FROM board_qna_view    
+    <if test="type != 9">
+      WHERE node_id = #{node_id}
+    </if>
+  </select>
+
+  <select id='eventBanner'>
+    SELECT
+      banner_id as 순번,
+      banner_title as 제목,
+      title_img as '배너이미지',
+      content_text as '내용',
+      content_img as '내용이미지'
+    FROM banner_list
+  </select>
+
+  <select id='agentQna'>
+    SELECT 
+      qna_id        as 'IDX',
+	    question_time as '문의일시',
+	    type          as '종류',
+	    title         as '제목',
+	    content       as '내용',
+	    state         as '상태',
+      reply         as '답변',
+      answer_time   as '답변일시'
+    FROM board_qna
+    WHERE user_id = (SELECT user_id
+                    FROM user
+                    WHERE id = #{id})
+  </select>
+
+  <select id='agentMessage'>
+    SELECT 
+      message_id    as 'IDX',
+      receive_time  as '받은일시',
+      type          as '종류',
+      title         as '제목',
+      content       as '내용',
+      is_read       as '읽음여부'
+    FROM board_receive_message
+    WHERE receiver = (SELECT user_id
+                    FROM user
+                    WHERE id = #{id})        
+          AND is_delete = 0
+  </select>
+
+// 공지사항 및 이벤트
+  <select id='insertNotice'>
+    INSERT INTO board_notice
+      (
+      category,
+      time,
+      notice_range,
+      notice_type, 
+      title, 
+      content,
+      filename
+      )
+    VALUES
+      (
+      #{category},
+      #{writeTime},
+      #{noticeRange},
+      #{noticeType}, 
+      #{title}, 
+      #{content},
+      #{filename}      
+      )
+  </select>  
+
+  <select id='updateNotice'>
+    UPDATE board_notice
+    SET
+      time = #{writeTime},
+      notice_range = #{noticeRange},
+      notice_type = #{noticeType}, 
+      title = #{title}, 
+      content = #{content},
+      filename = #{filename}
+    WHERE
+      notice_id = #{notice_id}
+  </select>
+
+  <select id='deleteNotice'>
+    DELETE FROM board_notice
+    WHERE
+      notice_id = #{IDX}
+  </select>
+
+  <select id='countInsertedNotice'>
+    SELECT
+      *
+    FROM popup_list
+    WHERE
+      popup_title = '' AND popup_content = ''
+  </select>
+
+  <update id='modifyPopup'>
+    UPDATE popup_list
+    SET
+      popup_title = #{title},
+      popup_content = #{content},
+      popup_image = #{filename}
+    WHERE
+      notice_id = ${notice_id}
+  </update>
+
+  <update id='updatePopup'>
+    UPDATE popup_list
+    SET
+      notice_id = ${IDX},
+      popup_title = #{title},
+      popup_content = #{content},
+      popup_image = #{file}
+    WHERE
+      popup_id = ${popupIdx}  
+  </update>
+
+  <update id='updateNoticePopupInfo'>
+    UPDATE board_notice
+    SET
+      popup = ${popupIdx}
+    WHERE
+      notice_id = ${IDX}
+  </update>
+
+  <update id='deletePopup'>
+    UPDATE popup_list
+    SET
+      notice_id = 0,
+      popup_title = '',
+      popup_content = '',
+      popup_image = ''
+    WHERE
+      popup_id = ${popupIdx}
+  </update>
+
+  <update id='deleteNoticePopupInfo'>
+    UPDATE board_notice
+    SET
+      popup = 0
+    WHERE
+      notice_id = ${IDX}
+  </update>
+
+// 메세지
+  <select id='checkUser'>
+    SELECT
+      count(*) as 'count'
+    FROM user
+    WHERE
+      id = #{receiver}
+  </select>
+
+  <select id='insertSendMessage'>
+    INSERT INTO board_send_message
+      (
+        send_time,
+        type,
+        title,
+        content,
+        receiver
+      )
+    VALUES
+      (
+        #{sendTime},
+        #{messageType},
+        #{title},
+        #{content},
+        #{receiver}
+      )
+  </select>
+
+  <select id='insertReceiveMessage'>
+    INSERT INTO board_receive_message
+      (
+        receive_time,
+        type,
+        title,
+        content,
+        receiver
+      )
+    SELECT
+      #{sendTime},
+      #{messageType},
+      #{title},
+      #{content},
+      user_id
+    From user
+    WHERE
+    <if test="messageType != '개별'">
+      type &lt;= ${sendRange}
+    </if>
+    <if test="messageType == '개별'">
+      id = #{selectedUser}
+    </if>
+  </select>
+
+  <select id='updateMessageState'>
+    UPDATE board_receive_message
+    SET
+      is_read = 1
+    WHERE
+      message_id = #{IDX}
+  </select>
+
+  <select id='findUnreadMessage'>
+    SELECT COUNT(*) AS 'count'
+    FROM board_receive_message        
+    WHERE is_read = 0 AND message_id IN
+    <foreach collection="idx" item="IDX" open="(" separator="," close=")">
+       #{IDX}
+    </foreach>
+  </select>
+
+  <select id='readAllMessage'>
+    UPDATE board_receive_message
+    SET is_read = 1
+    WHERE message_id IN 
+    <foreach collection="idx" item="IDX" open="(" separator="," close=")">
+      #{IDX}
+    </foreach>
+  </select>
+
+  <select id='deleteAllMessage'>
+    DELETE FROM board_receive_message
+    WHERE receiver = (SELECT user_id
+                    FROM user
+                    WHERE id = #{id})
+  </select>
+
+// 문의
+  <select id='answerQuestion'>
+    UPDATE board_qna
+    SET
+      reply = #{reply},
+      state = '답변완료',
+      answer_time = #{answerTime}
+    WHERE
+      qna_id = #{IDX}
+  </select>
+
+  <select id='modifyAnswer'>
+    UPDATE board_qna
+    SET
+      reply = #{reply},
+      answer_time = #{answerTime}
+    WHERE
+      qna_id = #{IDX}
+  </select>
+
+  <select id='insertAgentQuestion'>
+    INSERT INTO board_qna
+      (
+        question_time,
+        type,
+        user_id,
+        user_type,
+        title,
+        content
+      )
+    VALUES
+      (
+        #{time},
+        #{type},
+        (SELECT user_id
+        FROM user
+        WHERE id = #{id}),
+        #{user_type},
+        #{title},
+        #{content}      
+      );
+  </select>
+
+  <select id='updateQuestionState'>
+    UPDATE board_qna
+    SET state = #{state}
+    WHERE qna_id = #{IDX}
+  </select>
+
+  <select id='getMacroData'>
+    SELECT
+      *
+    FROM board_macro
+  </select>
+
+  <update id="updateMacroData">
+      UPDATE board_macro
+      SET 
+        macro_title = #{macro_title},
+        macro_content = #{macro_content}
+      WHERE 
+        macro_id = #{macro_id}
+  </update>
+
+// 이벤트배너
+  <select id='insertEventBanner'>
+    INSERT INTO banner_list
+      (
+        banner_title,
+        title_img,
+        content_text,
+        content_img
+      )
+    VALUES
+      (
+        #{title},
+        #{bannerFilename},
+        #{content},
+        #{contentFilename}
+      )
+  </select>
+
+  <select id='updateEventBanner'>
+    UPDATE banner_list
+    SET
+      banner_title = #{title},
+      <if test="bannerFilename != ''">
+        title_img = #{bannerFilename},
+      </if>
+      <if test="contentFilename != ''">
+        content_img = #{contentFilename},
+      </if>
+      content_text = #{content}
+    WHERE
+      banner_id = ${banner_id}
+  </select>
+
+  <select id='deleteEventBanner'>
+    DELETE FROM banner_list
+    WHERE
+      banner_id = ${idx}
+  </select>
+
+// 에이전트 노티체크
+  <select id='agentCheckQuestion'>
+    SELECT COUNT(*) AS 'count'
+    FROM board_qna
+    WHERE user_id = (SELECT user_id
+                    FROM user
+                    WHERE id = #{id})
+          AND state = '답변완료'
+  </select>
+
+  <select id='agentCheckMessage'>
+    SELECT COUNT(*) AS 'count'
+    FROM board_receive_message
+    WHERE receiver = (SELECT user_id
+                    FROM user
+                    WHERE id = #{id})
+          AND is_read = 0
+  </select>
+</mapper>

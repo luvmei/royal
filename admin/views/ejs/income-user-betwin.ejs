@@ -1,0 +1,85 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<%- include('head.ejs') %>
+
+<body class="sb-nav-fixed">
+  <% if (user.type === 9) { %>
+  <%- include('navBar-admin.ejs') %>
+  <% } else { %>
+  <%- include('navBar-agent.ejs') %>
+  <% } %>
+  <%- include('modals.ejs', {user: user}) %>
+  <div id="layoutSidenav">
+    <% if (user.type === 9) { %>
+    <%- include('sideBar-admin.ejs') %>
+    <% } else { %>
+    <%- include('sideBar-agent.ejs') %>
+    <% } %> <div id="layoutSidenav_content">
+      <main>
+        <div class="container-fluid px-4">
+          <h2 class="my-4">유저 매출내역 (베팅-획득)</h2>
+          <div class="incomeDescription">
+            <div class="alert alert-secondary d-inline-block fw-bold py-2" role="alert">
+              <div>최총 루징금(E): 카지노 베팅획득(A) + 슬롯 베팅획득(B) - 카지노 롤링금(C) - 슬롯 롤링금(D)</div>
+            </div>
+            <div class="alert alert-secondary d-inline-block fw-bold py-2 mx-lg-3 me-1 mb-2" role="alert">
+              <div>총 정산금(F): 최종 루징금(E) * 루징요율(G) / 100</div>
+            </div>            
+          </div>
+          <div class="card mb-4">
+            <div class="card-body">
+              <table id="incomeUserBetWin" class="cell-border hover" style="width: 100%">
+                <thead>
+                  <tr>
+                    <th rowspan="2"></th>
+                    <th rowspan="2">IDX</th>
+                    <th rowspan="2">정산일자</th>
+                    <th rowspan="2">타입</th>
+                    <th rowspan="2">아이디</th>
+                    <th rowspan="2">닉네임</th>
+                    <th colspan="2" class="text-center d-none d-lg-table-cell">현재 보유</th>
+                    <th colspan="5" class="text-center d-none d-lg-table-cell">요율(%)</th>
+                    <th colspan="3" class="text-center d-none d-lg-table-cell" id="betWinCasinoHeader">카지노</th>
+                    <th colspan="3" class="text-center d-none d-lg-table-cell" id="betWinSlotHeader">슬롯</th>
+                    <th colspan="2" class="text-center d-none d-lg-table-cell">획득 롤링</th>
+                    <th colspan="2" class="text-center d-none d-lg-table-cell">정산</th>
+                    <th rowspan="2">플래티넘</th>
+                    <th rowspan="2">골드</th>
+                    <th rowspan="2">실버</th>
+                    <th rowspan="2">브론즈</th>
+                  </tr>
+                  <tr>
+                    <th class="bg-gray">보유금</th>
+                    <th class="bg-gray">포인트</th>
+                    <th>카</th>
+                    <th>슬</th>
+                    <th>루(G)</th>
+                    <th></th>
+                    <th></th>
+                    <th class="bg-gray">베팅</th>
+                    <th class="bg-gray">획득</th>
+                    <th class="bg-gray">베팅 - 획득(A)</th>
+                    <th>베팅</th>
+                    <th>획득</th>
+                    <th>베팅 - 획득(B)</th>
+                    <th class="bg-gray">카지노(C)</th>
+                    <th class="bg-gray">슬롯(D)</th>
+                    <th>최종 루징금 (E)</th>
+                    <th>최종 정산금 (F)</th>
+                  </tr>
+                </thead>
+              </table>
+            </div>
+          </div>
+        </div>
+      </main>
+
+    </div>
+  </div>
+  <%- include('foot.ejs') %>
+  <script src="/public/js/income.js"></script>
+  <script src="/public/js/plugin/jquery-simple-tree-table.js"></script>
+</body>
+
+</html>

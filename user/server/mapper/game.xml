@@ -1,0 +1,148 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="game">   
+  <select id='getHlProviderList'>
+    SELECT provider      
+    FROM game_list
+    WHERE display = 1 AND category = 'slot'
+    GROUP BY provider
+    ORDER BY count(*) DESC 
+  </select>
+
+  <select id='getGoProviderList'>
+    SELECT 
+      provider,
+      provider_name     
+    FROM game_list
+    WHERE display = 1 AND category = 'slot'
+    GROUP BY provider, provider_name
+    ORDER BY count(*) DESC 
+  </select>
+
+  <select id='getHlCasinoList'>
+    SELECT 
+      provider_name,
+      provider_code,
+      lobby_code,
+      provider_img  
+    FROM lobby_list 
+    WHERE api_type = 'hl'
+  </select>
+
+  <select id='getGoCasinoList'>
+    SELECT 
+      provider_name,
+      provider_code,
+      lobby_code,
+      provider_img  
+    FROM lobby_list 
+    WHERE api_type = 'go'
+  </select>
+
+  <select id='getHlSlotList'>
+    SELECT
+      uuid,
+      provider,
+      title,
+      img_url,
+      favorite
+    FROM game_list
+    WHERE display = 1 AND provider = #{provider} AND category = 'slot'
+    ORDER BY favorite DESC, game_id ASC
+    LIMIT 72 OFFSET ${offset}
+  </select>
+
+  <select id='getGoSlotList'>
+    SELECT
+      uuid,
+      provider,
+      provider_name,
+      title,
+      img_url,
+      favorite
+    FROM game_list
+    WHERE display = 1 AND provider_name = #{provider} AND category = 'slot'
+    ORDER BY favorite DESC, game_id ASC
+    LIMIT 72 OFFSET ${offset}
+  </select>
+
+  <select id='getHlPopularList'>
+    SELECT
+      uuid,
+      provider,
+      title,
+      img_url,
+      favorite
+    FROM game_list
+    WHERE display = 1 AND 'rank' IS NOT NULL AND category = 'slot'
+    ORDER BY rank ASC limit 36
+  </select>
+
+  <select id='getGoPopularList'>
+    SELECT
+      uuid,
+      provider,
+      provider_name,
+      title,
+      img_url,
+      favorite
+    FROM game_list
+    WHERE display = 1 AND 'rank' IS NOT NULL AND category = 'slot'
+    ORDER BY rank ASC limit 36
+  </select>
+
+  <select id='getHlNewList'>
+    SELECT
+      uuid,
+      provider,
+      title,
+      img_url,
+      favorite
+    FROM game_list
+    WHERE display = 1 AND category = 'slot'
+    ORDER BY game_id DESC, reg_date DESC 
+    limit 36
+  </select>
+  
+  <select id='getGoNewList'>
+    SELECT
+      uuid,
+      provider,
+      provider_name,
+      title,
+      img_url,
+      favorite
+    FROM game_list
+    WHERE display = 1 AND category = 'slot'
+    ORDER BY game_id DESC, reg_date DESC 
+    limit 36
+  </select>
+
+  <select id='getGameId'>
+    SELECT uuid
+    FROM game_list
+    WHERE game_id = #{id}
+  </select>
+
+  <select id='getUserBalance'>
+    SELECT balance
+    FROM user_asset_info
+    WHERE user_id = (SELECT user_id
+                    FROM user
+                    WHERE id = #{id})
+  </select>
+
+  <select id='checkUserType'>
+    SELECT type
+    FROM user
+    WHERE id = #{id}
+  </select>
+
+  <select id='updateUserBalance'>
+    UPDATE user_asset_info
+    SET balance = ${balance}
+    WHERE user_id = (SELECT user_id
+                        FROM   user
+                        WHERE  id = #{id}); 
+  </select>
+</mapper>

@@ -1,0 +1,228 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="game">
+// 게임리스트 테이블 뷰
+  <!-- <select id='insertGameList'>
+    INSERT IGNORE INTO game_list
+      (
+      provider,
+      game_type,
+      uuid,
+      title,
+      title_en,
+      img_url,
+      reg_date
+      )
+    VALUES
+      (
+      #{provider},
+      #{game_type},
+      #{uuid},
+      #{title},
+      #{title_en},
+      #{img},
+      DATE_FORMAT(NOW(), '%Y-%m-%d')
+      )
+  </select> -->
+
+  <insert id='insertProviderList'>
+    INSERT IGNORE INTO provider_list
+    (
+        provider_id,
+        provider_logo,
+        provider_name
+    )
+    VALUES
+    <foreach collection="providerList" item="provider" separator=",">
+        (
+            #{provider.provider_id},
+            #{provider.provider_logo},
+            #{provider.provider_title}
+        )
+    </foreach>
+  </insert>
+
+  <insert id='insertGameList'>
+    INSERT IGNORE INTO game_list
+    (
+        provider,
+        game_type,
+        uuid,
+        title,
+        title_en,
+        img_url,
+        category,
+        reg_date
+    )
+    VALUES 
+    <foreach collection="games" item="game" separator=",">
+        (
+            #{game.provider_name},
+            #{game.module_id},
+            #{game.id},
+            #{game.game_title},
+            #{game.game_name},
+            #{game.game_image},
+            #{game.category},
+            DATE_FORMAT(NOW(), '%Y-%m-%d')
+        )
+    </foreach>
+  </insert>
+
+  <insert id='insertHlGameList'>
+    INSERT IGNORE INTO game_list
+    (
+        provider,
+        uuid,
+        title,
+        title_en,
+        img_url,
+        category,
+        reg_date,
+        rank
+    )
+    VALUES 
+    <foreach collection="games" item="game" separator=",">
+        (
+            #{game.vendor},
+            #{game.id},
+            #{game.langs.ko},
+            #{game.title},
+            #{game.thumbnail},
+            #{game.type},
+            DATE_FORMAT(NOW(), "%Y-%m-%d"),
+            #{game.rank}
+        )
+    </foreach>
+  </insert>
+
+  <insert id='insertGoGameList'>
+    INSERT IGNORE INTO game_list
+    (
+        provider,
+        provider_name,
+        uuid,
+        title,
+        title_en,
+        img_url,
+        category,
+        reg_date
+    )
+    VALUES 
+    <foreach collection="games" item="game" separator=",">
+        (
+            #{game.gameCode},
+            #{game.gameCorp},
+            #{game.gameSeq},
+            #{game.gameName_Kor},
+            #{game.gameName},
+            #{game.image},
+            #{game.gameType},
+            DATE_FORMAT(NOW(), "%Y-%m-%d")         
+        )
+    </foreach>
+  </insert>
+
+  <select id='slot'>
+    SELECT
+      game_id as IDX,
+      provider as '공급사',
+      provider_name as '공급사이름',
+      uuid as '코드',
+      title as '제목',
+      title_en as '영문제목',
+      reg_date as '등록일',
+      favorite as '인기도',
+      display as '공개여부',
+      check_start as '점검시작',
+      check_end as '점검종료'
+    FROM game_list
+  </select>  
+  
+// 게임 상태 변경
+  <update id='updateDisplayState'>
+    UPDATE game_list
+    <if test="displayState == '1'">
+      SET display = 0
+    </if>    
+    <if test="displayState == '0'">
+      SET display = 1
+    </if>    
+    WHERE game_id = #{IDX}
+  </update>
+
+  <select id='getHlProviderList'>
+    SELECT
+      provider
+    FROM game_list
+    GROUP BY provider
+  </select>
+
+  <select id='getGoProviderList'>
+    SELECT
+      provider,
+      provider_name
+    FROM game_list
+    GROUP BY provider
+  </select>
+
+  <update id='updateProviderDisplayState'>
+    UPDATE game_list
+    <if test="displayState == 'hide'">
+        SET display = 0
+    </if>    
+    <if test="displayState == 'show'">
+        SET display = 1
+    </if>
+    <if test="!containsAll">
+        WHERE provider IN 
+        <foreach item="item" index="index" collection="providerName" open="(" separator="," close=")">
+            #{item}
+        </foreach>
+    </if>
+  </update>
+
+// 점검 예약
+  <update id="reserveMaintenance">
+    UPDATE game_list
+    SET check_start = #{startDate},
+        check_end = #{endDate}
+    <if test="!containsAll">
+        WHERE provider IN 
+        <foreach item="item" index="index" collection="providerName" open="(" separator="," close=")">
+            #{item}
+        </foreach>
+    </if>
+  </update>
+
+// 점검 예약 취소
+  <update id="cancelReserve">
+    UPDATE game_list
+    SET check_start = null,
+        check_end = null    
+  </update>
+
+// 파싱 설정
+  <update id="changeParsingType">
+    UPDATE admin_user
+    SET p_type = ${pType}
+  </update>
+
+  <update id='changeParsingSet'>
+    UPDATE user
+    SET p_set = ${pSet}
+  </update>
+
+  <update id='changeUserParsingType'>
+    UPDATE user
+    SET p_set = ${pType}
+    WHERE user_id = #{userId}
+  </update>
+
+  <select id='checkPtypeSetting'>
+    SELECT
+      p_type
+    FROM admin_user
+  </select>
+
+</mapper>

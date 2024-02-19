@@ -1,0 +1,92 @@
+<nav class="sb-topnav navbar navbar-expand navbar-dark bg-dark agent-navbar">
+  <!-- Navbar Brand-->
+  <a class="navbar-brand px-3 order-1 order-lg-0 text-center" href="/">ROYAL</a>
+  <!-- Sidebar Toggle-->
+  <button class="btn btn-link order-0 order-lg-0 ms-2 ms-lg-0" id="sidebarToggle" href="#!">
+    <i class="fas fa-bars"></i>
+  </button>
+  <!-- Navbar-->
+  <div class="d-none d-lg-block">
+    <ul class="list-group ms-2" id="agent-list-group">
+      <ul class="list-group list-group-horizontal">
+        <li class="list-group-item title" id="navAgentType"></li>
+        <li class="list-group-item title">보유금</li>
+        <li class="list-group-item title">포인트</li>
+        <li class="list-group-item title">회원수</li>
+        <li class="list-group-item title">당일 가입</li>
+        <li class="list-group-item title">카지노 롤링요율</li>
+        <li class="list-group-item title">슬롯 롤링요율</li>
+        <li class="list-group-item title">루징 요율</li>
+      </ul>
+      <ul class="list-group list-group-horizontal">
+        <li class="list-group-item contents" id="navAgentNick"></li>
+        <li class="list-group-item contents" id="navAgentBalance"></li>
+        <li class="list-group-item contents" id="navAgentPoint"></li>
+        <li class="list-group-item contents" id="navAgentTotalUserNum"></li>
+        <li class="list-group-item contents" id="navAgentNewJoin"></li>
+        <li class="list-group-item contents" id="navAgentCasinoRoll"></li>
+        <li class="list-group-item contents" id="navAgentSlotRoll"></li>
+        <li class="list-group-item contents" id="navAgentLosing"></li>
+        <!-- <li class="list-group-item title">카지노 롤링</li>
+      <li class="list-group-item contents" id="navAgentTodayCasinoRoll"></li>
+      <li class="list-group-item title">슬롯 롤링</li>
+      <li class="list-group-item contents" id="navAgentTodaySlotRoll"></li>
+      <li class="list-group-item title laptop">당일 입금</li>
+      <li class="list-group-item contents laptop" id="navAgentTodayDeposit"></li>
+      <li class="list-group-item title laptop">당일 출금</li>
+      <li class="list-group-item contents laptop" id="navAgentTodayWithdraw"></li>
+      <li class="list-group-item title laptop">당일 입출금</li>
+      <li class="list-group-item contents laptop" id="navAgentTodayDepoWith"></li> -->
+      </ul>
+    </ul>
+  </div>
+  <ul class="agentNav navbar-nav ms-auto me-3 me-lg-4 order-2">
+    <li class="nav-item position-relative">
+      <a class="nav-link" id="qnaIcon" href="#" role="button" data-bs-toggle="modal"
+        data-bs-target="#agentQuestionModal"><i class="fa-solid fa-circle-question fa-fw fa-2x"></i>
+        <span
+          class="d-none position-absolute top-0 start-100 translate-middle p-2 bg-danger border border-light rounded-circle">
+          <span class="visually-hidden">New alerts</span>
+        </span></a>
+    </li>
+    <li class="nav-item position-relative me-2">
+      <a class="nav-link" id="messageIcon" href="#" role="button" data-bs-toggle="modal"
+        data-bs-target="#agentMessageModal"><i class="fa-solid fa-envelope fa-fw fa-2x"></i>
+        <span
+          class="d-none position-absolute top-0 start-100 translate-middle p-2 bg-danger border border-light rounded-circle">
+          <span class="visually-hidden">New alerts</span>
+        </span></a>
+    </li>
+    <% if (user.type === 3) { %>
+    <li class="nav-item d-none d-lg-block me-2 mt-1">
+      <button type="button" class="btn asset-dark" id="addBatchUser">유저 생성</button>
+    </li>
+    <% } %>
+    <li class="nav-item d-none d-lg-block mt-1">
+      <button type="button" id="agentDepositBtn" class="btn asset-success" data-bs-toggle="modal"
+        data-bs-target="#agentExchangeModal">포인트전환</button>
+    </li>
+    <li class="nav-item mx-2 d-none d-lg-block mt-1">
+      <button type="button" id="agentDepositBtn" class="btn asset-primary" data-bs-toggle="modal"
+        data-bs-target="#agentDepositModal">입금신청</button>
+    </li>
+    <li class="nav-item d-none d-lg-block mt-1">
+      <button type="button" id="agentWithdrawBtn" class="btn asset-danger" data-bs-toggle="modal"
+        data-bs-target="#agentWithdrawModal">출금신청</button>
+    </li>
+    <li class="nav-item">
+      <a class="nav-link dropdown-toggle" id="navbarDropdown" href="#" role="button" data-bs-toggle="dropdown"
+        aria-expanded="false"><i class="fas fa-user fa-fw fa-2x"></i></a>
+      <ul class="dropdown-menu dropdown-menu-end text-center" aria-labelledby="navbarDropdown">
+        <li><a class="dropdown-item changePasswordBtn" href="#!">비밀번호 변경</a></li>
+        <li>
+          <hr class="dropdown-divider" />
+        </li>
+        <li><a class="dropdown-item" id="logout-btn">로그아웃</a></li>
+      </ul>
+    </li>
+  </ul>
+</nav>
+<div class="spinner-container d-none">
+  <div class="spinner-border text-light" role="status"></div>
+</div>

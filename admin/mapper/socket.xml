@@ -1,0 +1,134 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="socket">
+// 알림 갯수 체크
+  <select id='checkNotification'>
+    SELECT 
+      deposit_count AS deposit,
+      withdraw_count AS withdraw,
+      join_confirm_count AS 'join',
+      question_count AS question,
+      alram
+    FROM notification
+  </select>
+
+// 알림 업데이트
+  <select id='requestDeposit'>
+    UPDATE notification
+    SET deposit_count = deposit_count + 1, alram = 1
+  </select>
+
+  <select id='requestWithdraw'>
+    UPDATE notification
+    SET withdraw_count = withdraw_count + 1, alram = 1
+  </select>
+
+  <select id='confirmDeposit'>
+    UPDATE notification
+    SET deposit_count = deposit_count - 1
+    WHERE deposit_count > 0
+  </select>
+
+  <select id='confirmWithdraw'>
+    UPDATE notification
+    SET withdraw_count = withdraw_count - 1
+    WHERE withdraw_count > 0
+  </select>
+
+  <select id='cancelDeposit'>
+    UPDATE notification
+    SET deposit_count = deposit_count - 1
+    WHERE deposit_count > 0
+  </select>
+
+  <select id='cancelWithdraw'>
+    UPDATE notification
+    SET withdraw_count = withdraw_count - 1
+    WHERE withdraw_count > 0
+  </select>
+  
+  <select id='requestQuestion'>
+    UPDATE notification
+    SET question_count = question_count + 1, alram = 1
+  </select>
+
+  <select id='answerQuestion'>
+    UPDATE notification
+    SET question_count = question_count - 1
+    WHERE question_count > 0
+  </select>
+
+  <select id='requestJoin'>
+    UPDATE notification
+    SET join_confirm_count = join_confirm_count + 1, alram = 1
+  </select>
+
+  <select id='confirmJoin'>
+    UPDATE notification
+    SET join_confirm_count = join_confirm_count - 1
+    WHERE join_confirm_count > 0
+  </select>
+
+  <select id='blockJoin'>
+    UPDATE notification
+    SET join_confirm_count = join_confirm_count - 1
+    WHERE join_confirm_count > 0
+  </select>  
+
+  <select id='offAlram'>
+    UPDATE notification
+    SET alram = 0
+  </select>
+
+// 온라인 유저정보
+  <select id='dashboardUsers'>
+    SELECT  
+      u.level as '레벨', 
+      u.id as '아이디', 
+      u.nickname '닉네임', 
+      u2.nickname as '상위 에이전트', 
+      a.balance '보유금', 
+      a.point '포인트', 
+      b.c_today_betting '카_베팅', 
+      b.c_today_win '카_윈',
+      b.s_today_betting '슬_베팅',
+      b.s_today_win '슬_윈'  
+    FROM user AS u 
+    JOIN user AS u2 
+      ON u.upper_agt = u2.user_id
+    JOIN user_asset_info AS a 
+      ON u.user_id = a.asset_id
+    JOIN user_betting_info AS b 
+      ON u.user_id = b.user_id 
+    WHERE u.id IN 
+    <foreach collection='ids' item='id' open='(' close=')' separator=','>
+      #{id}
+    </foreach>
+  </select>
+
+  <select id='checkDisconnectedUser'>
+    SELECT * FROM sessions WHERE JSON_EXTRACT(data, '$.passport.user') = #{userId};
+  </select>
+
+  <select id='getLoginInfo'>
+    SELECT user_id, ip_adress, connect_domain, device, browser 
+    FROM user_connect_history
+    WHERE user_id = (SELECT user_id 
+                    FROM user 
+                    WHERE id = #{userId}) AND type = '로그인'
+    ORDER BY user_connect_id DESC
+    LIMIT 1
+  </select>
+
+  <select id='deleteDisconnectedUser'>
+    DELETE FROM sessions
+    WHERE JSON_EXTRACT(data, '$.passport.user') = #{userId}
+  </select>
+
+  <select id='getLoggedId'>
+    SELECT JSON_EXTRACT(data, '$.passport.user') AS 'id'
+    FROM sessions
+    WHERE JSON_EXTRACT(data, '$.passport.user') != 'admin';
+  </select>
+
+</mapper>
