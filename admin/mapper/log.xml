@@ -147,7 +147,7 @@
     	d.round_id AS 라운드ID,
     	d.provider_name AS 프로바이더,
     	d.category AS 게임타입,
-    	g.title AS 게임명,
+    	COALESCE(g.title, d.game_title) AS 게임명,
     	d.transaction_type AS 내역타입,
     	d.transaction_amount AS 금액,
     	d.previous_balance AS 이전보유금,
@@ -156,7 +156,7 @@
       u.type AS 회원타입
     FROM log_hl_betting_detail AS d 
     JOIN royal.user AS u ON u.id = d.user_id
-    JOIN royal.game_list AS g ON d.game_id = g.uuid
+    LEFT JOIN royal.game_list AS g ON d.game_id = g.uuid
     JOIN royal.system_tree AS t ON u.upper_agt = t.user_id
     <where>      
       SUBSTR(event_date, 1, 16) 

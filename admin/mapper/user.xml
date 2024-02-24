@@ -369,6 +369,7 @@
       c.c_roll_rate,
       c.s_roll_rate,
       c.lose_rate,
+      c.death_rate,
       c.c_bet_margin_rate,
       c.s_bet_margin_rate,
       c.c_roll_margin_rate,
@@ -376,7 +377,10 @@
       DATEDIFF(CURDATE(), modify_date) AS days_passed,
       (SELECT count(*)
         FROM user 
-        WHERE recommend_id = #{id}) AS recommend_count
+        WHERE recommend_id = #{id}) AS recommend_count,
+      (SELECT nickname
+        FROM user
+        WHERE user_id = u.upper_agt) AS upper_agent_id
     FROM
       user AS u
     JOIN
@@ -445,6 +449,7 @@
       c_roll_rate = #{c_roll_rate},
       s_roll_rate = #{s_roll_rate},
       lose_rate = #{lose_rate},
+      death_rate = #{death_rate},
       c_bet_margin_rate = #{c_bet_margin_rate},
       s_bet_margin_rate = #{s_bet_margin_rate},
       c_roll_margin_rate = #{c_roll_margin_rate},

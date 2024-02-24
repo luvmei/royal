@@ -256,7 +256,6 @@ async function deleteNoticeToPopup(params) {
 // #region 메세지
 router.post('/send', (req, res) => {
   req.body.sendTime = getCurrentTime();
-  console.log(req.body);
   if (req.body.selectedUser) {
     req.body.messageType = '개별';
   }
@@ -264,7 +263,6 @@ router.post('/send', (req, res) => {
 });
 
 async function sendMessage(res, params) {
-  console.log(params);
   if (params.sendRange) {
     switch (params.sendRange) {
       case '0':
@@ -614,7 +612,6 @@ async function writeEventBanner(req, res, params) {
   if (params.isNew == 'true') {
     bannerSql = mybatisMapper.getStatement('board', 'insertEventBanner', params, sqlFormat);
   } else if (params.isNew == 'false') {
-    console.log('수정 시 파라미터 : ', params);
     bannerSql = mybatisMapper.getStatement('board', 'updateEventBanner', params, sqlFormat);
   }
   try {

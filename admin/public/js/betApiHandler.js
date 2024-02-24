@@ -712,7 +712,7 @@ async function insertPointLog(betting, hierarchyData) {
     console.log(e);
     return done(e);
   } finally {
-    console.log(`포인트로그: ID: ${logParams.id} 삽입완료`);
+    // console.log(`포인트로그: ID: ${logParams.id} 삽입완료`);
     if (conn) return conn.release();
   }
 }

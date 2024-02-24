@@ -35,7 +35,9 @@
                     <th rowspan="2">총 입금</th>
                     <th rowspan="2">총 출금</th>
                     <th rowspan="2">총 입출금</th>
-                    <th colspan="5" class="text-center d-none d-lg-table-cell">요율(%)</th>
+                    <th colspan="3" class="text-center d-none d-lg-table-cell">요율(%)</th>
+                    <th colspan="2" class="text-center d-none d-lg-table-cell">베팅마진</th>
+                    <th colspan="2" class="text-center d-none d-lg-table-cell">롤링마진</th>
                     <th rowspan="2">에이전트 트리</th>
                     <th rowspan="2">최근 첩속일시</th>
                     <th rowspan="2">최근 접속페이지</th>
@@ -54,6 +56,8 @@
                     <th>카지노<br>롤링</th>
                     <th>슬롯<br>롤링</th>
                     <th>루징</th>
+                    <th></th>
+                    <th></th>
                     <th></th>
                     <th></th>
                     <th>플래티넘</th>
@@ -84,8 +88,28 @@
       document.querySelector('#upper-agent-title').classList.add('d-none');
       document.querySelector('#basic-info').classList.replace('mt-4', 'mt-2');
 
+      // 루징 요율 셀렉트박스 생성
+      const loseRateSelect = document.querySelector('#lose-rate');
+      loseRateSelect.innerHTML = '';
+
+      // 초기 선택 옵션 생성 및 추가
+      const defaultOption = document.createElement('option');
+      defaultOption.textContent = '루징요율 선택';
+      defaultOption.value = '';
+      defaultOption.selected = true;
+      defaultOption.disabled = true;
+      loseRateSelect.appendChild(defaultOption);
+
+      for (let i = 0; i <= 40; i += 5) {
+        const option = document.createElement('option');
+        option.value = i;
+        option.innerHTML = i;
+        loseRateSelect.appendChild(option);
+      }
+
       $('#addAgentModal').modal('show');
-    });</script>
+    });
+  </script>
 </body>
 
 </html>

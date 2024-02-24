@@ -684,7 +684,8 @@ table.dataTable thead > tr > th.sorting_desc.no-sort:after {
   border-radius: 10px 10px 0 0;
 }
 
-#detail-pw {
+#detail-pw,
+#detail-withdraw-pw {
   cursor: pointer;
 }
 
@@ -719,8 +720,7 @@ table.dataTable thead > tr > th.sorting_desc.no-sort:after {
   cursor: pointer !important;
   -webkit-user-select: none !important;
   -moz-user-select: none !important;
-  -ms-user-select: none !important;
-      user-select: none !important;
+  user-select: none !important;
   border: var(--bs-btn-border-width) solid var(--bs-btn-border-color) !important;
   border-radius: 0.25rem !important;
   background-color: var(--bs-btn-bg) !important;
@@ -875,7 +875,7 @@ table.dataTable tbody td {
     width: 100px !important;
   }
   .agent-navbar #agentDepositBtn,
-.agent-navbar #agentWithdrawBtn {
+  .agent-navbar #agentWithdrawBtn {
     margin-top: 2px;
     font-size: 0.8rem !important;
   }

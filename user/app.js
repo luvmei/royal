@@ -312,12 +312,12 @@ app.get('/:code?', (req, res) => {
 });
 
 function getDomain(host) {
-  let domainParts = host.split(':'); // 포트 번호 제거
-  let domain = domainParts[0]; // 'www.naver.com'
-  let domainSegments = domain.split('.'); // 도메인을 점으로 분리
-  let rootDomain = domainSegments.slice(-2).join('.'); // 마지막 두 부분 추출
+  let domainParts = host.split(':');
+  let domain = domainParts[0];
+  // let domainSegments = domain.split('.');
+  // let rootDomain = domainSegments.slice(-2).join('.');
 
-  return rootDomain;
+  return domain;
 }
 
 app.post('/joincode', (req, res) => {

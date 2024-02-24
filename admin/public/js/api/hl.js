@@ -126,7 +126,7 @@ async function insertDetailHlLog(betHistory) {
   }
 }
 
-const isTie = (betting) => {
+async function isTie(betting) {
   if (!betting.external) return false;
   if (betting.external?.detail?.data?.result?.outcome !== 'Tie') return false;
 
@@ -363,7 +363,7 @@ async function requestDetailLog() {
       category: betting.details.game.type === 'slot' ? 'slot' : betting.details.game.type === 'live-sport' ? 'live-sport' : 'casino',
       game_id: betting.details.game.id,
       game_title: betting.details.game.title.replace(/'/g, ''),
-      transaction_type: isTie(betting) ? 'tie' : betting.type,
+      transaction_type: await isTie(betting) ? 'tie' : betting.type,
       transaction_amount: betting.amount,
       previous_balance: betting.before,
       available_balance: betting.before + betting.amount,

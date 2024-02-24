@@ -291,13 +291,14 @@ app.use('/event', require('./routes/event.js'));
 //? 테이블 뷰
 let sport = process.env.SPORT_VIEW;
 let lotto = process.env.EVENT_LOTTERY;
+let death = process.env.DEATH_VIEW;
 
 app.get('/', async (req, res) => {
   if (req.user) {
     let summary = await getData(res, 'getAgentSummary');
     summary = JSON.parse(summary);
     summary = getAgentSummary(summary);
-    res.render('index.ejs', { summary: summary, user: req.user[0], sport: sport, lotto: lotto });
+    res.render('index.ejs', { summary: summary, user: req.user[0], sport: sport, lotto: lotto, death: death});
   } else {
     res.render('login.ejs', { sport: sport });
   }
@@ -321,7 +322,7 @@ app.get('/:menu', (req, res) => {
 
   if (req.user) {
     req.user[0].lotto = process.env.EVENT_LOTTERY;
-    res.render(req.params.menu, { user: req.user[0], sport: sport, lotto: lotto });
+    res.render(req.params.menu, { user: req.user[0], sport: sport, lotto: lotto, death: death });
   } else {
     res.redirect('/');
   }

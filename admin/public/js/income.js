@@ -569,6 +569,8 @@ let incomeDepoWithDetail = $('#incomeDepoWithDetail').DataTable({
 // #endregion
 
 // #region 에이전트 베팅 - 획득 정산
+let selectedValues = {};
+
 let incomeAgentBetWin = $('#incomeAgentBetWin').DataTable({
   language: korean,
   scrollY: '63vh',
@@ -687,7 +689,7 @@ let incomeAgentBetWin = $('#incomeAgentBetWin').DataTable({
     { data: '루징', className: 'desktop' },
     { data: '총정산금', className: 'desktop' },
     { data: '하부합산루징금', responsivePriority: 4 },
-    { data: '최종루징금', className: 'desktop' },
+    { data: null, defaultContent: '', className: 'desktop' },
     { data: '최종정산금', responsivePriority: 5 },
     { data: '플래티넘' },
     { data: '골드' },
@@ -739,6 +741,11 @@ let incomeAgentBetWin = $('#incomeAgentBetWin').DataTable({
 
     $(row).attr('data-node-id', data.node_id);
     $(row).attr('data-node-pid', data.node_pid);
+
+    if (selectedValues[data.IDX]) {
+      // IDX는 행을 식별할 수 있는 고유한 값
+      $(row).find('select').val(selectedValues[data.IDX]);
+    }
   },
   columnDefs: [
     {
@@ -746,7 +753,7 @@ let incomeAgentBetWin = $('#incomeAgentBetWin').DataTable({
       className: 'dtr-control',
     },
     {
-      target: [1, 2, 3, 4, 13, 14, 23, 24],
+      target: [1, 2, 3, 4, 13, 14, 23, 24, 25],
       visible: false,
       searchable: false,
     },
@@ -925,16 +932,28 @@ let incomeAgentBetWin = $('#incomeAgentBetWin').DataTable({
       },
     },
     {
-      target: [26, 27],
+      target: 26,
       width: 120,
       className: 'fw-bolder',
       render: function (data, type, row) {
-        if (data < 0) {
-          return `<div class="text-danger">${Number(data).toLocaleString('ko-KR')}</div>`;
-        } else if (data == 0) {
-          return `<div>${Number(data).toLocaleString('ko-KR')}</div>`;
+        if (row.타입 == 3) {
+          let losing =
+            ((Number(row.슬롯마진베팅) +
+              Number(row.카지노마진베팅) -
+              Number(row.슬롯마진획득) -
+              Number(row.카지노마진획득) -
+              Number(row.슬롯롤링) -
+              Number(row.카지노롤링)) *
+              row.루징요율) /
+            100;
+
+          if (losing >= 0) {
+            return `<div class="text-primary">${losing.toLocaleString('ko-KR')}</div>`;
+          } else {
+            return `<div class="text-danger">${losing.toLocaleString('ko-KR')}</div>`;
+          }
         } else {
-          return `<div class="text-primary">${Number(data).toLocaleString('ko-KR')}</div>`;
+          return '';
         }
       },
     },
@@ -949,13 +968,29 @@ let incomeAgentBetWin = $('#incomeAgentBetWin').DataTable({
       slotHeader.innerHTML = `<div class="fw-light">슬롯</div>
       <div class="text-primary">슬롯 베팅마진</div>`;
 
-      incomeAgentBetWin.column(13).visible(true);
-      incomeAgentBetWin.column(13).header().innerHTML = '베';
-      incomeAgentBetWin.column(14).visible(true);
-      incomeAgentBetWin.column(14).header().innerHTML = '롤';
+      // incomeAgentBetWin.column(13).visible(true);
+      // incomeAgentBetWin.column(13).header().innerHTML = '베';
+      // incomeAgentBetWin.column(14).visible(true);
+      // incomeAgentBetWin.column(14).header().innerHTML = '롤';
     }
+
+    // 셀렉트 요소 변경 이벤트 리스너 추가
+    $('#incomeAgentBetWin').on('change', 'select', function () {
+      let selectElement = $(this);
+      let selectedValue = selectElement.val();
+      let rowEl = selectElement.closest('tr');
+      let rowData = incomeAgentBetWin.row(rowEl).data();
+
+      rowData.루징요율 = selectedValue; // 혹은 rowData['루징요율'] = selectedValue;
+
+      // 선택된 값을 저장
+      selectedValues[rowData.IDX] = selectedValue; // IDX는 행을 식별할 수 있는 고유한 값
+
+      incomeAgentBetWin.row(rowEl).data(rowData).draw(false); // draw(false)를 사용하여 현재 페이지 유지
+    });
+
     setTimeout(function () {
-      incomeAgentBetWin.columns.adjust().draw();
+      incomeAgentBetWin.columns.adjust().draw(false);
     }, 100);
   },
 });
@@ -1183,7 +1218,7 @@ let incomeAgentDeath = $('#incomeAgentDeath').DataTable({
       type: 'column',
       target: 0,
       renderer: function (api, rowIdx, columns) {
-        var data = $.map(columns, function (col, i) {
+        let data = $.map(columns, function (col, i) {
           switch (i) {
             case 9:
               col.title = '카지노 롤링요율';

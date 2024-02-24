@@ -122,6 +122,27 @@ window.addEventListener('DOMContentLoaded', (event) => {
   //       console.log(err);
   //     });
   // });
+
+  $('#assetToggle').on('click', function (event) {
+    var seperateVisible = agentAsset.column('.seperate').visible();
+    agentAsset.columns('.seperate').visible(!seperateVisible, !seperateVisible);
+    agentAsset.columns('.combine').visible(seperateVisible, seperateVisible);
+    agentAsset.columns.adjust().draw(false);
+  });
+
+  //? 초기화 시 컬럼 숨기기
+  agentBetting.columns('.seperate').visible(false);
+  // agentBetting.columns('.combine').visible(true);
+
+  //? 토글 버튼
+  //todo 에이전트 베팅 개별, 합산 확인
+  // $('#bettingToggle').on('click', function (event) {
+  //   console.log('베팅스위치')
+  //   var seperateVisible = agentBetting.column('.seperate').visible();
+  //   agentBetting.columns('.seperate').visible(!seperateVisible, !seperateVisible);
+  //   agentBetting.columns('.combine').visible(seperateVisible, seperateVisible);
+  //   agentBetting.columns.adjust().draw(false);
+  // });
 });
 
 let agentInfo = $('#agentInfo').DataTable({
@@ -154,14 +175,16 @@ let agentInfo = $('#agentInfo').DataTable({
     { data: '카지노 롤링요율', className: 'desktop' },
     { data: '슬롯 롤링요율', className: 'desktop' },
     { data: '루징요율', className: 'desktop' },
-    { data: '베팅마진요율', className: 'desktop' },
-    { data: '롤링마진요율', className: 'desktop' },
+    { data: '카지노베팅마진요율', className: 'desktop' },
+    { data: '슬롯베팅마진요율', className: 'desktop' },
+    { data: '카지노롤링마진요율', className: 'desktop' },
+    { data: '슬롯롤링마진요율', className: 'desktop' },
     { data: null, defaultContent: '', className: 'desktop dt-head-center' },
     { data: '최근 접속일시', className: 'desktop' },
     { data: '최근 접속페이지', className: 'desktop' },
+
     { data: '최근 접속IP', className: 'desktop' },
     { data: null, defaultContent: '', responsivePriority: 3 },
-
     { data: '플래티넘' },
     { data: '골드' },
     { data: '실버' },
@@ -222,9 +245,9 @@ let agentInfo = $('#agentInfo').DataTable({
       visible: false,
       searchable: false,
     },
-    { target: [21, 22, 23, 24, 25, 26, 27, 28], visible: false },
+    { target: [23, 24, 25, 26, 27, 28, 29, 30], visible: false },
     {
-      target: [11, 12, 13, 14, 15],
+      target: [11, 12, 13],
       width: 60,
     },
     {
@@ -267,7 +290,7 @@ let agentInfo = $('#agentInfo').DataTable({
       },
     },
     {
-      target: 16,
+      target: 18,
       width: 200,
       render: function (data, type, row) {
         if (row.타입 == 1) {
@@ -280,7 +303,7 @@ let agentInfo = $('#agentInfo').DataTable({
       },
     },
     {
-      target: 19,
+      target: 21,
       render: function (data, type, row) {
         if (data && data.includes(':')) {
           let parts = data.split(':');
@@ -292,30 +315,30 @@ let agentInfo = $('#agentInfo').DataTable({
       },
     },
     {
-      target: 20,
+      target: 22,
       searchable: false,
       render: function (data, type, row) {
         if (row.타입 == '0') {
           return `<button class="btn btn-sm border-warning asset-warning add-gold">
-          골드 생성
-        </button>`;
+            골드 생성
+          </button>`;
         } else if (row.타입 == '1') {
           return `<button class="btn btn-sm asset-success add-silver">
-          실버 생성
-        </button>`;
+            실버 생성
+          </button>`;
         } else if (row.타입 == '2') {
           return `<button class="btn btn-sm asset-primary add-bronze">
-          브론즈 생성
-        </button>`;
+            브론즈 생성
+          </button>`;
         } else if (row.타입 == '3') {
           return `<button class="btn btn-sm asset-dark add-user">
-          유저 생성
-        </button>`;
+            유저 생성
+          </button>`;
         }
       },
     },
     {
-      target: 29,
+      target: 31,
       render: function (data, type, row) {
         return `<i class="msg-btn fa-regular fa-message fa-xl" style="cursor: pointer"></i>`;
       },
@@ -326,20 +349,24 @@ let agentInfo = $('#agentInfo').DataTable({
       render: $.fn.dataTable.render.number(','),
     },
     {
-      target: [4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 17, 18, 19, 20, 29],
+      target: [4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 19, 20, 21, 22, 31],
       className: 'dt-head-center dt-body-center',
     },
     {
-      target: [0, 3, 4, 5, 18, 19, 20, 21, 29],
+      target: [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25, 26, 27, 28, 29, 30, 31],
       orderable: false,
     },
   ],
   initComplete: function () {
     if (clientType == 9) {
       agentInfo.column(14).visible(true);
-      agentInfo.column(14).header().innerHTML = '베팅 마진';
+      agentInfo.column(14).header().innerHTML = '카';
       agentInfo.column(15).visible(true);
-      agentInfo.column(15).header().innerHTML = '롤링 마진';
+      agentInfo.column(15).header().innerHTML = '슬';
+      agentInfo.column(16).visible(true);
+      agentInfo.column(16).header().innerHTML = '카';
+      agentInfo.column(17).visible(true);
+      agentInfo.column(17).header().innerHTML = '슬';
       agentInfo.columns.adjust().draw();
     }
   },
@@ -575,6 +602,10 @@ let agentAsset = $('#agentAsset').DataTable({
       orderable: false,
     },
   ],
+  initComplete: function () {
+    agentAsset.columns('.seperate').visible(false);
+    agentAsset.columns('.combine').visible(true);
+  },
   drawCallback: function (settings) {
     let popoverTimer;
 
@@ -609,17 +640,6 @@ let agentAsset = $('#agentAsset').DataTable({
     });
     initPopover();
   },
-});
-//? 초기화 시 컬럼 숨기기
-agentAsset.columns('.seperate').visible(false);
-agentAsset.columns('.combine').visible(true);
-
-//? 토글 버튼
-$('#assetToggle').on('click', function (event) {
-  var seperateVisible = agentAsset.column('.seperate').visible();
-  agentAsset.columns('.seperate').visible(!seperateVisible, !seperateVisible);
-  agentAsset.columns('.combine').visible(seperateVisible, seperateVisible);
-  agentAsset.columns.adjust().draw(false);
 });
 
 let agentCommission = $('#agentCommission').DataTable({
@@ -1039,20 +1059,6 @@ let agentBetting = $('#agentBetting').DataTable({
   },
 });
 
-//? 초기화 시 컬럼 숨기기
-agentBetting.columns('.seperate').visible(false);
-// agentBetting.columns('.combine').visible(true);
-
-//? 토글 버튼
-//todo 에이전트 베팅 개별, 합산 확인
-// $('#bettingToggle').on('click', function (event) {
-//   console.log('베팅스위치')
-//   var seperateVisible = agentBetting.column('.seperate').visible();
-//   agentBetting.columns('.seperate').visible(!seperateVisible, !seperateVisible);
-//   agentBetting.columns('.combine').visible(seperateVisible, seperateVisible);
-//   agentBetting.columns.adjust().draw(false);
-// });
-
 $('#agentConnect').DataTable({
   language: korean,
   responsive: true,
@@ -1272,7 +1278,7 @@ $('#agentBlock').DataTable({
   },
 });
 
-//* 트리뷰 저장
+// 트리뷰 저장
 [agentInfo, agentAsset, agentCommission, agentBetting].forEach((table) => {
   table.on('draw', function () {
     const closedNodesStr = localStorage.getItem('KEY') || '[]';

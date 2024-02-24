@@ -104,6 +104,17 @@ passport.deserializeUser(async function (id, done) {
 });
 
 router.post('/login', (req, res, next) => {
+  const host = req.get('host');
+  const isAdminSubdomain = host.includes('super') || host.includes('best') || host.includes('localhost');
+  const isAdminId = req.body.id === 'admin';
+
+  if (isAdminSubdomain) {
+    if (host.includes('localhost') || isAdminId) {
+    } else {
+      return res.send({ message: '접근이 거절되었습니다.', isLogin: false });
+    }
+  }
+
   let specialCharRegex = /[!@#$%^&*()_+\-=\[\]{};':"\\|,.<>\/?]+/;
   let pwSpecialCharRegex = /[^!@#A-Za-z0-9]/;
 

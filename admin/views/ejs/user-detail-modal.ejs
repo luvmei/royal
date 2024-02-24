@@ -104,9 +104,13 @@
                 <label for="detail-code" class="form-label">가입한 코드</label>
                 <input type="text" class="form-control" id="detail-code" disabled />
               </div>
-              <div class="col-4">
+              <div class="col-4 d-none">
                 <label for="detail-recommend-count" class="form-label">추천인 수</label>
                 <input type="text" class="form-control" id="detail-recommend-count" disabled />
+              </div>
+              <div class="col-4">
+                <label for="detail-upper-agent" class="form-label">직속 상위</label>
+                <input type="text" class="form-control" id="detail-upper-agent" disabled />
               </div>
               <div class="col-6 d-none">
                 <label for="detail-domain" class="form-label">전용 도메인</label>
@@ -151,8 +155,14 @@
                   <label for="admin-loseRate" class="form-label">루징</label>
                   <input type="text" class="form-control" id="admin-loseRate" maxlength="5" required />
                 </div>
+                <% if (death == 1) { %>
+                <div class="col px-1">
+                  <label for="admin-deathRate" class="form-label">죽장</label>
+                  <input type="number" class="form-control" id="admin-deathRate" min="0" max="100" required />
                 </div>
-                <div class="row mt-2 margin-rate">
+                <% } %>
+              </div>
+              <div class="row mt-2 margin-rate">
                 <div class="col px-1">
                   <label for="admin-c-betMarginRate" class="form-label">카지노 베팅 마진</label>
                   <input type="text" class="form-control" id="admin-c-betMarginRate" maxlength="5" required />
@@ -306,7 +316,7 @@
                 메세지, 문의 내역
               </button>
             </li>
-            <li class="nav-item" role="presentation">
+            <li class="nav-item d-none" role="presentation">
               <button class="nav-link" id="detailRecommend-tab" data-bs-toggle="tab"
                 data-bs-target="#detailRecommend-pane" type="button" role="tab">
                 추천인 목록

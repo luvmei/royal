@@ -426,9 +426,9 @@ body {
   font-family: 'Pretendard-Regular', sans-serif;
   font-size: 0.8rem;
 
-  main{
-    .online{
-      .card-header{
+  main {
+    .online {
+      .card-header {
         font-size: 0.9rem;
       }
     }
@@ -802,7 +802,8 @@ table.dataTable thead > tr > th.sorting_desc.no-sort:after {
   }
 }
 
-#detail-pw {
+#detail-pw,
+#detail-withdraw-pw {
   cursor: pointer;
 }
 

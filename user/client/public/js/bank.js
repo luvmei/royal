@@ -462,10 +462,114 @@ $('#withdrawHistory').DataTable({
 // #endregion
 
 // #region 리워드모달
+// #region 포인트 설정 전환방식
+// let reward = {
+//   curBalance: document.getElementById('rewarCurrentBalance'),
+//   afterRewardBalance: document.getElementById('afterRewardBalance'),
+//   curPoint: document.getElementById('rewardCurrentPoint'),
+//   requestPoint: document.getElementById('rewardRequestPoint'),
+//   exchangeBtn: document.getElementById('reward-submit'),
+// };
+
+// //? 모달열기 > 금액 및 포인트 채우기
+// $('#rewardModal').on('show.bs.modal', async function () {
+//   $.ajax({
+//     method: 'POST',
+//     url: '/bank/asset',
+//   }).done(function (result) {
+//     reward.curBalance.textContent = result.balance.toLocaleString('ko-KR');
+//     reward.curPoint.textContent = result.point.toLocaleString('ko-KR');
+//     reward.requestPoint.textContent = '0';
+//     updateAfterRewardBalance();
+//   });
+// });
+
+// //? 포인트 버튼 클릭 이벤트
+// $('#reward-btn-group .col-3 button.btn.btn-light').click(function (e) {
+//   pushPointBtn(reward, e);
+//   updateAfterRewardBalance();
+// });
+
+// //? 전환 신청 버튼 클릭 이벤트
+// reward.exchangeBtn.addEventListener('click', function () {
+//   $.ajax({
+//     method: 'POST',
+//     url: '/bank/reward',
+//     data: {
+//       reqPoints: parseInt(reward.requestPoint.textContent.replace(/,/g, ''), 10),
+//     },
+//   }).done(function (result) {
+//     $('#rewardModal').modal('hide');
+//     document.getElementById('confirm-text').innerHTML = `<div class='fs-5'>${result}</div>`;
+//     $('#confirmModal').modal('show');
+//   });
+// });
+
+// //? 포인트 버튼 처리 함수
+// function pushPointBtn(reward, e) {
+//   let points = parseInt(reward.curPoint.textContent.replace(/,/g, ''), 10); // 현재 포인트
+//   let requestPoints = parseInt(reward.requestPoint.textContent.replace(/,/g, '') || '0', 10); // 요청된 포인트
+//   let amount = e.currentTarget.dataset.won;
+//   console.log('points', points);
+//   console.log('requestPoints', requestPoints);
+//   console.log('amount', amount);
+
+//   if (amount === 'all') {
+//     if (points > 0) {
+//       console.log('point', points);
+//       amount = points;
+//     } else {
+//       document.getElementById('alert-text').innerHTML = `<div class='fs-5'>전환할 포인트가 없습니다.</div>`;
+//       $('#alertModal').modal('show');
+//       return;
+//     }
+//   } else {
+//     amount = parseInt(amount, 10) * 10000;
+//   }
+
+//   if (points >= amount) {
+//     points -= amount;
+//     requestPoints += amount;
+//     reward.curPoint.textContent = points.toLocaleString('ko-KR');
+//     reward.requestPoint.textContent = requestPoints.toLocaleString('ko-KR');
+//   } else {
+//     document.getElementById('alert-text').innerHTML = `<div class='fs-5'>보유 포인트보다<br>더 많이 전환할 수 없습니다.</div>`;
+//     $('#alertModal').modal('show');
+//   }
+// }
+
+// //? 정정 버튼 클릭 이벤트
+// document.getElementById('reward-modify').addEventListener('click', function () {
+//   resetToOriginalState();
+// });
+
+// //? 원래 상태로 복구하는 함수
+// function resetToOriginalState() {
+//   $.ajax({
+//     method: 'POST',
+//     url: '/bank/asset',
+//   }).done(function (result) {
+//     reward.curBalance.textContent = result.balance.toLocaleString('ko-KR');
+//     reward.curPoint.textContent = result.point.toLocaleString('ko-KR');
+//     reward.requestPoint.textContent = '0';
+//     updateAfterRewardBalance();
+//   });
+// }
+
+// //? 전환 후 보유금 업데이트 함수
+// function updateAfterRewardBalance() {
+//   const currentBalance = parseInt(reward.curBalance.textContent.replace(/,/g, ''), 10);
+//   const requestPoints = parseInt(reward.requestPoint.textContent.replace(/,/g, ''), 10);
+//   const newBalance = currentBalance + requestPoints;
+//   reward.afterRewardBalance.textContent = newBalance.toLocaleString('ko-KR');
+// }
+// #endregion
+
+// #region 포인트 전액 전환방식
 let reward = {
   curBalance: document.getElementById('rewarCurrentBalance'),
-  afterRewardBalance: document.getElementById('afterRewardBalance'),
   curPoint: document.getElementById('rewardCurrentPoint'),
+  afterRewardBalance: document.getElementById('afterRewardBalance'),
   requestPoint: document.getElementById('rewardRequestPoint'),
   exchangeBtn: document.getElementById('reward-submit'),
 };
@@ -483,19 +587,13 @@ $('#rewardModal').on('show.bs.modal', async function () {
   });
 });
 
-//? 포인트 버튼 클릭 이벤트
-$('#reward-btn-group .col-3 button.btn.btn-light').click(function (e) {
-  pushPointBtn(reward, e);
-  updateAfterRewardBalance();
-});
-
 //? 전환 신청 버튼 클릭 이벤트
 reward.exchangeBtn.addEventListener('click', function () {
   $.ajax({
     method: 'POST',
     url: '/bank/reward',
     data: {
-      reqPoints: parseInt(reward.requestPoint.textContent.replace(/,/g, ''), 10),
+      reqPoints: parseInt(reward.curPoint.textContent.replace(/,/g, ''), 10),
     },
   }).done(function (result) {
     $('#rewardModal').modal('hide');
@@ -558,10 +656,14 @@ function resetToOriginalState() {
 //? 전환 후 보유금 업데이트 함수
 function updateAfterRewardBalance() {
   const currentBalance = parseInt(reward.curBalance.textContent.replace(/,/g, ''), 10);
-  const requestPoints = parseInt(reward.requestPoint.textContent.replace(/,/g, ''), 10);
-  const newBalance = currentBalance + requestPoints;
+  const currentPoint = parseInt(reward.curPoint.textContent.replace(/,/g, ''), 10);
+  console.log('currentBalance', currentBalance);
+  console.log('requestPoints', currentPoint);
+  const newBalance = currentBalance + currentPoint;
+  console.log('newBalance', newBalance);
   reward.afterRewardBalance.textContent = newBalance.toLocaleString('ko-KR');
 }
+// #endregion
 // #endregion
 
 // #region 리워드 내역 모달

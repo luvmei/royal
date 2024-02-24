@@ -85,7 +85,7 @@ router.post('/withdraw/batchconfirm', async function (req, res) {
       continue;
     } else if (object.currentStatus === '출금대기') {
       console.log('출금신청입니다.');
-      let result = await confirmRequest(res, object, 'confirmWithdraw');
+      let result = await confirmWithdrawRequest(object);
       resultArr.push(result);
     }
   }
@@ -309,7 +309,6 @@ async function giveTakeBalance(res, params) {
           apiResult = await api.requestAsset(params);
         } else {
           console.log(`${params.receiverId} 에이전트에게 ${params.type}합니다.`);
-          params.transactionId = params.IDX;
         }
 
         await updateDatabase(conn, params);
@@ -592,7 +591,7 @@ async function updateEventState(id) {
     //todo 로또 입금충족액 정해야함
     if (lotto_state == 0 && weeklyDepositSum >= 300000) {
       params.lotto_state = 1;
-      confirmMsg += `<h3 class="mt-3">💰 이번주 로또 참여조건 충족 💰</div>`;
+      // confirmMsg += `<h3 class="mt-3">💰 이번주 로또 참여조건 충족 💰</div>`;
     }
 
     let updateEventState = mybatisMapper.getStatement('user', 'updateEventState', params, sqlFormat);

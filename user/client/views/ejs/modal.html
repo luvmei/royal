@@ -562,38 +562,38 @@
                 <% } %>
                 <span name="withdraw-won">원</span>
               </div>
-              <hr class="my-1" />
-              <div class="col-6" id="reward-app-money">전환 할 포인트</div>
-              <div class="col-6 text-end">
+              <div class="col-6 d-none" id="reward-app-money">전환 할 포인트</div>
+              <div class="col-6 d-none text-end">
                 <span id="rewardRequestPoint"></span>
                 <span name="withdraw-won"> 원</span>
               </div>
-              <div class="col-3">
+              <hr class="my-3" />
+              <div class="col-3 d-none">
                 <button type="button" class="btn btn-light" data-won="1">1<span name="withdraw-man">만</span></button>
               </div>
-              <div class="col-3">
+              <div class="col-3 d-none">
                 <button type="button" class="btn btn-light" data-won="3">3<span name="withdraw-man">만</span></button>
               </div>
-              <div class="col-3">
+              <div class="col-3 d-none">
                 <button type="button" class="btn btn-light" data-won="5">5<span name="withdraw-man">만</span></button>
               </div>
-              <div class="col-3">
+              <div class="col-3 d-none">
                 <button type="button" class="btn btn-light" data-won="10">10<span name="withdraw-man">만</span></button>
               </div>
-              <div class="col-3">
+              <div class="col-3 d-none">
                 <button type="button" class="btn btn-light" data-won="30">30<span name="withdraw-man">만</span></button>
               </div>
-              <div class="col-3">
+              <div class="col-3 d-none">
                 <button type="button" class="btn btn-light" data-won="50">50<span name="withdraw-man">만</span></button>
               </div>
-              <div class="col-3">
+              <div class="col-3 d-none">
                 <button type="button" class="btn btn-light" data-won="100">100<span
                     name="withdraw-man">만</span></button>
               </div>
-              <div class="col-3">
+              <div class="col-3 d-none">
                 <button type="button" class="btn" id="reward-modify">정정</button>
               </div>
-              <hr class="my-2" />
+              <hr class="my-2 d-none" />
               <div class="col-12" id="reward-after-text">전환 후 보유금</div>
               <div class="col-5 text-center">
                 <span id="rewarCurrentBalance"></span>
@@ -792,19 +792,19 @@
             </div>
           </div>
           <div class="row g-2 m-0 p-0">
-            <div class="col-6 mt-2">
+            <div class="col-4 mt-2">
               <button type="button" class="btn asset-success historyBtn w-100" data-bs-target="#depositHistoryModal"
                 data-bs-toggle="modal">입금내역</button>
             </div>
-            <div class="col-6 mt-2">
+            <div class="col-4 mt-2">
               <button type="button" class="btn asset-danger historyBtn w-100" data-bs-target="#withdrawHistoryModal"
                 data-bs-toggle="modal">출금내역</button>
             </div>
-            <div class="col-6 mt-2">
+            <div class="col-4 mt-2">
               <button type="button" class="btn asset-primary historyBtn w-100" data-bs-target="#rewardHistoryModal"
                 data-bs-toggle="modal">콤프전환내역</button>
             </div>
-            <div class="col-6 mt-2">
+            <div class="col-6 mt-2 d-none">
               <button type="button" class="btn asset-warning historyBtn w-100" data-bs-target="#recommendHistoryModal"
                 data-bs-toggle="modal">추천인내역</button>
             </div>

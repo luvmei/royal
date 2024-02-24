@@ -43,19 +43,33 @@ export let korean = {
 // #region 모달열기, 닫기
 //? 네비메뉴 모달열기
 document.querySelector('.navbar').addEventListener('click', function (e) {
-  let selectedMenu = `#${e.target.id.slice(4)}Modal`;
-  openModals(selectedMenu);
+  let selectedMenu;
+
+  if (e.target.tagName === 'SPAN') {
+    selectedMenu = `#${e.target.id.slice(4)}Modal`;
+  }
+  else if (e.target.tagName === 'A') {
+    const spanElement = e.target.querySelector('span');
+    e.preventDefault();
+    if (spanElement) {
+      selectedMenu = `#${spanElement.id.slice(4)}Modal`;
+    } else {
+      selectedMenu = `#${e.target.id.slice(4)}Modal`;
+    }
+  }
+
+  if (selectedMenu) {
+    openModals(selectedMenu);
+  }
 });
 
 //? 모바일 모달열기
 document.querySelector('.sidebarMenu').addEventListener('click', function (e) {
-  // 초기에 클릭된 요소의 id를 체크하거나 형제 요소의 id를 사용합니다.
   let elementId = e.target.id || (e.target.nextElementSibling ? e.target.nextElementSibling.id : null);
 
-  // ID가 존재하는 경우에만 모달을 연다.
   if (elementId) {
-    let strippedId = elementId.slice(6); // 첫 6글자 제거
-    let selectedMenu = `#${strippedId.charAt(0).toLowerCase()}${strippedId.slice(1)}Modal`; // 남은 문자열의 첫 글자를 소문자로
+    let strippedId = elementId.slice(6);
+    let selectedMenu = `#${strippedId.charAt(0).toLowerCase()}${strippedId.slice(1)}Modal`;
     openModals(selectedMenu);
   }
 });

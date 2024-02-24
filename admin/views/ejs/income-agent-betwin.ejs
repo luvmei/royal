@@ -20,14 +20,11 @@
         <div class="container-fluid px-4">
           <h2 class="my-4">에이전트 정산내역 (베팅 - 획득)</h2>
           <div class="incomeDescription">
-            <div class="alert alert-secondary d-inline-block fw-bold py-2" role="alert">
-              <div>하부 합산 루징금: 세부내역 참조</div>
+            <div class="alert alert-secondary d-inline-block fw-bold py-2 mb-2" role="alert">
+              합계 = 베팅( 카지노베팅(C) + 슬롯베팅(E) ) - 획득( 카지노획득(D) + 슬롯획득(F) ) - 롤링( 카지노롤링(G) + 슬롯롤링(H) )
             </div>
-            <div class="alert alert-secondary d-inline-block fw-bold py-2 mx-lg-3 me-1 mb-2" role="alert">
-              <div>최종 루징금(D): 하부 합산 루징금(B) - 자신의 루징금(C)</div>
-            </div>
-            <div class="alert alert-secondary d-inline-block fw-bold py-2 mt-2" role="alert">
-              <div>총 정산금: 최종 루징금(D) * 루징요율(A) / 100</div>
+            <div class="alert alert-secondary d-inline-block fw-bold py-2 mb-2 ms-3" role="alert">
+              최종 루징금(A) = 합계 * 루징요율(B)%
             </div>
           </div>
           <div class="card mb-4">
@@ -59,21 +56,21 @@
                     <th class="bg-gray">포인트</th>
                     <th>카</th>
                     <th>슬</th>
-                    <th>루</th>
+                    <th>루(B)</th>
                     <th></th>
                     <th></th>
-                    <th class="bg-gray">베팅</th>
-                    <th class="bg-gray">획득</th>
+                    <th class="bg-gray">베팅(C)</th>
+                    <th class="bg-gray">획득(D)</th>
                     <th class="bg-gray">베팅 - 획득</th>
-                    <th>베팅</th>
-                    <th>획득</th>
+                    <th>베팅(E)</th>
+                    <th>획득(F)</th>
                     <th>베팅 - 획득</th>
-                    <th class="bg-gray">카지노(F)</th>
-                    <th class="bg-gray">슬롯(G)</th>
+                    <th class="bg-gray">카지노(G)</th>
+                    <th class="bg-gray">슬롯(H)</th>
                     <th>루징</th>
                     <th>총 정산금</th>
                     <th>하부 합산<br>루징금</th>
-                    <th>최종<br>루징금</th>
+                    <th>최종 루징금(A)</th>
                     <th>최종<br>정산금</th>
                   </tr>
                 </thead>

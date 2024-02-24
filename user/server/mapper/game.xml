@@ -49,7 +49,7 @@
     FROM game_list
     WHERE display = 1 AND provider = #{provider} AND category = 'slot'
     ORDER BY favorite DESC, game_id ASC
-    LIMIT 72 OFFSET ${offset}
+    LIMIT 500 OFFSET ${offset}
   </select>
 
   <select id='getGoSlotList'>

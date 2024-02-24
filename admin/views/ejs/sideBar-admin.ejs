@@ -44,7 +44,7 @@
           <nav class="sb-sidenav-menu-nested nav">
             <a class="nav-link" href="agent-info">요약정보</a>
             <a class="nav-link" href="agent-assets">머니정보</a>
-            <a class="nav-link" href="agent-commission">커미션정보</a>
+            <a class="nav-link d-none" href="agent-commission">커미션정보</a>
             <a class="nav-link" href="agent-betting">베팅정보</a>
             <a class="nav-link" href="agent-connect">접속내역</a>
             <a class="nav-link" href="agent-block">차단내역</a>
@@ -144,8 +144,10 @@
             <a class="nav-link" href="income-hq">일일 정산내역</a>
             <a class="nav-link d-none" href="income-agent-depowith">에이전트 정산내역<br>(입금 - 출금)</a>
             <a class="nav-link" href="income-agent-betwin">에이전트 정산내역<br>(베팅 - 획득)</a>
-            <a class="nav-link d-none" href="income-agent-death">에이전트 정산내역<br>(죽장)</a>
-            <a class="nav-link d-none" href="income-user-depowith">유저 정산내역<br>(입금 - 출금)</a>
+            <% if (death == '1') { %>
+            <a class="nav-link" href="income-agent-death">에이전트 정산내역<br>(죽장)</a>
+            <% } %>
+            <a class="nav-link" href="income-user-depowith">유저 정산내역<br>(입금 - 출금)</a>
             <a class="nav-link d-none" href="income-user-betwin">유저 정산내역<br>(베팅 - 획득)</a>
           </nav>
         </div>

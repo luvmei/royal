@@ -28,6 +28,7 @@ function openUserDetail(selectedUser) {
   })
     .done(function (result) {
       $('#detailModalBody input').addClass('text-center');
+      console.log(result);
       selectedUserInfo = result.user;
       loginUser = result.login_user;
       hierarchy = result.hierarchy;
@@ -36,7 +37,7 @@ function openUserDetail(selectedUser) {
       if (loginUser.type == 9) {
         document.querySelector('#user-detail-grid').classList.remove('d-none');
       } else {
-        document.querySelector('#agent-detail-grid').classList.remove('d-none');
+        document.querySelector('#agent-tree').classList.add('d-none');
         document.querySelector('#detail-pw-item').classList.add('d-none');
         document.querySelector('#detail-nickname-item').classList.replace('col-3', 'col-6');
         document.querySelector('#addon').classList.add('d-none');
@@ -69,9 +70,8 @@ function openUserDetail(selectedUser) {
         // document.querySelector('#admin-betMarginRate').disabled = false;
         document.querySelector('#detailTakeBtn').classList.remove('d-none');
       } else if (loginUser.type != 4 && loginUser.type != 9) {
-        if (selectedUserInfo.type != 4) {
-          document.querySelector('#agent-rate').classList.remove('d-none');
-        }
+        document.querySelector('#agent-rate').classList.remove('d-none');
+
         //? 인풋창들 비활성화
         document.querySelector('#detail-lv').disabled = true;
         document.querySelector('#detail-nickname').disabled = true;
@@ -128,6 +128,7 @@ function openUserDetail(selectedUser) {
         document.querySelector('#detail-domain').value = selectedUserInfo.join_domain;
       }
       document.querySelector('#detail-code').value = selectedUserInfo.join_code;
+      document.querySelector('#detail-upper-agent').value = selectedUserInfo.upper_agent_id;
       document.querySelector('#detail-recommend-count').value = selectedUserInfo.recommend_count;
       document.querySelector('#detail-memo').value = selectedUserInfo.join_memo;
 
@@ -154,6 +155,7 @@ function openUserDetail(selectedUser) {
           ).previousElementSibling.innerHTML = `루징 요율<br>(<span class='text-danger'>▲</span>100 ~ <span class='text-primary'>▼</span>${
             lowerMaxRate.lose_rate ?? 0
           })`;
+          document.querySelector('#admin-deathRate').previousElementSibling.innerHTML = `죽장 요율<br>(개별적용, 최대 100)`;
           break;
         case 1:
           document.querySelector('#admin-casinoRate').previousElementSibling.innerHTML = `카지노 롤링<br>(<span class='text-danger'>▲</span> ${
@@ -165,6 +167,7 @@ function openUserDetail(selectedUser) {
           document.querySelector('#admin-loseRate').previousElementSibling.innerHTML = `루징 요율<br>(<span class='text-danger'>▲</span> ${
             hierarchy.p_lose
           } ~ <span class='text-primary'>▼</span> ${lowerMaxRate.lose_rate ?? 0})`;
+          document.querySelector('#admin-deathRate').previousElementSibling.innerHTML = `죽장 요율<br>(각 에이전트별 개별적용)`;
           break;
         case 2:
           document.querySelector('#admin-casinoRate').previousElementSibling.innerHTML = `카지노 롤링<br>(<span class='text-danger'>▲</span> ${
@@ -176,6 +179,7 @@ function openUserDetail(selectedUser) {
           document.querySelector('#admin-loseRate').previousElementSibling.innerHTML = `루징 요율<br>(<span class='text-danger'>▲</span> ${
             hierarchy.g_lose
           } ~ <span class='text-primary'>▼</span> ${lowerMaxRate.lose_rate ?? 0})`;
+          document.querySelector('#admin-deathRate').previousElementSibling.innerHTML = `죽장 요율<br>(각 에이전트별 개별적용)`;
           break;
         case 3:
           document.querySelector('#admin-casinoRate').previousElementSibling.innerHTML = `카지노 롤링<br>(<span class='text-danger'>▲</span> ${
@@ -187,6 +191,7 @@ function openUserDetail(selectedUser) {
           document.querySelector('#admin-loseRate').previousElementSibling.innerHTML = `루징 요율<br>(<span class='text-danger'>▲</span> ${
             hierarchy.s_lose
           } ~ <span class='text-primary'>▼</span> ${lowerMaxRate.lose_rate ?? 0})`;
+          document.querySelector('#admin-deathRate').previousElementSibling.innerHTML = `죽장 요율<br>(각 에이전트별 개별적용)`;
           break;
         case 4:
           document.querySelector('#admin-casinoRate').previousElementSibling.innerHTML = `카지노 롤링<br>(<span class='text-danger'>▲</span> ${getRateValue(
@@ -205,7 +210,7 @@ function openUserDetail(selectedUser) {
           )} ~ <span class='text-primary'>▼</span>0)`;
 
           document.querySelector('.margin-rate').classList.add('d-none');
-          
+          document.querySelector('#admin-deathRate').parentElement.classList.add('d-none');
           // document.querySelector('#admin-rate').classList.add('d-none');
           break;
       }
@@ -213,6 +218,7 @@ function openUserDetail(selectedUser) {
       document.querySelector('#admin-casinoRate').value = selectedUserInfo.c_roll_rate;
       document.querySelector('#admin-slotRate').value = selectedUserInfo.s_roll_rate;
       document.querySelector('#admin-loseRate').value = selectedUserInfo.lose_rate;
+      document.querySelector('#admin-deathRate').value = selectedUserInfo.death_rate;
       document.querySelector('#admin-c-betMarginRate').value = selectedUserInfo.c_bet_margin_rate;
       document.querySelector('#admin-s-betMarginRate').value = selectedUserInfo.s_bet_margin_rate;
       document.querySelector('#admin-c-rollMarginRate').value = selectedUserInfo.c_roll_margin_rate;
@@ -317,7 +323,7 @@ function openUserDetail(selectedUser) {
 
 //? 상세보기 내용 수정
 $(
-  '#detail-lv , #detail-nickname , #detail-phone, #detail-bank , #detail-banknum , #detail-bankowner , #detail-memo, #admin-casinoRate, #admin-slotRate, #admin-loseRate, #admin-c-betMarginRate,#admin-s-betMarginRate, #admin-c-rollMarginRate,#admin-s-rollMarginRate'
+  '#detail-lv , #detail-nickname , #detail-phone, #detail-bank , #detail-banknum , #detail-bankowner , #detail-memo, #admin-casinoRate, #admin-slotRate, #admin-loseRate, #admin-deathRate, #admin-c-betMarginRate, #admin-s-betMarginRate, #admin-c-rollMarginRate,#admin-s-rollMarginRate'
 ).on('input', function () {
   selectedUserInfo.join_memo = selectedUserInfo.join_memo == null ? '' : selectedUserInfo.join_memo;
   document.querySelector('#detail-lv').value = Number(document.querySelector('#detail-lv').value);
@@ -329,10 +335,11 @@ $(
     document.querySelector('#detail-bank').value == selectedUserInfo.bank &&
     document.querySelector('#detail-banknum').value == selectedUserInfo.bank_num &&
     document.querySelector('#detail-bankowner').value == selectedUserInfo.bank_owner &&
-    document.querySelector('#detail-memo').va == selectedUserInfo.join_memolue &&
+    document.querySelector('#detail-memo').value == selectedUserInfo.join_memo &&
     document.querySelector('#admin-casinoRate').value == selectedUserInfo.c_roll_rate &&
     document.querySelector('#admin-slotRate').value == selectedUserInfo.s_roll_rate &&
     document.querySelector('#admin-loseRate').value == selectedUserInfo.lose_rate &&
+    document.querySelector('#admin-deathRate').value == selectedUserInfo.death_rate &&
     document.querySelector('#admin-c-betMarginRate').value == selectedUserInfo.c_bet_margin_rate &&
     document.querySelector('#admin-s-betMarginRate').value == selectedUserInfo.s_bet_margin_rate &&
     document.querySelector('#admin-c-rollMarginRate').value == selectedUserInfo.c_roll_margin_rate &&
@@ -370,62 +377,71 @@ document.querySelector('#modifyUserBtn').addEventListener('click', async functio
 });
 
 //? 요율 변경시 요율 체크
-$('#admin-casinoRate, #admin-slotRate, #admin-loseRate, #admin-c-betMarginRate,#admin-s-betMarginRate, #admin-c-rollMarginRate,#admin-s-rollMarginRate').on(
-  'input',
-  async function () {
-    let { c_roll_valid, s_roll_valid, lose_valid, c_bet_margin_valid, s_bet_margin_valid, c_roll_margin_valid, s_roll_margin_valid } = await checkRate(
-      selectedUserInfo.type
-    );
+$(
+  '#admin-casinoRate, #admin-slotRate, #admin-loseRate, #admin-deathRate, #admin-c-betMarginRate, #admin-s-betMarginRate, #admin-c-rollMarginRate, #admin-s-rollMarginRate'
+).on('input', async function () {
+  let { c_roll_valid, s_roll_valid, lose_valid, c_bet_margin_valid, s_bet_margin_valid, c_roll_margin_valid, s_roll_margin_valid } = await checkRate(
+    selectedUserInfo.type
+  );
 
-    if (!c_roll_valid) {
-      document.querySelector('#admin-casinoRate').classList.add('is-invalid');
-      isRateModifyValid = false;
-    } else {
-      document.querySelector('#admin-casinoRate').classList.remove('is-invalid');
-    }
-    if (!s_roll_valid) {
-      document.querySelector('#admin-slotRate').classList.add('is-invalid');
-      isRateModifyValid = false;
-    } else {
-      document.querySelector('#admin-slotRate').classList.remove('is-invalid');
-    }
-    if (!lose_valid) {
-      document.querySelector('#admin-loseRate').classList.add('is-invalid');
-      isRateModifyValid = false;
-    } else {
-      document.querySelector('#admin-loseRate').classList.remove('is-invalid');
-    }
-    if (!c_bet_margin_valid) {
-      document.querySelector('#admin-c-betMarginRate').classList.add('is-invalid');
-      isRateModifyValid = false;
-    } else {
-      document.querySelector('#admin-c-betMarginRate').classList.remove('is-invalid');
-    }
-    if (!s_bet_margin_valid) {
-      document.querySelector('#admin-s-betMarginRate').classList.add('is-invalid');
-      isRateModifyValid = false;
-    } else {
-      document.querySelector('#admin-s-betMarginRate').classList.remove('is-invalid');
-    }
-    if (!c_roll_margin_valid) {
-      document.querySelector('#admin-c-rollMarginRate').classList.add('is-invalid');
-      isRateModifyValid = false;
-    } else {
-      document.querySelector('#admin-c-rollMarginRate').classList.remove('is-invalid');
-    }
-    if (!s_roll_margin_valid) {
-      document.querySelector('#admin-s-rollMarginRate').classList.add('is-invalid');
-      isRateModifyValid = false;
-    } else {
-      document.querySelector('#admin-s-rollMarginRate').classList.remove('is-invalid');
-    }
+  let death_valid = document.querySelector('#admin-deathRate').value >= 0 && document.querySelector('#admin-deathRate').value <= 100;
 
-    // If all fields are valid, then set isRateModifyValid to true.
-    if (c_roll_valid && s_roll_valid && lose_valid && c_bet_margin_valid && s_bet_margin_valid && c_roll_margin_valid && s_roll_margin_valid) {
-      isRateModifyValid = true;
-    }
+  if (!death_valid) {
+    document.querySelector('#admin-deathRate').classList.add('is-invalid');
+    isRateModifyValid = false;
+    console.log('100넘을때', isRateModifyValid);
+  } else {
+    document.querySelector('#admin-deathRate').classList.remove('is-invalid');
   }
-);
+
+  if (!c_roll_valid) {
+    document.querySelector('#admin-casinoRate').classList.add('is-invalid');
+    isRateModifyValid = false;
+  } else {
+    document.querySelector('#admin-casinoRate').classList.remove('is-invalid');
+  }
+  if (!s_roll_valid) {
+    document.querySelector('#admin-slotRate').classList.add('is-invalid');
+    isRateModifyValid = false;
+  } else {
+    document.querySelector('#admin-slotRate').classList.remove('is-invalid');
+  }
+  if (!lose_valid) {
+    document.querySelector('#admin-loseRate').classList.add('is-invalid');
+    isRateModifyValid = false;
+  } else {
+    document.querySelector('#admin-loseRate').classList.remove('is-invalid');
+  }
+  if (!c_bet_margin_valid) {
+    document.querySelector('#admin-c-betMarginRate').classList.add('is-invalid');
+    isRateModifyValid = false;
+  } else {
+    document.querySelector('#admin-c-betMarginRate').classList.remove('is-invalid');
+  }
+  if (!s_bet_margin_valid) {
+    document.querySelector('#admin-s-betMarginRate').classList.add('is-invalid');
+    isRateModifyValid = false;
+  } else {
+    document.querySelector('#admin-s-betMarginRate').classList.remove('is-invalid');
+  }
+  if (!c_roll_margin_valid) {
+    document.querySelector('#admin-c-rollMarginRate').classList.add('is-invalid');
+    isRateModifyValid = false;
+  } else {
+    document.querySelector('#admin-c-rollMarginRate').classList.remove('is-invalid');
+  }
+  if (!s_roll_margin_valid) {
+    document.querySelector('#admin-s-rollMarginRate').classList.add('is-invalid');
+    isRateModifyValid = false;
+  } else {
+    document.querySelector('#admin-s-rollMarginRate').classList.remove('is-invalid');
+  }
+
+  // If all fields are valid, then set isRateModifyValid to true.
+  if (c_roll_valid && s_roll_valid && lose_valid && death_valid && c_bet_margin_valid && s_bet_margin_valid && c_roll_margin_valid && s_roll_margin_valid) {
+    isRateModifyValid = true;
+  }
+});
 
 async function checkRate(type) {
   let c_roll = document.querySelector('#admin-casinoRate').value;
@@ -523,6 +539,7 @@ function modifyUserData() {
     c_roll_rate: document.querySelector('#admin-casinoRate').value,
     s_roll_rate: document.querySelector('#admin-slotRate').value,
     lose_rate: document.querySelector('#admin-loseRate').value,
+    death_rate: document.querySelector('#admin-deathRate').value,
     c_bet_margin_rate: document.querySelector('#admin-c-betMarginRate').value,
     s_bet_margin_rate: document.querySelector('#admin-s-betMarginRate').value,
     c_roll_margin_rate: document.querySelector('#admin-c-rollMarginRate').value,
@@ -1286,6 +1303,27 @@ $('table').on('click', 'tbody tr .add-gold', function () {
   document.querySelector('#slot-roll-rate').nextElementSibling.innerHTML = `슬롯 롤링요율 (최대 ${upperAgent['슬롯 롤링요율']})`;
   document.querySelector('#lose-rate').nextElementSibling.innerHTML = `루징요율 (최대 ${upperAgent['루징요율']})`;
 
+  // 루징 요율 셀렉트박스 생성
+  const loseRateSelect = document.querySelector('#lose-rate');
+  loseRateSelect.innerHTML = '';
+
+  // 초기 선택 옵션 생성 및 추가
+  const defaultOption = document.createElement('option');
+  defaultOption.textContent = '루징요율 선택';
+  defaultOption.value = '';
+  defaultOption.selected = true;
+  defaultOption.disabled = true;
+  loseRateSelect.appendChild(defaultOption);
+
+  for (let i = 0; i <= 20; i += 5) {
+    if (i <= upperAgent['루징요율']) {
+      const option = document.createElement('option');
+      option.value = i;
+      option.innerHTML = i;
+      loseRateSelect.appendChild(option);
+    }
+  }
+
   $('#addAgentModal').modal('show');
 });
 // #endregion
@@ -1315,6 +1353,27 @@ $('table').on('click', 'tbody tr .add-silver', function () {
   document.querySelector('#slot-roll-rate').nextElementSibling.innerHTML = `슬롯 롤링요율 (최대 ${upperAgent['슬롯 롤링요율']})`;
   document.querySelector('#lose-rate').nextElementSibling.innerHTML = `루징요율 (최대 ${upperAgent['루징요율']})`;
 
+  // 루징 요율 셀렉트박스 생성
+  const loseRateSelect = document.querySelector('#lose-rate');
+  loseRateSelect.innerHTML = '';
+
+  // 초기 선택 옵션 생성 및 추가
+  const defaultOption = document.createElement('option');
+  defaultOption.textContent = '루징요율 선택';
+  defaultOption.value = '';
+  defaultOption.selected = true;
+  defaultOption.disabled = true;
+  loseRateSelect.appendChild(defaultOption);
+
+  for (let i = 0; i <= 20; i += 5) {
+    if (i <= upperAgent['루징요율']) {
+      const option = document.createElement('option');
+      option.value = i;
+      option.innerHTML = i;
+      loseRateSelect.appendChild(option);
+    }
+  }
+
   $('#addAgentModal').modal('show');
 });
 // #endregion
@@ -1343,6 +1402,27 @@ $('table').on('click', 'tbody tr .add-bronze', function () {
   document.querySelector('#casino-roll-rate').nextElementSibling.innerHTML = `카지노 롤링요율 (최대 ${upperAgent['카지노 롤링요율']})`;
   document.querySelector('#slot-roll-rate').nextElementSibling.innerHTML = `슬롯 롤링요율 (최대 ${upperAgent['슬롯 롤링요율']})`;
   document.querySelector('#lose-rate').nextElementSibling.innerHTML = `루징요율 (최대 ${upperAgent['루징요율']})`;
+
+  // 루징 요율 셀렉트박스 생성
+  const loseRateSelect = document.querySelector('#lose-rate');
+  loseRateSelect.innerHTML = '';
+
+  // 초기 선택 옵션 생성 및 추가
+  const defaultOption = document.createElement('option');
+  defaultOption.textContent = '루징요율 선택';
+  defaultOption.value = '';
+  defaultOption.selected = true;
+  defaultOption.disabled = true;
+  loseRateSelect.appendChild(defaultOption);
+
+  for (let i = 0; i <= 20; i += 5) {
+    if (i <= upperAgent['루징요율']) {
+      const option = document.createElement('option');
+      option.value = i;
+      option.innerHTML = i;
+      loseRateSelect.appendChild(option);
+    }
+  }
 
   // 추천코드 입력란 노출
   // document.querySelector('#reg-domain-info').classList.remove('d-none');
@@ -2892,10 +2972,10 @@ if (document.querySelector('#agentDepositModal')) {
   //   openBalanceTakeModal(rowData);
   // });
   function openBalanceTakeModal(rowData) {
-    if (rowData.가입코드 != null && clientType != 9) {
-      alert('온라인 유저입니다. 온라인 유저에게는 지급 및 회수가 불가능합니다.');
-      return;
-    }
+    // if (rowData.가입코드 != null && clientType != 9) {
+    //   alert('온라인 유저입니다. 온라인 유저에게는 지급 및 회수가 불가능합니다.');
+    //   return;
+    // }
 
     if (clientType == 9) {
       document.getElementById('take-reason-text').classList.remove('d-none');

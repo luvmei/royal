@@ -233,11 +233,6 @@ let userInfoOnline = $('#userInfoOnline').DataTable({
     [100, 300, 500, 'All'],
   ],
   order: [[0, 'desc']],
-  createdRow: function (row, data, dataIndex) {
-    if (data['중복아이피'] > 0) {
-      $(row).find('td').eq(15).addClass('asset-danger');
-    }
-  },
   columnDefs: [
     {
       target: [0, 17, 23],
@@ -349,6 +344,7 @@ let userInfoOnline = $('#userInfoOnline').DataTable({
     },
   ],
   drawCallback: function (settings) {
+    // #region 지급/회수 팝오버
     let popoverTimer;
 
     $('[data-bs-toggle="popover"]').on('shown.bs.popover', function () {
@@ -381,6 +377,48 @@ let userInfoOnline = $('#userInfoOnline').DataTable({
       clearTimeout(popoverTimer);
     });
     initPopover();
+    // #endregion
+
+    // #region 가입IP 및 최근접속IP 중복처리
+    let api = this.api();
+    let connIpMap = {};
+    let joinIpMap = {};
+
+    api.rows().every(function () {
+      let data = this.data();
+      let recentConnIP = data['최근 접속IP'];
+      let joinIP = data['가입IP'];
+
+      if (!connIpMap[recentConnIP]) {
+        connIpMap[recentConnIP] = [];
+      }
+      connIpMap[recentConnIP].push(this.index());
+
+      if (!joinIpMap[joinIP]) {
+        joinIpMap[joinIP] = [];
+      }
+      joinIpMap[joinIP].push(this.index());
+    });
+
+    Object.keys(connIpMap).forEach(function (ip) {
+      if (connIpMap[ip].length > 1) {
+        connIpMap[ip].forEach(function (rowIndex) {
+          let row = api.row(rowIndex).node();
+          $(row).find('td').eq(15).addClass('asset-danger');
+        });
+      }
+    });
+
+    Object.keys(joinIpMap).forEach(function (ip) {
+      if (joinIpMap[ip].length > 1) {
+        // 중복된 '가입IP'가 있는 경우
+        joinIpMap[ip].forEach(function (rowIndex) {
+          let row = api.row(rowIndex).node();
+          $(row).find('td').eq(13).addClass('asset-danger');
+        });
+      }
+    });
+    // #endregion
   },
 });
 
@@ -511,6 +549,7 @@ let userInfoLocal = $('#userInfoLocal').DataTable({
     },
   ],
   drawCallback: function (settings) {
+    // #region 지급/회수 팝오버
     let popoverTimer;
 
     $('[data-bs-toggle="popover"]').on('shown.bs.popover', function () {
@@ -543,6 +582,48 @@ let userInfoLocal = $('#userInfoLocal').DataTable({
       clearTimeout(popoverTimer);
     });
     initPopover();
+    // #endregion
+
+    // #region 가입IP 및 최근접속IP 중복처리
+    let api = this.api();
+    let connIpMap = {};
+    let joinIpMap = {};
+
+    api.rows().every(function () {
+      let data = this.data();
+      let recentConnIP = data['최근 접속IP'];
+      let joinIP = data['가입IP'];
+
+      if (!connIpMap[recentConnIP]) {
+        connIpMap[recentConnIP] = [];
+      }
+      connIpMap[recentConnIP].push(this.index());
+
+      if (!joinIpMap[joinIP]) {
+        joinIpMap[joinIP] = [];
+      }
+      joinIpMap[joinIP].push(this.index());
+    });
+
+    Object.keys(connIpMap).forEach(function (ip) {
+      if (connIpMap[ip].length > 1) {
+        connIpMap[ip].forEach(function (rowIndex) {
+          let row = api.row(rowIndex).node();
+          $(row).find('td').eq(15).addClass('asset-danger');
+        });
+      }
+    });
+
+    Object.keys(joinIpMap).forEach(function (ip) {
+      if (joinIpMap[ip].length > 1) {
+        // 중복된 '가입IP'가 있는 경우
+        joinIpMap[ip].forEach(function (rowIndex) {
+          let row = api.row(rowIndex).node();
+          $(row).find('td').eq(13).addClass('asset-danger');
+        });
+      }
+    });
+    // #endregion
   },
 });
 
@@ -962,7 +1043,7 @@ $('#userBetting').DataTable({
   responsive: {
     details: {
       renderer: function (api, rowIdx, columns) {
-        var data = $.map(columns, function (col, i) {
+        let data = $.map(columns, function (col, i) {
           switch (i) {
             case 4:
               col.title = '카지노 당일베팅금';
