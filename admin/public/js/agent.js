@@ -241,7 +241,7 @@ let agentInfo = $('#agentInfo').DataTable({
   },
   columnDefs: [
     {
-      target: [1, 2, 8, 9, 10, 14, 15],
+      target: [1, 2, 8, 9, 10, 14, 15, 16, 17],
       visible: false,
       searchable: false,
     },
@@ -291,14 +291,34 @@ let agentInfo = $('#agentInfo').DataTable({
     },
     {
       target: 18,
-      width: 200,
       render: function (data, type, row) {
-        if (row.타입 == 1) {
-          return `<button type='button' class='btn btn-sm btn-outline-dark asset-danger ms-2' style='cursor: default'>${row.플래티넘}</button>`;
-        } else if (row.타입 == 2) {
-          return `<button type='button' class='btn btn-sm btn-outline-dark asset-danger ms-2' style='cursor: default'>${row.플래티넘}</button><button type='button' class='btn btn-sm btn-outline-dark ms-2 asset-warning' style='cursor: default'>${row.골드}</button>`;
-        } else if (row.타입 == 3) {
-          return `<button type='button' class='btn btn-sm btn-outline-dark asset-danger ms-2' style='cursor: default'>${row.플래티넘}</button><button type='button' class='btn btn-sm btn-outline-dark ms-2 asset-warning' style='cursor: default'>${row.골드}</button><button type='button' class='btn btn-sm btn-outline-dark ms-2 asset-success' style='cursor: default'>${row.실버}</button>`;
+        if (clientType === 9) {
+          let result = `<button type='button' class='btn btn-sm btn-outline-dark asset-danger ms-2' style='cursor: default'>${row.플래티넘}</button>`;
+
+          if (row.골드 !== null) {
+            result += `<button type='button' class='btn btn-sm btn-outline-dark ms-2 asset-warning' style='cursor: default'>${row.골드}</button>`;
+          }
+
+          if (row.실버 !== null) {
+            result += `<button type='button' class='btn btn-sm btn-outline-dark ms-2 asset-success' style='cursor: default'>${row.실버}</button>`;
+          }
+
+          if (row.브론즈 !== null) {
+            result += `<button type='button' class='btn btn-sm btn-outline-dark ms-2 asset-primary' style='cursor: default'>${row.브론즈}</button>`;
+          }
+
+          return result;
+        } else {
+          switch (row.타입) {
+            case 4:
+              return `<button type='button' class='btn btn-sm btn-outline-dark asset-primary ms-2' style='cursor: default'>${row.브론즈}</button>`;
+            case 3:
+              return `<button type='button' class='btn btn-sm btn-outline-dark asset-success ms-2' style='cursor: default'>${row.실버}</button>`;
+            case 2:
+              return `<button type='button' class='btn btn-sm btn-outline-dark asset-warning ms-2' style='cursor: default'>${row.골드}</button>`;
+            case 1:
+              return `<button type='button' class='btn btn-sm btn-outline-dark asset-danger ms-2' style='cursor: default'>${row.플래티넘}</button>`;
+          }
         }
       },
     },
@@ -368,6 +388,11 @@ let agentInfo = $('#agentInfo').DataTable({
       agentInfo.column(17).visible(true);
       agentInfo.column(17).header().innerHTML = '슬';
       agentInfo.columns.adjust().draw();
+    } else {
+      this.api().columns(18).header().to$().text('상위 에이전트');
+      console.log(this.api().columns(18).css);
+      this.api().column(18).style.width = '100px';
+      this.api().columns.adjust().draw();
     }
   },
   drawCallback: function (settings) {
@@ -1062,6 +1087,7 @@ let agentBetting = $('#agentBetting').DataTable({
 $('#agentConnect').DataTable({
   language: korean,
   responsive: true,
+  autowidth: true,
   ajax: {
     url: '/agent/connect',
     method: 'POST',
@@ -1123,16 +1149,35 @@ $('#agentConnect').DataTable({
     },
     {
       target: 5,
-      width: 270,
+      width: 300,
       render: function (data, type, row) {
-        if (row.골드 == null) {
-          return null;
-        } else if (row.실버 == null) {
-          return `<button type='button' class='btn btn-sm btn-outline-dark asset-danger ms-2' style='cursor: default'>${row.플래티넘}</button>`;
-        } else if (row.브론즈 == null) {
-          return `<button type='button' class='btn btn-sm btn-outline-dark asset-danger ms-2' style='cursor: default'>${row.플래티넘}</button><button type='button' class='btn btn-sm btn-outline-dark ms-2 asset-warning' style='cursor: default'>${row.골드}</button>`;
+        if (clientType === 9) {
+          let result = `<button type='button' class='btn btn-sm btn-outline-dark asset-danger ms-2' style='cursor: default'>${row.플래티넘}</button>`;
+
+          if (row.골드 !== null) {
+            result += `<button type='button' class='btn btn-sm btn-outline-dark ms-2 asset-warning' style='cursor: default'>${row.골드}</button>`;
+          }
+
+          if (row.실버 !== null) {
+            result += `<button type='button' class='btn btn-sm btn-outline-dark ms-2 asset-success' style='cursor: default'>${row.실버}</button>`;
+          }
+
+          if (row.브론즈 !== null) {
+            result += `<button type='button' class='btn btn-sm btn-outline-dark ms-2 asset-primary' style='cursor: default'>${row.브론즈}</button>`;
+          }
+
+          return result;
         } else {
-          return `<button type='button' class='btn btn-sm btn-outline-dark asset-danger ms-2' style='cursor: default'>${row.플래티넘}</button><button type='button' class='btn btn-sm btn-outline-dark ms-2 asset-warning' style='cursor: default'>${row.골드}</button><button type='button' class='btn btn-sm btn-outline-dark ms-2 asset-success' style='cursor: default'>${row.실버}</button>`;
+          switch (row.타입) {
+            case 4:
+              return `<button type='button' class='btn btn-sm btn-outline-dark asset-primary ms-2' style='cursor: default'>${row.브론즈}</button>`;
+            case 3:
+              return `<button type='button' class='btn btn-sm btn-outline-dark asset-success ms-2' style='cursor: default'>${row.실버}</button>`;
+            case 2:
+              return `<button type='button' class='btn btn-sm btn-outline-dark asset-warning ms-2' style='cursor: default'>${row.골드}</button>`;
+            case 1:
+              return `<button type='button' class='btn btn-sm btn-outline-dark asset-danger ms-2' style='cursor: default'>${row.플래티넘}</button>`;
+          }
         }
       },
     },
@@ -1157,6 +1202,11 @@ $('#agentConnect').DataTable({
       orderable: false,
     },
   ],
+  initComplete: function () {
+    if (clientType !== 9) {
+      this.api().columns(5).header().to$().text('상위 에이전트');
+    }
+  },
 });
 
 $('#agentBlock').DataTable({

@@ -254,9 +254,8 @@ let userInfoOnline = $('#userInfoOnline').DataTable({
     },
     {
       target: 4,
-      width: 300,
       render: function (data, type, row) {
-        if (row.타입 == 4) {
+        if (clientType === 9) {
           let result = `<button type='button' class='btn btn-sm btn-outline-dark asset-danger ms-2' style='cursor: default'>${row.플래티넘}</button>`;
 
           if (row.골드 !== null) {
@@ -272,6 +271,17 @@ let userInfoOnline = $('#userInfoOnline').DataTable({
           }
 
           return result;
+        } else {
+          switch (row.타입) {
+            case 4:
+              return `<button type='button' class='btn btn-sm btn-outline-dark asset-primary ms-2' style='cursor: default'>${row.브론즈}</button>`;
+            case 3:
+              return `<button type='button' class='btn btn-sm btn-outline-dark asset-success ms-2' style='cursor: default'>${row.실버}</button>`;
+            case 2:
+              return `<button type='button' class='btn btn-sm btn-outline-dark asset-warning ms-2' style='cursor: default'>${row.골드}</button>`;
+            case 1:
+              return `<button type='button' class='btn btn-sm btn-outline-dark asset-danger ms-2' style='cursor: default'>${row.플래티넘}</button>`;
+          }
         }
       },
     },
@@ -343,6 +353,11 @@ let userInfoOnline = $('#userInfoOnline').DataTable({
       orderable: false,
     },
   ],
+  initComplete: function () {
+    if (clientType !== 9) {
+      this.api().columns(4).header().to$().text('상위 에이전트');
+    }
+  },
   drawCallback: function (settings) {
     // #region 지급/회수 팝오버
     let popoverTimer;
@@ -488,9 +503,35 @@ let userInfoLocal = $('#userInfoLocal').DataTable({
     },
     {
       target: 4,
-      width: 300,
       render: function (data, type, row) {
-        return `<button type='button' class='btn btn-sm btn-outline-dark asset-danger ms-2' style='cursor: default'>${row.플래티넘}</button><button type='button' class='btn btn-sm btn-outline-dark ms-2 asset-warning' style='cursor: default'>${row.골드}</button><button type='button' class='btn btn-sm btn-outline-dark ms-2 asset-success' style='cursor: default'>${row.실버}</button><button type='button' class='btn btn-sm btn-outline-dark ms-2 asset-primary' style='cursor: default'>${row.브론즈}</button>`;
+        if (clientType === 9) {
+          let result = `<button type='button' class='btn btn-sm btn-outline-dark asset-danger ms-2' style='cursor: default'>${row.플래티넘}</button>`;
+
+          if (row.골드 !== null) {
+            result += `<button type='button' class='btn btn-sm btn-outline-dark ms-2 asset-warning' style='cursor: default'>${row.골드}</button>`;
+          }
+
+          if (row.실버 !== null) {
+            result += `<button type='button' class='btn btn-sm btn-outline-dark ms-2 asset-success' style='cursor: default'>${row.실버}</button>`;
+          }
+
+          if (row.브론즈 !== null) {
+            result += `<button type='button' class='btn btn-sm btn-outline-dark ms-2 asset-primary' style='cursor: default'>${row.브론즈}</button>`;
+          }
+
+          return result;
+        } else {
+          switch (row.타입) {
+            case 4:
+              return `<button type='button' class='btn btn-sm btn-outline-dark asset-primary ms-2' style='cursor: default'>${row.브론즈}</button>`;
+            case 3:
+              return `<button type='button' class='btn btn-sm btn-outline-dark asset-success ms-2' style='cursor: default'>${row.실버}</button>`;
+            case 2:
+              return `<button type='button' class='btn btn-sm btn-outline-dark asset-warning ms-2' style='cursor: default'>${row.골드}</button>`;
+            case 1:
+              return `<button type='button' class='btn btn-sm btn-outline-dark asset-danger ms-2' style='cursor: default'>${row.플래티넘}</button>`;
+          }
+        }
       },
     },
     {
@@ -548,6 +589,11 @@ let userInfoLocal = $('#userInfoLocal').DataTable({
       orderable: false,
     },
   ],
+  initComplete: function () {
+    if (clientType !== 9) {
+      this.api().columns(4).header().to$().text('상위 에이전트');
+    }
+  },
   drawCallback: function (settings) {
     // #region 지급/회수 팝오버
     let popoverTimer;
@@ -626,22 +672,6 @@ let userInfoLocal = $('#userInfoLocal').DataTable({
     // #endregion
   },
 });
-
-// 파싱 유효시에만 사용
-function checkUserType() {
-  $.ajax({
-    method: 'POST',
-    url: '/clientId',
-  })
-    .done(function (result) {
-      if (result.type != 9) {
-        userInfo.columns('.pType').visible(false);
-      }
-    })
-    .fail(function (err) {
-      console.log(err);
-    });
-}
 
 $('#userInfoDate').DataTable({
   language: korean,
@@ -870,9 +900,8 @@ $('#userAsset').DataTable({
     },
     {
       target: 3,
-      width: 300,
       render: function (data, type, row) {
-        if (row.타입 == 4) {
+        if (clientType === 9) {
           let result = `<button type='button' class='btn btn-sm btn-outline-dark asset-danger ms-2' style='cursor: default'>${row.플래티넘}</button>`;
 
           if (row.골드 !== null) {
@@ -888,6 +917,17 @@ $('#userAsset').DataTable({
           }
 
           return result;
+        } else {
+          switch (row.타입) {
+            case 4:
+              return `<button type='button' class='btn btn-sm btn-outline-dark asset-primary ms-2' style='cursor: default'>${row.브론즈}</button>`;
+            case 3:
+              return `<button type='button' class='btn btn-sm btn-outline-dark asset-success ms-2' style='cursor: default'>${row.실버}</button>`;
+            case 2:
+              return `<button type='button' class='btn btn-sm btn-outline-dark asset-warning ms-2' style='cursor: default'>${row.골드}</button>`;
+            case 1:
+              return `<button type='button' class='btn btn-sm btn-outline-dark asset-danger ms-2' style='cursor: default'>${row.플래티넘}</button>`;
+          }
         }
       },
     },
@@ -923,6 +963,11 @@ $('#userAsset').DataTable({
       orderable: false,
     },
   ],
+  initComplete: function () {
+    if (clientType !== 9) {
+      this.api().columns(3).header().to$().text('상위 에이전트');
+    }
+  },
   drawCallback: function (settings) {
     let popoverTimer;
 
@@ -1153,9 +1198,8 @@ $('#userBetting').DataTable({
     },
     {
       target: 3,
-      width: 300,
       render: function (data, type, row) {
-        if (row.타입 == 4) {
+        if (clientType === 9) {
           let result = `<button type='button' class='btn btn-sm btn-outline-dark asset-danger ms-2' style='cursor: default'>${row.플래티넘}</button>`;
 
           if (row.골드 !== null) {
@@ -1171,6 +1215,17 @@ $('#userBetting').DataTable({
           }
 
           return result;
+        } else {
+          switch (row.타입) {
+            case 4:
+              return `<button type='button' class='btn btn-sm btn-outline-dark asset-primary ms-2' style='cursor: default'>${row.브론즈}</button>`;
+            case 3:
+              return `<button type='button' class='btn btn-sm btn-outline-dark asset-success ms-2' style='cursor: default'>${row.실버}</button>`;
+            case 2:
+              return `<button type='button' class='btn btn-sm btn-outline-dark asset-warning ms-2' style='cursor: default'>${row.골드}</button>`;
+            case 1:
+              return `<button type='button' class='btn btn-sm btn-outline-dark asset-danger ms-2' style='cursor: default'>${row.플래티넘}</button>`;
+          }
         }
       },
     },
@@ -1195,6 +1250,11 @@ $('#userBetting').DataTable({
       orderable: false,
     },
   ],
+  initComplete: function () {
+    if (clientType !== 9) {
+      this.api().columns(3).header().to$().text('상위 에이전트');
+    }
+  },
 });
 
 $('#userConnect').DataTable({
@@ -1282,9 +1342,36 @@ $('#userConnect').DataTable({
     },
     {
       target: 5,
-      width: 300,
       render: function (data, type, row) {
-        return `<button type='button' class='btn btn-sm btn-outline-dark asset-danger ms-2' style='cursor: default'>${row.플래티넘}</button><button type='button' class='btn btn-sm btn-outline-dark ms-2 asset-warning' style='cursor: default'>${row.골드}</button><button type='button' class='btn btn-sm btn-outline-dark ms-2 asset-success' style='cursor: default'>${row.실버}</button><button type='button' class='btn btn-sm btn-outline-dark ms-2 asset-primary' style='cursor: default'>${row.브론즈}</button>`;
+        console.log(row.node_id);
+        if (clientType === 9) {
+          let result = `<button type='button' class='btn btn-sm btn-outline-dark asset-danger ms-2' style='cursor: default'>${row.플래티넘}</button>`;
+
+          if (row.골드 !== null) {
+            result += `<button type='button' class='btn btn-sm btn-outline-dark ms-2 asset-warning' style='cursor: default'>${row.골드}</button>`;
+          }
+
+          if (row.실버 !== null) {
+            result += `<button type='button' class='btn btn-sm btn-outline-dark ms-2 asset-success' style='cursor: default'>${row.실버}</button>`;
+          }
+
+          if (row.브론즈 !== null) {
+            result += `<button type='button' class='btn btn-sm btn-outline-dark ms-2 asset-primary' style='cursor: default'>${row.브론즈}</button>`;
+          }
+
+          return result;
+        } else {
+          switch (row.node_id.length) {
+            case 7:
+              return `<button type='button' class='btn btn-sm btn-outline-dark asset-primary ms-2' style='cursor: default'>${row.브론즈}</button>`;
+            case 5:
+              return `<button type='button' class='btn btn-sm btn-outline-dark asset-success ms-2' style='cursor: default'>${row.실버}</button>`;
+            case 3:
+              return `<button type='button' class='btn btn-sm btn-outline-dark asset-warning ms-2' style='cursor: default'>${row.골드}</button>`;
+            case 1:
+              return `<button type='button' class='btn btn-sm btn-outline-dark asset-danger ms-2' style='cursor: default'>${row.플래티넘}</button>`;
+          }
+        }
       },
     },
     {
@@ -1308,6 +1395,11 @@ $('#userConnect').DataTable({
       orderable: false,
     },
   ],
+  initComplete: function () {
+    if (clientType !== 9) {
+      this.api().columns(5).header().to$().text('상위 에이전트');
+    }
+  },
 });
 
 $('#userBlock').DataTable({
@@ -1595,3 +1687,19 @@ $('#userJoinConfirm').DataTable({
     },
   ],
 });
+
+// 파싱 유효시에만 사용
+function checkUserType() {
+  $.ajax({
+    method: 'POST',
+    url: '/clientId',
+  })
+    .done(function (result) {
+      if (result.type != 9) {
+        userInfo.columns('.pType').visible(false);
+      }
+    })
+    .fail(function (err) {
+      console.log(err);
+    });
+}

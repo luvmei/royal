@@ -71,9 +71,6 @@ async function getDetailLog(res, type, params = {}) {
 
   let getLogData = mybatisMapper.getStatement('log', type, params, sqlFormat);
   let getLogDataCount = mybatisMapper.getStatement('log', 'getTotalDetailRecordsCount', params, sqlFormat);
-
-  console.log(getLogData);
-  console.log(getLogDataCount);
   
   try {
     let result = await conn.query(getLogData);
