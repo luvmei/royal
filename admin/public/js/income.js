@@ -1574,7 +1574,7 @@ $('#incomeUserDepoWith').DataTable({
     { data: '카지노 롤링요율', className: 'desktop' },
     { data: '슬롯 롤링요율', className: 'desktop' },
 
-    { data: '루징요율', className: 'desktop' },
+    { data: '죽장요율', className: 'desktop' },
     { data: '입금', className: 'desktop' },
     { data: '출금', className: 'desktop' },
     { data: '입출금', className: 'desktop' },

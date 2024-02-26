@@ -28,7 +28,6 @@ function openUserDetail(selectedUser) {
   })
     .done(function (result) {
       $('#detailModalBody input').addClass('text-center');
-      console.log(result);
       selectedUserInfo = result.user;
       loginUser = result.login_user;
       hierarchy = result.hierarchy;
@@ -137,6 +136,8 @@ function openUserDetail(selectedUser) {
       document.querySelector('#admin-c-rollMarginRate').previousElementSibling.innerHTML = `카지노 롤링마진`;
       document.querySelector('#admin-s-rollMarginRate').previousElementSibling.innerHTML = `슬롯 롤링마진`;
 
+      const deathRate = document.querySelector('#admin-deathRate');
+
       switch (selectedUserInfo.type) {
         //todo 요율 상위 ~ 하위까지의 요율을 구해 범위지정 해야하는데, 현재는 상위만 구함
         case 0:
@@ -155,7 +156,7 @@ function openUserDetail(selectedUser) {
           ).previousElementSibling.innerHTML = `루징 요율<br>(<span class='text-danger'>▲</span>100 ~ <span class='text-primary'>▼</span>${
             lowerMaxRate.lose_rate ?? 0
           })`;
-          document.querySelector('#admin-deathRate').previousElementSibling.innerHTML = `죽장 요율<br>(개별적용, 최대 100)`;
+          deathRate.previousElementSibling.innerHTML = `죽장 요율<br>(개별적용, 최대 100)`;
           break;
         case 1:
           document.querySelector('#admin-casinoRate').previousElementSibling.innerHTML = `카지노 롤링<br>(<span class='text-danger'>▲</span> ${
@@ -167,7 +168,7 @@ function openUserDetail(selectedUser) {
           document.querySelector('#admin-loseRate').previousElementSibling.innerHTML = `루징 요율<br>(<span class='text-danger'>▲</span> ${
             hierarchy.p_lose
           } ~ <span class='text-primary'>▼</span> ${lowerMaxRate.lose_rate ?? 0})`;
-          document.querySelector('#admin-deathRate').previousElementSibling.innerHTML = `죽장 요율<br>(각 에이전트별 개별적용)`;
+          deathRate.previousElementSibling.innerHTML = `죽장 요율<br>(개별적용, 최대 100)`;
           break;
         case 2:
           document.querySelector('#admin-casinoRate').previousElementSibling.innerHTML = `카지노 롤링<br>(<span class='text-danger'>▲</span> ${
@@ -179,7 +180,7 @@ function openUserDetail(selectedUser) {
           document.querySelector('#admin-loseRate').previousElementSibling.innerHTML = `루징 요율<br>(<span class='text-danger'>▲</span> ${
             hierarchy.g_lose
           } ~ <span class='text-primary'>▼</span> ${lowerMaxRate.lose_rate ?? 0})`;
-          document.querySelector('#admin-deathRate').previousElementSibling.innerHTML = `죽장 요율<br>(각 에이전트별 개별적용)`;
+          deathRate.previousElementSibling.innerHTML = `죽장 요율<br>(개별적용, 최대 100)`;
           break;
         case 3:
           document.querySelector('#admin-casinoRate').previousElementSibling.innerHTML = `카지노 롤링<br>(<span class='text-danger'>▲</span> ${
@@ -191,7 +192,7 @@ function openUserDetail(selectedUser) {
           document.querySelector('#admin-loseRate').previousElementSibling.innerHTML = `루징 요율<br>(<span class='text-danger'>▲</span> ${
             hierarchy.s_lose
           } ~ <span class='text-primary'>▼</span> ${lowerMaxRate.lose_rate ?? 0})`;
-          document.querySelector('#admin-deathRate').previousElementSibling.innerHTML = `죽장 요율<br>(각 에이전트별 개별적용)`;
+          deathRate.previousElementSibling.innerHTML = `죽장 요율<br>(개별적용, 최대 100)`;
           break;
         case 4:
           document.querySelector('#admin-casinoRate').previousElementSibling.innerHTML = `카지노 롤링<br>(<span class='text-danger'>▲</span> ${getRateValue(
@@ -208,9 +209,9 @@ function openUserDetail(selectedUser) {
             hierarchy,
             'lose'
           )} ~ <span class='text-primary'>▼</span>0)`;
+          deathRate.previousElementSibling.innerHTML = `죽장 요율<br>(개별적용, 최대 100)`;
 
           document.querySelector('.margin-rate').classList.add('d-none');
-          document.querySelector('#admin-deathRate').parentElement.classList.add('d-none');
           // document.querySelector('#admin-rate').classList.add('d-none');
           break;
       }

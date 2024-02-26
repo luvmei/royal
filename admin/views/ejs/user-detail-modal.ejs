@@ -155,12 +155,11 @@
                   <label for="admin-loseRate" class="form-label">루징</label>
                   <input type="text" class="form-control" id="admin-loseRate" maxlength="5" required />
                 </div>
-                <% if (death == 1) { %>
-                <div class="col px-1">
+                <div class="col px-1 <%= death == 1 ? '' : 'd-none' %>">
                   <label for="admin-deathRate" class="form-label">죽장</label>
                   <input type="number" class="form-control" id="admin-deathRate" min="0" max="100" required />
                 </div>
-                <% } %>
+                
               </div>
               <div class="row mt-2 margin-rate">
                 <div class="col px-1">

