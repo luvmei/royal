@@ -69,7 +69,7 @@ async function insertGameList(gameList) {
 }
 
 // #region HL Detail Log
-let processedBetIds = new Set();
+let processedBetIds = new Map();
 
 async function getBetHistory() {
   let intervalTime = 20;
@@ -106,10 +106,19 @@ async function getBetHistory() {
 
   try {
     const response = await axios(config);
-
     const data = response.data.data;
+    
+    const now = Date.now();
+    const twentyMinutes = 20 * 60 * 1000;
+
+    processedBetIds.forEach((value, key) => {
+      if (now - value > twentyMinutes) {
+        processedBetIds.delete(key);
+      }
+    });
+
     const newData = data.filter((item) => !processedBetIds.has(item.id));
-    newData.forEach((item) => processedBetIds.add(item.id));
+    newData.forEach((item) => processedBetIds.set(item.id, now));
 
     const processedData = newData
       .filter((item) => item.type === 'bet' || item.type === 'win')
@@ -126,7 +135,7 @@ async function getBetHistory() {
   } catch (error) {
     console.log('[HL API]베팅내역 가져오기 실패');
     console.error(error);
-    return []; // 에러가 발생한 경우 빈 배열 반환
+    return [];
   }
 }
 
