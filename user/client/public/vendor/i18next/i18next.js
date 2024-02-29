@@ -66,7 +66,7 @@ i18next.init(
             pw: '비밀번호',
             pw_placeholder: '비밀번호',
             pw_btn: '비밀번호 확인',
-            pw_desc: '영문, 숫자, 특수문자 조합 8~16자',
+            pw_desc: '영문, 숫자, 특수문자(!,@,#,*) 조합 8~16자',
             nick: '닉네임',
             nick_placeholder: '닉네임',
             nick_btn: '중복확인',

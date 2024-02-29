@@ -664,6 +664,7 @@ function updateAfterRewardBalance() {
   reward.afterRewardBalance.textContent = newBalance.toLocaleString('ko-KR');
 }
 // #endregion
+
 // #endregion
 
 // #region 리워드 내역 모달

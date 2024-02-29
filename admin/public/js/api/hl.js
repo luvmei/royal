@@ -36,7 +36,7 @@ async function insertHlAccount(params) {
   }
 }
 
-const BATCH_SIZE = 1000; // 더 작거나 큰 수로 조정 가능
+const BATCH_SIZE = 1000;
 
 async function insertGameList(gameList) {
   console.log(`게임리스트 업데이트 시작`);
@@ -69,6 +69,8 @@ async function insertGameList(gameList) {
 }
 
 // #region HL Detail Log
+let processedBetIds = new Set();
+
 async function getBetHistory() {
   let intervalTime = 20;
   let localTime = {
@@ -88,24 +90,44 @@ async function getBetHistory() {
     page: 1,
     perPage: 1000,
     withDetails: 1,
-    odrer: 'asc',
+    order: 'asc',
   };
 
   const config = {
     method: 'get',
     url: `${process.env.HL_API_ENDPOINT}/transactions`,
-    headers: { Authorization: `Bearer ${process.env.HL_API_KEY}`, Accept: 'application/json', 'Content-Type': 'application/json' },
-    data: postData,
+    headers: {
+      Authorization: `Bearer ${process.env.HL_API_KEY}`,
+      Accept: 'application/json',
+      'Content-Type': 'application/json',
+    },
+    params: postData,
   };
 
-  return await axios(config)
-    .then((result) => {
-      return result.data.data;
-    })
-    .catch((error) => {
-      console.log(`[HL API]베팅내역 가져오기 실패`);
-      console.log(error);
-    });
+  try {
+    const response = await axios(config);
+
+    const data = response.data.data;
+    const newData = data.filter((item) => !processedBetIds.has(item.id));
+    newData.forEach((item) => processedBetIds.add(item.id));
+
+    const processedData = newData
+      .filter((item) => item.type === 'bet' || item.type === 'win')
+      .map((item) => {
+        const isTie = item.external?.detail?.data?.result?.outcome === 'Tie';
+
+        return {
+          ...item,
+          transaction_type: isTie ? 'tie' : item.type,
+        };
+      });
+
+    return processedData;
+  } catch (error) {
+    console.log('[HL API]베팅내역 가져오기 실패');
+    console.error(error);
+    return []; // 에러가 발생한 경우 빈 배열 반환
+  }
 }
 
 async function insertDetailHlLog(betHistory) {
@@ -125,22 +147,6 @@ async function insertDetailHlLog(betHistory) {
     if (conn) conn.release();
   }
 }
-
-async function isTie(betting) {
-  if (!betting.external) return false;
-  if (betting.external?.detail?.data?.result?.outcome !== 'Tie') return false;
-
-  let participants = betting.external?.detail?.data?.participants || [];
-
-  for (let participant of participants) {
-    let bets = participant.bets || [];
-
-    for (let bet of bets) {
-      if (bet.stake !== bet.payout) return false; // Do not filter if stake and payout are not equal
-    }
-  }
-  return true; // Filter out if outcome is 'Tie' and stake and payout are equal
-};
 // #endregion
 
 // #endregion
@@ -340,42 +346,51 @@ async function updateGameList() {
   }
 }
 
+async function isTie(betting) {
+  if (!betting.external || betting.external?.detail?.data?.result?.outcome !== 'Tie') return false;
+
+  let participants = betting.external?.detail?.data?.participants || [];
+
+  if (participants.length === 0) return false;
+
+  for (let participant of participants) {
+    let bets = participant.bets || [];
+    if (bets.length === 0) return false;
+
+    for (let bet of bets) {
+      if (bet.stake !== bet.payout) return false;
+    }
+  }
+  return true;
+}
+
 async function requestDetailLog() {
-  let newBetArr = [];
   let getBetArr = await getBetHistory();
 
-  if (getBetArr === undefined || getBetArr.length === 0) {
+  if (!getBetArr || getBetArr.length === 0) {
     console.log('[HL API] 새로운 베팅내역 없음');
     return;
   }
 
-  for (const betting of getBetArr) {
-    if (betting.details === null || !(betting.type === 'bet' || betting.type === 'win')) {
-      continue;
-    }
+  let mappedBetArr = getBetArr.map((betting) => ({
+    created_date: moment(betting.processed_at).format('YYYY-MM-DD HH:mm:ss'),
+    transaction_id: betting.id,
+    round_id: betting.details.game.round,
+    username: betting.user.username,
+    provider_name: betting.details.game.vendor,
+    category: betting.details.game.type === 'slot' ? 'slot' : betting.details.game.type === 'live-sport' ? 'live-sport' : 'casino',
+    game_id: betting.details.game.id,
+    game_title: betting.details.game.title.replace(/'/g, ''),
+    transaction_type: betting.transaction_type,
+    transaction_amount: betting.amount,
+    previous_balance: betting.before,
+    available_balance: betting.before + betting.amount,
+  }));
 
-    const mappedItem = {
-      created_date: moment(betting.processed_at).format('YYYY-MM-DD HH:mm:ss'),
-      transaction_id: betting.id,
-      round_id: betting.details.game.round,
-      username: betting.user.username,
-      provider_name: betting.details.game.vendor,
-      category: betting.details.game.type === 'slot' ? 'slot' : betting.details.game.type === 'live-sport' ? 'live-sport' : 'casino',
-      game_id: betting.details.game.id,
-      game_title: betting.details.game.title.replace(/'/g, ''),
-      transaction_type: await isTie(betting) ? 'tie' : betting.type,
-      transaction_amount: betting.amount,
-      previous_balance: betting.before,
-      available_balance: betting.before + betting.amount,
-    };
+  let betUsers = [...new Set(mappedBetArr.map((betting) => betting.username))];
 
-    newBetArr.push(mappedItem);
-  }
-
-  let betUsers = [...new Set(newBetArr.map((betting) => betting.username))];
-
-  if (newBetArr.length > 0) {
-    await insertDetailHlLog(newBetArr);
+  if (mappedBetArr.length > 0) {
+    await insertDetailHlLog(mappedBetArr);
   }
 
   return betUsers;

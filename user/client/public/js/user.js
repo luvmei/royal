@@ -155,11 +155,11 @@ let pw_button = document.querySelector('#join-pw-btn');
 // PW 유효성 체크
 pw.addEventListener('input', () => {
   reportToServer({ pw: pw.value });
-  let regex = /^(?=.*[a-zA-Z])(?=.*[!@#$%^*+=-])(?=.*[0-9]).{8,16}$/;
+  let regex = /^(?=.*[a-zA-Z])(?=.*\d)(?=.*[!@#*])[a-zA-Z\d!@#*]{8,16}$/;
 
   if (!regex.test(pw.value)) {
     pw_desc.style.color = failColor;
-    pw_desc.innerHTML = '영문, 숫자, 특수문자 조합 8~16자';
+    pw_desc.innerHTML = '영문, 숫자, 특수문자(!,@,#,*) 조합 8~16자';
     pw_button.style.boxShadow = `0 0 0 0 ${successColor} inset`;
     pw.classList.add('is-invalid');
     pw_isValid = false;
@@ -791,7 +791,6 @@ function login(e) {
   }
 
   if (!loginId || !loginPw) {
-
     checkLogin('아이디와 비밀번호를 입력해주세요', true);
     return;
   }

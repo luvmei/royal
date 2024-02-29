@@ -1,4 +1,64 @@
 window.addEventListener('DOMContentLoaded', (event) => {
+  // #region 상세내역 타입선택 버튼
+  const detailSelectCasinoBtn = document.querySelector('.detailViewCasino');
+  const detailSelectSlotBtn = document.querySelector('.detailViewSlot');
+  const detailSelectBetBtn = document.querySelector('.detailViewBet');
+  const detailSelectWinBtn = document.querySelector('.detailViewWin');
+  const detailSelectTieBtn = document.querySelector('.detailViewTie');
+  const detailSelectResetBtn = document.querySelector('.detailViewReset');
+
+  const summarySelectCasinoBtn = document.querySelector('.summaryViewCasino');
+  const summarySelectSlotBtn = document.querySelector('.summaryViewSlot');
+  const summarySelectResetBtn = document.querySelector('.summaryViewReset');
+
+  detailSelectCasinoBtn.innerHTML = '카지노 내역';
+  detailSelectSlotBtn.innerHTML = '슬롯 내역';
+  detailSelectBetBtn.innerHTML = '베팅 내역';
+  detailSelectWinBtn.innerHTML = '윈 내역';
+  detailSelectTieBtn.innerHTML = '타이 내역';
+  detailSelectResetBtn.innerHTML = '전체 내역';
+
+  summarySelectCasinoBtn.innerHTML = '카지노 내역';
+  summarySelectSlotBtn.innerHTML = '슬롯 내역';
+  summarySelectResetBtn.innerHTML = '전체 내역';
+
+  detailSelectCasinoBtn.addEventListener('click', () => {
+    let searchText = 'casino';
+    detailBetting.search(searchText).draw();
+  });
+  detailSelectSlotBtn.addEventListener('click', () => {
+    let searchText = 'slot';
+    detailBetting.search(searchText).draw();
+  });
+  detailSelectBetBtn.addEventListener('click', () => {
+    let searchText = 'bet';
+    detailBetting.search(searchText).draw();
+  });
+  detailSelectWinBtn.addEventListener('click', () => {
+    let searchText = 'win';
+    detailBetting.search(searchText).draw();
+  });
+  detailSelectTieBtn.addEventListener('click', () => {
+    let searchText = 'tie';
+    detailBetting.search(searchText).draw();
+  });
+  detailSelectResetBtn.addEventListener('click', () => {
+    detailBetting.search('').draw();
+  });
+
+  summarySelectCasinoBtn.addEventListener('click', () => {
+    let searchText = '카지노';
+    detailSummaryBetting.search(searchText).draw();
+  });
+  summarySelectSlotBtn.addEventListener('click', () => {
+    let searchText = '슬롯';
+    detailSummaryBetting.search(searchText).draw();
+  });
+  summarySelectResetBtn.addEventListener('click', () => {
+    detailSummaryBetting.search('').draw();
+  });
+
+  // #endregion
   //? 날짜 선택
   let elements = document.querySelectorAll('.detailDateInput');
 
@@ -1041,7 +1101,7 @@ let detailBetting = $('#detailBetting').DataTable({
     },
     // dataSrc: '',
   },
-  dom: '<"detailDateInput float-start dateWidth me-2">lfrtip',
+  dom: '<"detailDateInput float-start dateWidth me-2"><"ms-2 btn btn-sm asset-primary detailViewCasino"><"ms-1 btn btn-sm asset-danger detailViewSlot"><"ms-4 btn btn-sm asset-primary detailViewBet"><"ms-1 btn btn-sm asset-danger detailViewWin"><"ms-1 btn btn-sm asset-success detailViewTie"><"ms-4 btn btn-sm asset-dark detailViewReset">lfrtip',
   columns: [
     { data: 'IDX' },
     { data: '발생시간', className: 'desktop' },
@@ -1196,7 +1256,7 @@ let detailSummaryBetting = $('#detailSummaryBetting').DataTable({
     },
     dataSrc: '',
   },
-  dom: '<"detailDateInput float-start dateWidth me-2">lfrtip',
+  dom: '<"detailDateInput float-start dateWidth me-2"><"ms-2 btn btn-sm asset-primary summaryViewCasino"><"ms-1 btn btn-sm asset-danger summaryViewSlot"><"ms-4 btn btn-sm asset-dark summaryViewReset">lfrtip',
   columns: [
     { data: 'IDX' },
     { data: '결과수신시간', className: 'desktop' },

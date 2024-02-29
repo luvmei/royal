@@ -1169,11 +1169,11 @@ h6 {
   background-size: contain;
 }
 .game-selector #nav-casino-tab {
-  background-image: url(/public/custom/type_2/icon/tab_banner_01.png);
+  background-image: url(/public/custom/type_2/icon/tab_btn_01.png);
   filter: brightness(0.5);
 }
 .game-selector #nav-casino-tab.active, .game-selector #nav-casino-tab:focus, .game-selector #nav-casino-tab:active {
-  background-image: url(/public/custom/type_2/icon/tab_banner_01.png);
+  background-image: url(/public/custom/type_2/icon/tab_btn_01.png);
   filter: drop-shadow(0px 0px 10px #ff3399);
 }
 .game-selector #nav-casino-tab.active + .text, .game-selector #nav-casino-tab:focus + .text, .game-selector #nav-casino-tab:active + .text {
@@ -1181,11 +1181,11 @@ h6 {
   font-weight: 700;
 }
 .game-selector #nav-slots-tab {
-  background-image: url(/public/custom/type_2/icon/tab_banner_02.png);
+  background-image: url(/public/custom/type_2/icon/tab_btn_02.png);
   filter: brightness(0.5);
 }
 .game-selector #nav-slots-tab.active, .game-selector #nav-slots-tab:focus, .game-selector #nav-slots-tab:active {
-  background-image: url(/public/custom/type_2/icon/tab_banner_02.png);
+  background-image: url(/public/custom/type_2/icon/tab_btn_02.png);
   filter: drop-shadow(0px 0px 10px #ff3399);
 }
 .game-selector #nav-slots-tab.active + .text, .game-selector #nav-slots-tab:focus + .text, .game-selector #nav-slots-tab:active + .text {
@@ -1193,11 +1193,11 @@ h6 {
   font-weight: 700;
 }
 .game-selector #nav-sport-tab {
-  background-image: url(/public/custom/type_2/icon/tab_banner_03.png);
+  background-image: url(/public/custom/type_2/icon/tab_btn_03.png);
   filter: brightness(0.5);
 }
 .game-selector #nav-sport-tab.active, .game-selector #nav-sport-tab:focus, .game-selector #nav-sport-tab:active {
-  background-image: url(/public/custom/type_2/icon/tab_banner_03.png);
+  background-image: url(/public/custom/type_2/icon/tab_btn_03.png);
   filter: drop-shadow(0px 0px 10px #ff3399);
 }
 .game-selector #nav-sport-tab.active + .text, .game-selector #nav-sport-tab:focus + .text, .game-selector #nav-sport-tab:active + .text {
@@ -1262,6 +1262,7 @@ h6 {
   position: relative;
   padding: 0;
   max-width: 75%;
+  margin-top: 160px;
 }
 #main-section .banner-section {
   margin-top: -7%;
@@ -2701,7 +2702,7 @@ body.modal-open {
     background-image: linear-gradient(rgba(0, 0, 0, 0.7), rgba(0, 0, 0, 0.7)), url(/public/custom/type_2/bg/m_main_bg.jpg);
   }
   #main-section .container {
-    margin: 1rem auto;
+    margin: 0rem auto;
     max-width: 90%;
   }
   #main-section .container .carousel-cover {
@@ -2723,8 +2724,9 @@ body.modal-open {
     padding: 0;
   }
   #main-section .container .game-selector .nav.nav-tabs {
+    height: 13rem;
     border: none;
-    margin: 1rem 0;
+    margin: 0rem 0;
     background-image: url(/public/custom/type_2/main/partition.png);
     background-repeat: no-repeat;
     background-size: auto 80%;

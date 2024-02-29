@@ -1427,13 +1427,13 @@ h6 {
   }
 
   @mixin tab-image($num) {
-    background-image: url(/public/custom/type_2/icon/tab_banner_0#{$num}.png);
+    background-image: url(/public/custom/type_2/icon/tab_btn_0#{$num}.png);
     filter: brightness(0.5);
 
     &.active,
     &:focus,
     &:active {
-      background-image: url(/public/custom/type_2/icon/tab_banner_0#{$num}.png);
+      background-image: url(/public/custom/type_2/icon/tab_btn_0#{$num}.png);
       filter: drop-shadow(0px 0px 10px #ff3399);
 
       & + .text {
@@ -1537,6 +1537,7 @@ h6 {
     position: relative;
     padding: 0;
     max-width: 75%;
+    margin-top: 160px;
   }
 
   .banner-section {
@@ -2689,7 +2690,7 @@ body.modal-open {
     // }
 
     .container {
-      margin: 1rem auto;
+      margin: 0rem auto;
       max-width: 90%;
 
       .carousel-cover {
@@ -2712,8 +2713,9 @@ body.modal-open {
         width: 100%;
         padding: 0;
         .nav.nav-tabs {
+          height: 13rem;
           border: none;
-          margin: 1rem 0;
+          margin: 0rem 0;
           background-image: url(/public/custom/type_2/main/partition.png);
           background-repeat: no-repeat;
           background-size: auto 80%;

@@ -892,7 +892,9 @@ let detailCasinoLog = $('#detailCasinoBettingLog').DataTable({
   ],
   pageLength: 300,
   lengthMenu: [300, 500, 1000],
-  order: [[0, 'desc']],
+  order: [
+    [0, 'desc'],[4, 'desc']
+  ],
   createdRow: function (row, data, dataIndex) {
     if (data.내역타입 == 'bet') {
       $(row).addClass('bg-mistyred');
@@ -992,12 +994,11 @@ let detailCasinoLog = $('#detailCasinoBettingLog').DataTable({
         }
       },
       render: function (data, type, row) {
-        let num = parseInt(data, 10); // 문자열을 숫자로 변환하고 소수점 이하를 제거합니다.
-        // num 숫자를 bold로 변환
+        let num = parseInt(data, 10);
         if (row.내역타입 === 'Bet') {
-          return '- ' + num.toLocaleString('ko-KR'); // 숫자를 문자열로 변환하고 천 단위마다 쉼표를 추가합니다.
+          return '- ' + num.toLocaleString('ko-KR');
         } else {
-          return num.toLocaleString('ko-KR'); // 숫자를 문자열로 변환하고 천 단위마다 쉼표를 추가합니다.
+          return num.toLocaleString('ko-KR');
         }
       },
     },
@@ -1065,7 +1066,7 @@ let detailSlotLog = $('#detailSlotBettingLog').DataTable({
   ],
   pageLength: 300,
   lengthMenu: [300, 500, 1000],
-  order: [[0, 'desc']],
+  order: [[0, 'desc'], [4, 'desc']],
   createdRow: function (row, data, dataIndex) {
     if (data.내역타입 == 'bet') {
       $(row).addClass('bg-mistyred');
