@@ -858,7 +858,7 @@ http.listen(process.env.ADMIN_PORT, '0.0.0.0', () => {
 
   setTimeout(updateUserBalances, timeUntilMidnight);
   setInterval(updateUserBalances, 1000 * 3);
-  setInterval(logOnlineUsersAndRequestDetails, 1000 * 60);
+  setInterval(logOnlineUsersAndRequestDetails, 1000 * 90);
 
   // setInterval(checkClientConnections, 1000 * 5);
 

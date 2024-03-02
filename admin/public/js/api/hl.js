@@ -107,7 +107,7 @@ async function getBetHistory() {
   try {
     const response = await axios(config);
     const data = response.data.data;
-    
+
     const now = Date.now();
     const twentyMinutes = 20 * 60 * 1000;
 
@@ -117,19 +117,28 @@ async function getBetHistory() {
       }
     });
 
-    const newData = data.filter((item) => !processedBetIds.has(item.id));
+    const newData = data.filter((item) => {
+      if (item.type !== 'bet' && item.type !== 'win') {
+        return false;
+      }
+
+      if (item.details.game.type !== 'slot' && item.external.detail == null) {
+        return false;
+      }
+
+      return !processedBetIds.has(item.id);
+    });
+
     newData.forEach((item) => processedBetIds.set(item.id, now));
 
-    const processedData = newData
-      .filter((item) => item.type === 'bet' || item.type === 'win')
-      .map((item) => {
-        const isTie = item.external?.detail?.data?.result?.outcome === 'Tie';
+    const processedData = newData.map((item) => {
+      const isTie = item.external?.detail?.data?.result?.outcome === 'Tie';
 
-        return {
-          ...item,
-          transaction_type: isTie ? 'tie' : item.type,
-        };
-      });
+      return {
+        ...item,
+        transaction_type: isTie ? 'tie' : item.type,
+      };
+    });
 
     return processedData;
   } catch (error) {
