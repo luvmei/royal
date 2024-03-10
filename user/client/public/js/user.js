@@ -57,7 +57,7 @@ let id_button = document.querySelector('#join-id-btn');
 
 // ID 유효성 체크
 id.addEventListener('input', function () {
-  let regex = /^(?=.*[a-z])(?=.*[0-9])[a-z0-9]{6,12}$/;
+  let regex = /^(?=.*[a-zA-Z])(?=.*[0-9])[a-zA-Z0-9]{6,12}$/;
   // let regex = /^(?=\S*[a-z])(?=\S*[0-9])\S{6,12}$/;
   //* 아이디는 'admin', 'test'를 포함하면 안됨
   let forbiddenWords = ['admin', 'test'];
@@ -195,7 +195,7 @@ let nick_button = document.querySelector('#join-nick-btn');
 
 // nickname 유효성 체크
 nick.addEventListener('input', () => {
-  let regex = /^(?=.*[a-z가-힣]).{3,8}$/;
+  let regex = /^(?=.*[a-z가-힣0-9]).{3,8}$/;
 
   if (regex.test(nick.value)) {
     nick_desc.style.color = failColor;
@@ -254,7 +254,7 @@ let userName_desc = document.querySelector('#join-name-desc');
 
 // 이름 유효성 체크
 userName.addEventListener('input', () => {
-  let regex = /^[\uAC00-\uD7A3]{2,4}$|^[a-zA-Z]{3,20}$/;
+  let regex = /^[a-zA-Z\uAC00-\uD7A3\s]{2,30}$/;
 
   // 이후 중복 된 전화번호 케이스 추가
   if (!regex.test(userName.value)) {
@@ -273,7 +273,7 @@ userName.addEventListener('input', () => {
 
 // #region 전화번호
 let phone_isValid = false;
-let phone_isCheck = false;
+let phone_isCheck = true;
 
 let phone = document.querySelector('#join-phone-num');
 let phone_desc = document.querySelector('#join-phone-desc');
@@ -376,7 +376,7 @@ let holder_desc = document.querySelector('#join-account-holder-desc');
 
 // 예금주 유효성 체크
 holder.addEventListener('input', () => {
-  let regex = /^[a-zA-Z가-힣]{2,20}$/;
+  let regex = /^[a-zA-Z가-힣\s]{2,30}$/;
 
   if (!regex.test(holder.value) || userName.value !== holder.value) {
     holder_desc.style.color = failColor;

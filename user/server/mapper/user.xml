@@ -180,12 +180,16 @@
 	    )
   </select>
 
-   <select id='insertSdAccount'>
+  <select id='insertSdAccount'>
     UPDATE user
     SET sd_usercode = #{usercode}, sd_token = #{token}
     WHERE id = #{id};
   </select>
 
+  <delete id='expireSession'>
+    DELETE FROM sessions
+    WHERE JSON_EXTRACT(data, '$.passport.user') = #{id}
+  </delete>
 <!--? 기타 기능 -->
   <select id='getUserInfo'>
     SELECT 

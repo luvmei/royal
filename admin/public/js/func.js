@@ -1525,7 +1525,7 @@ let id_button = document.querySelector('#agent-id-btn');
 //? ID 유효성 체크
 id.addEventListener('input', function () {
   //* 아이디 규칙: 영문, 숫자 조합 4~12자
-  let regex = /^(?=.*[a-z])[a-z](?=.*[0-9])[^\s]{3,11}$/;
+  let regex = /^(?=.*[a-zA-Z])[a-zA-Z](?=.*[0-9])[^\s]{3,12}$/;
   //* 아이디는 'admin', 'test'를 포함하면 안됨
   let forbiddenWords = ['admin', 'test'];
 

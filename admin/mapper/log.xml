@@ -67,7 +67,7 @@
       u.join_code AS 가입코드
     FROM log_hl_betting_detail AS d 
     JOIN royal.user AS u ON u.id = d.user_id
-    LEFT JOIN royal.game_list AS g ON d.game_id = g.uuid
+    LEFT JOIN royal.game_list AS g ON d.provider_name = g.provider AND d.game_id = g.uuid
     JOIN royal.system_tree AS t ON u.upper_agt = t.user_id
     <where>      
       SUBSTR(event_date, 1, 16) BETWEEN #{startDate} AND #{endDate}
@@ -156,7 +156,7 @@
       u.type AS 회원타입
     FROM log_hl_betting_detail AS d 
     JOIN royal.user AS u ON u.id = d.user_id
-    LEFT JOIN royal.game_list AS g ON d.game_id = g.uuid
+    LEFT JOIN royal.game_list AS g ON d.provider_name = g.provider AND d.game_id = g.uuid
     JOIN royal.system_tree AS t ON u.upper_agt = t.user_id
     <where>      
       SUBSTR(event_date, 1, 16) 

@@ -876,11 +876,44 @@ let incomeAgentBetWin = $('#incomeAgentBetWin').DataTable({
     {
       target: 21,
       className: 'fw-semibold',
+      width: 250,
       render: function (data, type, row) {
         data = Number(data) || 0;
         if (clientType == 9) {
-          return `<div class="fw-light">${data.toLocaleString('ko-KR')}</div>
-                <div class="text-primary">${Number(row.카지노마진롤링).toLocaleString('ko-KR')}</div>`;
+          if (row.타입 == 3) {
+            return `
+            <div class="row text-end justify-content-between">
+              <div class='col-4'>매장</div>
+              <div class='col-4'>유저</div>
+              <div class='col-4'>합</div>
+              <div class="col-4 fw-light">
+                ${data.toLocaleString('ko-KR')}
+              </div>
+              <div class="col-4 fw-light">
+                ${Number(row.유저카지노롤링).toLocaleString('ko-KR')}
+              </div>
+              <div class="col-4 fw-light">
+                ${(Number(row.유저카지노롤링) + data).toLocaleString('ko-KR')}
+              </div>
+              <div class="col-4 text-primary">
+                ${Number(row.카지노마진롤링).toLocaleString('ko-KR')}
+              </div>
+              <div class="col-4 text-primary">
+                ${Number(row.유저카지노마진롤링).toLocaleString('ko-KR')}
+              </div>
+              <div class="col-4 text-primary">
+                ${(Number(row.카지노마진롤링) + Number(row.유저카지노마진롤링)).toLocaleString('ko-KR')}
+              </div>
+          </div>`;
+          } else {
+            return `
+            <div class="fw-light">
+            ${data.toLocaleString('ko-KR')}
+            </div>
+            <div class="text-primary">
+            ${Number(row.카지노마진롤링).toLocaleString('ko-KR')}
+            </div>`;
+          }
         } else {
           return `${Number(row.카지노마진롤링).toLocaleString('ko-KR')}`;
         }
@@ -889,11 +922,46 @@ let incomeAgentBetWin = $('#incomeAgentBetWin').DataTable({
     {
       target: 22,
       className: 'fw-semibold',
+      width: 250,
       render: function (data, type, row) {
         data = Number(data) || 0;
         if (clientType == 9) {
-          return `<div class="fw-light">${data.toLocaleString('ko-KR')}</div>
-                <div class="text-primary">${Number(row.슬롯마진롤링).toLocaleString('ko-KR')}</div>`;
+          if (row.타입 == 3) {
+            console.log('슬롯롤링마진', typeof row.슬롯마진롤링);
+            console.log('유저슬롯롤링마진', typeof row.유저슬롯마진롤링);
+            return `
+            <div class="row text-end justify-content-around">
+              <div class='col-4'>매장</div>
+              <div class='col-4'>유저</div>
+              <div class='col-4'>합</div>
+              <div class="col-4 fw-light">
+                ${data.toLocaleString('ko-KR')}
+              </div>
+              <div class="col-4 fw-light">
+                ${Number(row.유저슬롯롤링).toLocaleString('ko-KR')}
+                </div>
+                <div class="col-4 fw-light">
+                ${(Number(row.유저슬롯롤링) + data).toLocaleString('ko-KR')}
+                </div>
+                <div class="col-4 text-primary">
+                ${Number(row.슬롯마진롤링).toLocaleString('ko-KR')}
+                </div>
+                <div class="col-4 text-primary">
+                ${Number(row.유저슬롯마진롤링).toLocaleString('ko-KR')}
+                </div>
+                <div class="col-4 text-primary">
+                ${(Number(row.슬롯마진롤링) + Number(row.유저슬롯마진롤링)).toLocaleString('ko-KR')}
+                </div>
+                </div>`;
+          } else {
+            return `
+            <div class="fw-light">
+            ${data.toLocaleString('ko-KR')}
+            </div>
+            <div class="text-primary">
+            ${Number(row.슬롯마진롤링).toLocaleString('ko-KR')}
+            </div>`;
+          }
         } else {
           return `${Number(row.슬롯마진롤링).toLocaleString('ko-KR')}`;
         }
@@ -942,10 +1010,14 @@ let incomeAgentBetWin = $('#incomeAgentBetWin').DataTable({
               Number(row.카지노마진베팅) -
               Number(row.슬롯마진획득) -
               Number(row.카지노마진획득) -
-              Number(row.슬롯롤링) -
-              Number(row.카지노롤링)) *
+              Number(row.슬롯마진롤링) -
+              Number(row.카지노마진롤링) -
+              Number(row.유저슬롯마진롤링) -
+              Number(row.유저카지노마진롤링)) *
               row.루징요율) /
             100;
+
+          losing = Math.floor(losing);
 
           if (losing >= 0) {
             return `<div class="text-primary">${losing.toLocaleString('ko-KR')}</div>`;

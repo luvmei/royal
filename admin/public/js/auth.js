@@ -4,7 +4,7 @@ login_form.addEventListener('submit', function (e) {
   e.preventDefault();
 
   let login_data = $('#login-data').serialize();
-
+  console.log(login_data);
   $.ajax({
     method: 'POST',
     url: '/auth/login',

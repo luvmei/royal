@@ -635,7 +635,7 @@ h6 {
         }
 
         .modal-body {
-          padding: 20px;
+          padding: 0px;
         }
 
         .form-floating {
@@ -699,6 +699,15 @@ h6 {
   &#slotModal {
     .modal-content {
       background-attachment: fixed;
+    }
+  }
+
+  &#noticePopup {
+    .modal-dialog {
+      max-width: 1600px !important;
+      .modal-content{
+        background-image: linear-gradient(rgba(0, 0, 0, 0.95), rgba(0, 0, 0, 0.95)), url(/public/custom/type_1/bg/modal_bg.webp);
+      }
     }
   }
 }

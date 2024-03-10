@@ -525,7 +525,7 @@ h6 {
   display: none;
 }
 .modal.popup .modal-dialog .modal-content .modal-body {
-  padding: 20px;
+  padding: 0px;
 }
 .modal.popup .modal-dialog .modal-content .form-floating .form-control,
 .modal.popup .modal-dialog .modal-content .form-floating .form-select {
@@ -565,6 +565,12 @@ h6 {
 }
 .modal#slotModal .modal-content {
   background-attachment: fixed;
+}
+.modal#noticePopup .modal-dialog {
+  max-width: 1600px !important;
+}
+.modal#noticePopup .modal-dialog .modal-content {
+  background-image: linear-gradient(rgba(0, 0, 0, 0.95), rgba(0, 0, 0, 0.95)), url(/public/custom/type_1/bg/modal_bg.webp);
 }
 
 #popup1 {

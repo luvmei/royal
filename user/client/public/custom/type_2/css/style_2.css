@@ -581,6 +581,12 @@ h6 {
 .modal#slotModal .modal-content {
   background-attachment: fixed;
 }
+.modal#noticePopup .modal-dialog {
+  max-width: 1600px !important;
+}
+.modal#noticePopup .modal-dialog .modal-content {
+  background-image: linear-gradient(rgba(0, 0, 0, 0.95), rgba(0, 0, 0, 0.95)), url(/public/custom/type_2/bg/modal_bg.webp);
+}
 
 #popup1 {
   z-index: 1057;

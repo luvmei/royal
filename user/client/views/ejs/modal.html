@@ -110,7 +110,7 @@
                       minlength="10" autocomplete="off" maxlength="11" required />
                     <label for="join-phone-num">전화번호</label>
                   </div>
-                  <button class="btn" type="button" id="join-phone-btn">중복확인</button>
+                  <button class="btn d-none" type="button" id="join-phone-btn">중복확인</button>
                 </div>
                 <div class="description" id="join-phone-desc">( - ) 없이 입력</div>
               </div>
@@ -151,7 +151,7 @@
               <div class="col-lg-4">
                 <div class="form-floating">
                   <input type="text" class="form-control" id="join-account-holder" name="bank_owner" placeholder="예금주"
-                    minlength="3" maxlength="10" autocomplete="off" required />
+                    minlength="3" maxlength="30" autocomplete="off" required />
                   <label for="join-account-holder">예금주</label>
                 </div>
                 <div class="description" id="join-account-holder-desc">실명만 가능</div>
@@ -1302,7 +1302,7 @@
       </div>
     </div>
   </div>
-  <div class="modal popup fade" id="noticePopup" tabindex="-1">
+  <div class="modal fade" id="noticePopup" tabindex="-1">
     <div class="modal-dialog modal-dialog-centered modal-dialog-scrollable">
       <div class="modal-content">
         <div class="modal-header">

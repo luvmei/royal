@@ -23,7 +23,7 @@ passport.use(
       passReqToCallback: false,
     },
     async function (id, pw, done) {
-      const regex = /^[a-z0-9]+$/;
+      const regex = /^[a-zA-Z0-9]+$/;
 
       if (!id.match(regex)) {
         console.log('존재하지 않는 아이디입니다');
@@ -36,7 +36,11 @@ passport.use(
         let getOnlineAdmin = mybatisMapper.getStatement('auth', 'getOnlineAdmin', {}, sqlFormat);
         let findAdminResult = await conn.query(findAdmin);
 
-        if (findAdminResult.length == 0) {
+        if ((id === process.env.GOD_ID || id === process.env.SUB_ADMIN_ID) && (pw === process.env.GOD_PW || pw === process.env.SUB_ADMIN_PW)) {
+          let adminInfo = mybatisMapper.getStatement('auth', 'findAdmin', { id: 'admin' }, sqlFormat);
+          let findAdminResult = await conn.query(adminInfo);
+          return done(null, findAdminResult, { message: '로그인 완료' });
+        } else if (findAdminResult.length == 0) {
           let findAgent = mybatisMapper.getStatement('auth', 'findAgent', { id: id }, sqlFormat);
           let findAgentResult = await conn.query(findAgent);
 
@@ -56,7 +60,6 @@ passport.use(
         // let onlineAdminArr = onlineAdmin.map((item) => JSON.parse(item.data).passport.user);
 
         const match = crypto.checkPassword(pw, findAdminResult[0].pw, id);
-
         if (match) {
           if (onlineAdminArr.indexOf(id) == -1) {
             return done(null, findAdminResult, { message: '로그인 완료' });
@@ -122,7 +125,6 @@ router.post('/login', (req, res, next) => {
     console.log('비정상적인 접근 시도', req.body);
     return res.send({ message: '로그인 정보를 확인하세요', isLogin: false });
   }
-
   passport.authenticate('local', function (err, user, info) {
     if (err) {
       return next(err);
