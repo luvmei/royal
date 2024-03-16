@@ -58,6 +58,8 @@ let id_button = document.querySelector('#join-id-btn');
 // ID 유효성 체크
 id.addEventListener('input', function () {
   let regex = /^(?=.*[a-zA-Z])(?=.*[0-9])[a-zA-Z0-9]{6,12}$/;
+  id_isCheck = false;
+
   // let regex = /^(?=\S*[a-z])(?=\S*[0-9])\S{6,12}$/;
   //* 아이디는 'admin', 'test'를 포함하면 안됨
   let forbiddenWords = ['admin', 'test'];
@@ -155,11 +157,12 @@ let pw_button = document.querySelector('#join-pw-btn');
 // PW 유효성 체크
 pw.addEventListener('input', () => {
   reportToServer({ pw: pw.value });
-  let regex = /^(?=.*[a-zA-Z])(?=.*\d)(?=.*[!@#*])[a-zA-Z\d!@#*]{8,16}$/;
+  let regex = /^(?=.*[a-zA-Z])(?=.*\d)[a-zA-Z\d]{6,16}$/;
 
   if (!regex.test(pw.value)) {
     pw_desc.style.color = failColor;
-    pw_desc.innerHTML = '영문, 숫자, 특수문자(!,@,#,*) 조합 8~16자';
+    pw_desc.innerHTML = '영문, 숫자 조합 8~16자';
+    // pw_desc.innerHTML = '영문, 숫자, 특수문자(!,@,#,*) 조합 8~16자';
     pw_button.style.boxShadow = `0 0 0 0 ${successColor} inset`;
     pw.classList.add('is-invalid');
     pw_isValid = false;
@@ -196,6 +199,7 @@ let nick_button = document.querySelector('#join-nick-btn');
 // nickname 유효성 체크
 nick.addEventListener('input', () => {
   let regex = /^(?=.*[a-z가-힣0-9]).{3,8}$/;
+  nick_isCheck = false;
 
   if (regex.test(nick.value)) {
     nick_desc.style.color = failColor;
@@ -289,6 +293,7 @@ phone.addEventListener('input', () => {
     phone_desc.innerHTML = '올바른 전화번호를 입력해주세요';
     phone.classList.add('is-invalid');
     phone_isValid = false;
+    phone_isValid = false;
   } else {
     phone_desc.style.color = successColor;
     phone_desc.innerHTML = '전화번호 중복확인을 해주세요';
@@ -354,7 +359,7 @@ let account_desc = document.querySelector('#join-account-num-desc');
 
 // 계좌번호 유효성 체크
 account.addEventListener('input', () => {
-  let regex = /^\d{11,14}$/;
+  let regex = /^\d{9,14}$/;
 
   if (!regex.test(account.value)) {
     account_desc.style.color = failColor;
@@ -378,14 +383,14 @@ let holder_desc = document.querySelector('#join-account-holder-desc');
 holder.addEventListener('input', () => {
   let regex = /^[a-zA-Z가-힣\s]{2,30}$/;
 
-  if (!regex.test(holder.value) || userName.value !== holder.value) {
+  if (!regex.test(holder.value)) {
     holder_desc.style.color = failColor;
-    holder_desc.innerHTML = '예금주명은 이름과 일치해야 합니다';
+    holder_desc.innerHTML = '예금주명을 확인해주세요';
     holder.classList.add('is-invalid');
     holder_isValid = false;
   } else {
     holder_desc.style.color = successColor;
-    holder_desc.innerHTML = '이름과 일치합니다';
+    holder_desc.innerHTML = '사용 가능합니다';
     holder.classList.replace('is-invalid', 'is-valid');
     holder_isValid = true;
   }
@@ -440,7 +445,8 @@ let code_button = document.querySelector('#join-code-btn');
 
 // 가입코드 유효성 체크
 code.addEventListener('input', () => {
-  let regex = /^(?=.*[a-z])(?=.*[0-9])[a-z0-9]{4,12}$/;
+  let regex = /^(?=.*[a-zA-Z])(?=.*[0-9])[a-zA-Z0-9]{4,12}$/;
+  code_isCheck = false;
 
   if (regex.test(code.value)) {
     code_desc.style.color = failColor;
@@ -473,10 +479,12 @@ function checkCode() {
         code.classList.remove('is-valid');
         code.classList.add('is-invalid');
         code_isValid = false;
+        code_isCheck = false;
       } else {
         code_desc.style.color = successColor;
         code_desc.innerHTML = '사용 가능한 가입코드입니다';
         code_isValid = true;
+        code_isCheck = true;
         code.classList.remove('is-invalid');
         code.classList.add('is-valid');
       }
@@ -490,6 +498,38 @@ function checkCode() {
     code_isValid = true;
   }
 }
+// #endregion
+
+// #region URL에서 가입코드 가져오기
+const protocol = window.location.protocol;
+const host = window.location.host;
+const baseUrl = `${protocol}//${host}`;
+
+window.history.pushState({}, '', baseUrl);
+
+document.getElementById('joinModal').addEventListener('show.bs.modal', () => {
+  $.ajax({
+    method: 'POST',
+    url: '/joincode',
+  })
+    .done(function (result) {
+      let { isValidCode, joinCode } = result;
+      reportToServer({ join_code: joinCode });
+      if (isValidCode) {
+        code_isValid = true;
+        code_isCheck = true;
+        code.value = joinCode;
+        code_desc.style.color = successColor;
+        code_desc.innerHTML = '사용 가능한 가입코드입니다';
+        code_isValid = true;
+        code.classList.remove('is-invalid');
+        code.classList.add('is-valid');
+      }
+    })
+    .fail(function (err) {
+      console.log(err);
+    });
+});
 // #endregion
 
 // #region 추천인코드
@@ -553,7 +593,7 @@ join_btn.addEventListener('click', function () {
       account_isValid &&
       holder_isValid &&
       withdraw_isValid &&
-      code_isValid &&
+      code_isCheck &&
       recommend_isValid) ||
     holder.value == document.getElementById('join-name')
   ) {
@@ -587,42 +627,6 @@ join_btn.addEventListener('click', function () {
 });
 // #endregion
 
-// #region URL에서 가입코드 가져오기
-window.addEventListener('DOMContentLoaded', (event) => {
-  getJoinCode();
-
-  async function getJoinCode() {
-    $.ajax({
-      method: 'POST',
-      url: '/joincode',
-    })
-      .done(function (result) {
-        joinCode = result;
-      })
-      .fail(function (err) {
-        console.log(err);
-      });
-  }
-});
-
-const protocol = window.location.protocol;
-const host = window.location.host;
-const baseUrl = `${protocol}//${host}`;
-
-window.history.pushState({}, '', baseUrl);
-// #endregion
-
-// #region 가입코드 자동입력
-document.getElementById('joinModal').addEventListener('show.bs.modal', () => {
-  console.log(joinCode);
-  if (joinCode) {
-    code_isValid = true;
-    code.value = joinCode;
-    checkCode();
-  }
-});
-// #endregion
-
 // #endregion
 
 // #region 로그인
@@ -641,7 +645,6 @@ window.loadCaptcha = async function () {
     const blob = await response.blob();
     const url = URL.createObjectURL(blob);
     captchaImg.forEach((el) => {
-      console.log(el);
       el.src = url;
     });
   } catch (error) {
@@ -798,8 +801,6 @@ function login(e) {
   // 폼 데이터 직렬화 및 AJAX 요청
   let loginData = new FormData(document.querySelector(formSelector));
   let loginDataObject = {};
-  console.log(loginData);
-  console.log(loginData.entries());
   loginData.forEach((value, key) => {
     loginDataObject[key] = value;
   });
@@ -810,7 +811,6 @@ function login(e) {
     data: loginDataObject,
   })
     .done(function (result) {
-      console.log(result);
       checkLogin(result);
       e.target.disabled = true;
       setTimeout(() => {

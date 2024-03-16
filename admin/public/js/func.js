@@ -2155,6 +2155,7 @@ userId.addEventListener('input', function () {
     userId_button.style.boxShadow = '0 0 0 0 #00ffff inset';
     userId.classList.add('is-invalid');
     userId_isValid = false;
+    userId_isCheck = false;
   } else {
     userId_desc.style.color = '#dc3545';
     userId_desc.innerHTML = '아이디 중복확인을 해주세요';
@@ -2271,6 +2272,7 @@ user_nick.addEventListener('input', () => {
     user_nick_button.style.boxShadow = '0 0 0 0 #00ffff inset';
     user_nick.classList.add('is-invalid');
     user_nick_isValid = false;
+    user_nick_isCheck = false;
   } else {
     user_nick_desc.style.color = '#dc3545';
     user_nick_desc.innerHTML = '닉네임 중복확인을 해주세요';

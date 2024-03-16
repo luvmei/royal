@@ -65,6 +65,9 @@ const dbConfig = {
   database: process.env.DB_NAME,
   user: process.env.DB_USER,
   password: process.env.DB_PW,
+  clearExpired: true,
+  checkExpirationInterval: 1000 * 10,
+  expiration: 1000 * 60,
 };
 
 app.use(
@@ -75,8 +78,10 @@ app.use(
     saveUninitialized: false,
     store: new MySQLStore(dbConfig),
     cookie: {
-      expires: false,
+      maxAge: 1000 * 60,
+      // expires: false,
     },
+    rolling: true,
   })
 );
 // #endregion
@@ -204,7 +209,7 @@ async function checkXssAttack(req, res, next) {
   }
 }
 
-function containsSpecialCharacters(input, isPassword) {
+functioncontainsSpecialCharacters(input, isPassword) {
   if (isPassword) {
     const alphanumericRegex = /^[a-zA-Z0-9]+$/;
     const specialCharactersPassword = /[!@#$%^*+=-]/;
@@ -245,6 +250,7 @@ async function checkBlackList(params, type) {
 
 app.use(checkXssAttack);
 // #endregion
+
 // #endregion
 
 // #region 라우터 등록
@@ -321,8 +327,27 @@ function getDomain(host) {
 }
 
 app.post('/joincode', (req, res) => {
-  res.send(joinCode);
+  checkJoinCode(res, joinCode);
 });
+
+async function checkJoinCode(res, joinCode) {
+  let conn = await pool.getConnection();
+  let sql = mybatisMapper.getStatement('user', 'checkCode', { join_code: joinCode }, sqlFormat);
+
+  try {
+    let result = await conn.query(sql);
+    if (result.length > 0) {
+      res.send({ isValidCode: true, joinCode: joinCode });
+    } else {
+      res.send({ result: false, joinCode: '' });
+    }
+  } catch (e) {
+    console.log(e);
+    return done(e);
+  } finally {
+    if (conn) return conn.release();
+  }
+}
 
 app.post('/popup', (req, res) => {
   getPopupData(res);

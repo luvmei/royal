@@ -161,7 +161,7 @@ app.use((req, res, next) => {
 let ipAttackCounts = {};
 
 function containsSpecialCharacters(input) {
-  const specialCharactersXSS = /[<>"'&;:()#]/;
+  const specialCharactersXSS = /[<>"';:()]/;
   const specialCharactersSQL = /['";%\-#||&&\/\*]/;
 
   return specialCharactersXSS.test(input) || specialCharactersSQL.test(input);
@@ -298,7 +298,7 @@ app.get('/', async (req, res) => {
     let summary = await getData(res, 'getAgentSummary');
     summary = JSON.parse(summary);
     summary = getAgentSummary(summary);
-    res.render('index.ejs', { summary: summary, user: req.user[0], sport: sport, lotto: lotto, death: death});
+    res.render('index.ejs', { summary: summary, user: req.user[0], sport: sport, lotto: lotto, death: death });
   } else {
     res.render('login.ejs', { sport: sport });
   }
@@ -525,33 +525,30 @@ io.on('connection', async (socket) => {
   });
 
   socket.on('disconnect', async () => {
-    const sessionOutInterval = 3;
-    const client = clients[socket.id];
-
-    if (client && client.clientType === '4') {
-      updateUserBalances();
-      if (disconnectTimeouts[client.clientId]) {
-        console.log('연결해제 타이머있었음', disconnectTimeouts[client.clientId]);
-        clearTimeout(disconnectTimeouts[client.clientId]);
-        delete disconnectTimeouts[client.clientId];
-      }
-
-      disconnectTimeouts[client.clientId] = setTimeout(async () => {
-        let checkSession = await checkDisconnectedUser(client.clientId);
-        if (checkSession == 1) {
-          deleteDisconectedUser(client.clientId);
-          let loginInfo = await getLoginInfo(client.clientId);
-          loginInfo.time = userRouter.getCurrentTime();
-          loginInfo.type = '세션아웃';
-          loginInfo.domain = loginInfo.connect_domain;
-          insertConnectInfo(loginInfo);
-          console.log(`세션아웃: [ ID: ${client.clientId} ]`);
-        }
-
-        delete clients[socket.id];
-        delete disconnectTimeouts[client.clientId];
-      }, 1000 * 60 * sessionOutInterval);
-    }
+    // const sessionOutInterval = 3;
+    // const client = clients[socket.id];
+    // if (client && client.clientType === '4') {
+    //   updateUserBalances();
+    //   if (disconnectTimeouts[client.clientId]) {
+    //     console.log('연결해제 타이머있었음', disconnectTimeouts[client.clientId]);
+    //     clearTimeout(disconnectTimeouts[client.clientId]);
+    //     delete disconnectTimeouts[client.clientId];
+    //   }
+    //   disconnectTimeouts[client.clientId] = setTimeout(async () => {
+    //     let checkSession = await checkDisconnectedUser(client.clientId);
+    //     if (checkSession == 1) {
+    //       deleteDisconectedUser(client.clientId);
+    //       let loginInfo = await getLoginInfo(client.clientId);
+    //       loginInfo.time = userRouter.getCurrentTime();
+    //       loginInfo.type = '세션아웃';
+    //       loginInfo.domain = loginInfo.connect_domain;
+    //       insertConnectInfo(loginInfo);
+    //       console.log(`세션아웃: [ ID: ${client.clientId} ]`);
+    //     }
+    //     delete clients[socket.id];
+    //     delete disconnectTimeouts[client.clientId];
+    //   }, 1000 * 60 * sessionOutInterval);
+    // }
   });
 });
 
@@ -793,9 +790,64 @@ async function getLoggedId() {
     if (conn) conn.release();
   }
 }
+
+async function insertSessionOutInfo(id) {
+  let loginInfo = await getLoginInfo(id);
+  loginInfo.time = userRouter.getCurrentTime();
+  loginInfo.type = '세션아웃';
+  loginInfo.domain = loginInfo.connect_domain;
+  insertConnectInfo(loginInfo);
+  console.log(`세션아웃: [ ID: ${id} ]`);
+}
+
+async function getUserId(username) {
+  let conn = await pool.getConnection();
+  let sql = mybatisMapper.getStatement('user', 'getUserId', { id: username }, sqlFormat);
+
+  try {
+    const result = await conn.query(sql);
+
+    if (!result[0] || result[0].user_id === undefined) {
+      return null;
+    }
+
+    const userId = result[0].user_id;
+    return userId;
+  } catch (error) {
+    console.error('유저 ID 조회 중 오류 발생:', error);
+  } finally {
+    if (conn) conn.release();
+  }
+}
+
+async function updateUserAssetInfo(userAssetParams) {
+  let conn;
+  try {
+    conn = await pool.getConnection();
+
+    let sql = mybatisMapper.getStatement('user', 'upsertUserAssetInfoTune', { userAssetParams: userAssetParams }, sqlFormat);
+    await conn.query(sql);
+  } catch (error) {
+    if (conn) await conn.rollback(); // 오류 발생 시 트랜잭션 롤백
+    console.error('Batch update of user asset info failed:', error);
+  } finally {
+    if (conn) conn.release(); // 데이터베이스 연결 해제
+  }
+}
 // #endregion
 
 // #region 유저밸런스 업데이트
+async function checkOnlineUsers() {
+  const previousOnlineUsers = [...onlineUsers];
+
+  let loggedIds = await getLoggedId();
+  onlineUsers = [...new Set([...loggedIds])];
+
+  const loggedOutIds = previousOnlineUsers.filter((id) => !onlineUsers.includes(id));
+
+  loggedOutIds.forEach((id) => insertSessionOutInfo(id));
+}
+
 async function updateUserBalanceInDB(params) {
   let conn = await pool.getConnection();
   let checkType = mybatisMapper.getStatement('log', 'checkUserType', params, sqlFormat);
@@ -814,18 +866,14 @@ async function updateUserBalanceInDB(params) {
 }
 
 const updateUserBalances = async () => {
-  let loggedIds = await getLoggedId();
-  onlineUsers = [...new Set([...loggedIds])];
-  // onlineUsers = [...new Set([...loggedIds, ...betUsers])];
-
   if (onlineUsers.length != 0) {
     onlineUsers = await filterUsers(onlineUsers);
     await Promise.all(
       onlineUsers.map(async (el) => {
         let apiInfo = await api.updateUserBalance(el);
-        if (apiInfo == undefined) {
+        if (!apiInfo) {
           return;
-        } else if (apiInfo.status == 200 || apiInfo.status == 0) {
+        } else if (apiInfo.status == 200) {
           let params = { id: el, balance: apiInfo.balance };
           updateUserBalanceInDB(params);
         }
@@ -836,13 +884,39 @@ const updateUserBalances = async () => {
     }
   }
   api.updateAdminBalance();
-    socket.emit('to_admin', { id: '', type: 'updateOnlineUsers' });
+  socket.emit('to_admin', { id: '', type: 'updateOnlineUsers' });
 };
+
+async function updateAllUserBalance() {
+  const userAssetParams = [];
+
+  const updateAllUserBalance = await api.updateAllUserBalance();
+
+  for (const { username, balance } of updateAllUserBalance) {
+    try {
+      const userId = await getUserId(username);
+      if (userId) {
+        userAssetParams.push({
+          user_id: userId,
+          username,
+          balance,
+        });
+      }
+    } catch (error) {
+      console.error('오류발생:', username, error);
+    }
+  }
+  await updateUserAssetInfo(userAssetParams);
+}
+
 // #endregion
 
 const logOnlineUsersAndRequestDetails = async () => {
+  await checkOnlineUsers();
   betUsers = (await api.requestDetailLog()) || [];
   await betHandler.requestSummaryLog();
+
+  onlineUsers = [...new Set([...betUsers, ...onlineUsers])];
 
   if (onlineUsers.length != 0) {
     console.log('접속 유저목록: ', onlineUsers);
@@ -857,7 +931,8 @@ http.listen(process.env.ADMIN_PORT, '0.0.0.0', () => {
   const timeUntilMidnight = midnight - now - 1000;
 
   setTimeout(updateUserBalances, timeUntilMidnight);
-  setInterval(updateUserBalances, 1000 * 3);
+  setInterval(updateUserBalances, 1000 * 5);
+  setInterval(updateAllUserBalance, 1000 * 20);
   setInterval(logOnlineUsersAndRequestDetails, 1000 * 90);
 
   // setInterval(checkClientConnections, 1000 * 5);

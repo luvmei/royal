@@ -130,29 +130,6 @@ router.post('/login', (req, res, next) => {
   }
   delete req.session.captcha;
 
-  // const originalId = req.body.id;
-  // const originalPassword = req.body.password;
-
-  // const id = xss(req.body.id);
-  // const password = xss(req.body.password);
-
-  // const isIdSanitized = originalId !== id;
-  // const isPasswordSanitized = originalPassword !== password;
-
-  // if (isIdSanitized) {
-  //   console.log('Sanitized Id Detected:', isIdSanitized);
-  //   console.log('Original Id:', originalId);
-  // }
-
-  // if (isPasswordSanitized) {
-  //   console.log('Sanitized Password Detected:', isPasswordSanitized);
-  //   console.log('Original Password:', originalPassword);
-  // }
-
-  // if(isIdSanitized || isPasswordSanitized) {
-  //   console.log('살균내역 있음')
-  // }
-
   passport.authenticate('local', function (err, user, info) {
     if (err) {
       return next(err);
@@ -174,7 +151,7 @@ router.post('/login', (req, res, next) => {
 router.post('/logout', (req, res, next) => {
   if (!req.user || !req.user[0]) {
     console.log('로그인되어있지 않은 상태에서 로그아웃 시도');
-    return res.render(templateName, { isLogin: false, title: title });
+    return res.redirect('/');
   }
   let logoutParams = new redefineConnectParams(req, '로그아웃');
 
@@ -249,6 +226,7 @@ async function insertConnectInfo(connectParams) {
 
 // #region 회원가입
 router.post('/signup', (req, res) => {
+  req.body.name = req.body.bank_owner;
   insertJoinInfo(res, req.body, req);
 });
 
@@ -265,7 +243,7 @@ router.post('/doublecheck', (req, res) => {
     console.log(`[중복체크] 전화번호: ${req.body.phone} / ip: ${this.ip_adress}`);
     doubleCheck(req, res, 'checkPhone');
   } else if (req.body.type == 'code') {
-    console.log(`[코드체크] 가입코드: ${req.body.code} / ip: ${this.ip_adress}`);
+    console.log(`[코드체크] 가입코드: ${req.body.join_code} / ip: ${this.ip_adress}`);
     doubleCheck(req, res, 'checkCode');
   } else if (req.body.type == 'recommend') {
     console.log(`[추천인체크] 추천인: ${req.body.recommend} / ip: ${this.ip_adress}`);

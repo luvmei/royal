@@ -657,10 +657,7 @@ function resetToOriginalState() {
 function updateAfterRewardBalance() {
   const currentBalance = parseInt(reward.curBalance.textContent.replace(/,/g, ''), 10);
   const currentPoint = parseInt(reward.curPoint.textContent.replace(/,/g, ''), 10);
-  console.log('currentBalance', currentBalance);
-  console.log('requestPoints', currentPoint);
   const newBalance = currentBalance + currentPoint;
-  console.log('newBalance', newBalance);
   reward.afterRewardBalance.textContent = newBalance.toLocaleString('ko-KR');
 }
 // #endregion

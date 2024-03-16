@@ -47,8 +47,7 @@ document.querySelector('.navbar').addEventListener('click', function (e) {
 
   if (e.target.tagName === 'SPAN') {
     selectedMenu = `#${e.target.id.slice(4)}Modal`;
-  }
-  else if (e.target.tagName === 'A') {
+  } else if (e.target.tagName === 'A') {
     const spanElement = e.target.querySelector('span');
     e.preventDefault();
     if (spanElement) {
@@ -58,7 +57,21 @@ document.querySelector('.navbar').addEventListener('click', function (e) {
     }
   }
 
-  if (selectedMenu) {
+  console.log(selectedMenu);
+  if (selectedMenu === '#withdrawModal') {
+    let now = moment().tz('Asia/Seoul');
+    console.log(now);
+
+    if ((now.hours() === 23 && now.minutes() >= 30) || (now.hours() === 0 && now.minutes() <= 30)) {
+      let msg = `<p>PM 11:30 ~ AM 0:30</p>
+      <p>출금신청 불가</p>
+      <p>Không thể yêu cầu rút tiền</p>`;
+      document.getElementById('confirm-text').innerHTML = `<div class='fs-5'>${msg}</div>`;
+      $('#confirmModal').modal('show');
+    } else {
+      openModals(selectedMenu);
+    }
+  } else if (selectedMenu) {
     openModals(selectedMenu);
   }
 });

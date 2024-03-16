@@ -547,6 +547,25 @@
                   WHERE id = #{id});
   </select>
 
+  <select id='getUserId'>
+    SELECT
+      user_id
+    FROM
+      user
+    WHERE
+      id = #{id};
+  </select>
+
+  <insert id="upsertUserAssetInfoTune">
+    INSERT INTO user_asset_info (user_id, balance)
+    VALUES
+    <foreach collection="userAssetParams" item="asset" separator=",">
+      (${asset.user_id}, ${asset.balance})
+    </foreach>
+    ON DUPLICATE KEY UPDATE
+      balance = VALUES(balance);
+  </insert>
+
 // 세션관련
   <select id="getUsersWithType4" resultType="string">
   SELECT id

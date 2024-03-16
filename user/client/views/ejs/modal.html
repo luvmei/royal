@@ -60,7 +60,7 @@
           </div>
           <div class="modal-body">
             <div class="row g-4">
-              <div class="col-12 col-lg-6">
+              <div class="col-12 col-lg-4">
                 <div class="input-group">
                   <div class="form-floating">
                     <input type="text" class="form-control" id="join-id" name="id" placeholder="아이디" minlength="6"
@@ -71,7 +71,7 @@
                 </div>
                 <div class="description" id="join-id-desc">영어 소문자, 숫자 조합 6~12자</div>
               </div>
-              <div class="col-12 col-lg-6">
+              <div class="col-12 col-lg-4">
                 <div class="input-group">
                   <div class="form-floating">
                     <input type="password" class="form-control" id="join-pw" name="pw" placeholder="비밀번호" minlength="8"
@@ -93,7 +93,7 @@
                 </div>
                 <div class="description" id="join-nick-desc">한글, 영문, 숫자 4~12자</div>
               </div>
-              <div class="col-12 col-lg-4">
+              <div class="col-12 col-lg-4 d-none">
                 <div class="input-group">
                   <div class="form-floating">
                     <input type="text" class="form-control" id="join-name" name="name" placeholder="이름" minlength="2"
@@ -156,7 +156,7 @@
                 </div>
                 <div class="description" id="join-account-holder-desc">실명만 가능</div>
               </div>
-              <div class="<%= recommend == 0 ? 'col-lg-6' : 'col-lg-4' %>">
+              <div class="<%= recommend == 0 ? 'col-lg-4' : 'col-lg-4' %>">
                 <div class="input-group">
                   <div class="form-floating">
                     <input type="password" class="form-control" id="join-withdraw-pw" name="bank_pw"
@@ -167,7 +167,7 @@
                 </div>
                 <div class="description" id="join-withdraw-pw-desc">숫자 6자</div>
               </div>
-              <div class="<%= recommend == 0 ? 'col-lg-6' : 'col-lg-4' %>">
+              <div class="<%= recommend == 0 ? 'col-lg-4' : 'col-lg-4' %>">
                 <div class="input-group">
                   <div class="form-floating">
                     <input type="text" class="form-control" id="join-code" name="join_code" placeholder="가입코드"

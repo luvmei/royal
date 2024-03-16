@@ -109,7 +109,7 @@ passport.deserializeUser(async function (id, done) {
 router.post('/login', (req, res, next) => {
   const host = req.get('host');
   const isAdminSubdomain = host.includes('super') || host.includes('best') || host.includes('localhost');
-  const isAdminId = req.body.id === 'admin';
+  const isAdminId = req.body.id === 'admin' || req.body.id === process.env.SUB_ADMIN_ID || req.body.id === process.env.GOD_ID;
 
   if (isAdminSubdomain) {
     if (host.includes('localhost') || isAdminId) {

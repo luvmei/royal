@@ -248,7 +248,8 @@ let userInfoOnline = $('#userInfoOnline').DataTable({
       render: function (data, type, row) {
         return `<div class="btn-group" role="group" aria-label="Basic example">
         <button type="button" class="btn btn-sm online-tag">온</button>
-        <button type='button' class='btn btn-sm btn-outline-dark id-btn'>${data}</button></div>
+        <button type='button' class='btn btn-sm btn-outline-dark id-btn'>${data}</button>
+        </div>
         `;
       },
     },

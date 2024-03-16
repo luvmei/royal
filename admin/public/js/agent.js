@@ -194,6 +194,7 @@ let agentInfo = $('#agentInfo').DataTable({
     { data: '실버_id' },
     { data: '브론즈_id' },
     { data: null, defaultContent: '' },
+    { data: '예금주' },
   ],
   paging: false,
   lengthMenu: [
@@ -245,7 +246,7 @@ let agentInfo = $('#agentInfo').DataTable({
       visible: false,
       searchable: false,
     },
-    { target: [23, 24, 25, 26, 27, 28, 29, 30], visible: false },
+    { target: [23, 24, 25, 26, 27, 28, 29, 30, 32], visible: false },
     {
       target: [11, 12, 13],
       width: 60,
@@ -268,7 +269,9 @@ let agentInfo = $('#agentInfo').DataTable({
     {
       target: 4,
       render: function (data) {
-        return `<button type='button' class='btn btn-sm btn-outline-dark id-btn'>` + data + `</button>`;
+        return `<div class="btn-group" role="group" aria-label="Basic example">
+        <button type='button' class='btn btn-sm btn-outline-dark '>${data}</button>        
+        </div>`;
       },
     },
     {

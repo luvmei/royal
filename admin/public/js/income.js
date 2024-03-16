@@ -787,7 +787,12 @@ let incomeAgentBetWin = $('#incomeAgentBetWin').DataTable({
       target: 6,
       width: 90,
       render: function (data) {
-        return `<button type='button' class='btn btn-sm btn-outline-dark id-btn'>` + data + `</button>`;
+        return `<div>
+        <button type='button' class='btn btn-sm btn-outline-dark id-btn'>${data}</button>
+        <button type="button" class="btn btn-sm copy-btn" data-copy="${data}">
+          <i class="bi bi-copy"></i>
+        </button>
+      </div>`;
       },
     },
     { target: 7, width: 90 },
@@ -927,8 +932,6 @@ let incomeAgentBetWin = $('#incomeAgentBetWin').DataTable({
         data = Number(data) || 0;
         if (clientType == 9) {
           if (row.타입 == 3) {
-            console.log('슬롯롤링마진', typeof row.슬롯마진롤링);
-            console.log('유저슬롯롤링마진', typeof row.유저슬롯마진롤링);
             return `
             <div class="row text-end justify-content-around">
               <div class='col-4'>매장</div>

@@ -122,9 +122,10 @@ async function getBetHistory() {
         return false;
       }
 
-      if (item.details.game.type !== 'slot' && item.external.detail == null) {
-        return false;
-      }
+      // if (item.details.game.type !== 'slot' && item.external.detail == null) {
+      //   console.log(item.details.game.type, item.external.detail)
+      //   return false;
+      // }
 
       return !processedBetIds.has(item.id);
     });

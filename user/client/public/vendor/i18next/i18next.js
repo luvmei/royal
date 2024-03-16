@@ -66,7 +66,7 @@ i18next.init(
             pw: '비밀번호',
             pw_placeholder: '비밀번호',
             pw_btn: '비밀번호 확인',
-            pw_desc: '영문, 숫자, 특수문자(!,@,#,*) 조합 8~16자',
+            pw_desc: '영문, 숫자 조합 6~16자',
             nick: '닉네임',
             nick_placeholder: '닉네임',
             nick_btn: '중복확인',
@@ -90,6 +90,7 @@ i18next.init(
             withdraw_pw_desc: '숫자 6자',
             join_code: '가입코드',
             join_code_placeholder: '가입코드',
+            join_code_desc: '가입코드 입력',
             join_code_btn: '가입코드 확인',
             button: '회원가입',
             already: '이미 계정이 있으신가요?',
@@ -622,7 +623,7 @@ i18next.init(
             pw: 'mật khẩu',
             pw_placeholder: 'Nhập mật khẩu',
             pw_btn: 'Kiểm tra',
-            pw_desc: '8 -16 ký tự bao gồm chữ in hoa,số,và ký tự đặc biệt',
+            pw_desc: 'Tiếng Anh, 6 đến 16 ký tự số',
             nick: 'tên nick',
             nick_placeholder: 'Nhập tên',
             nick_btn: 'kiểm tra hai lần',
@@ -646,6 +647,7 @@ i18next.init(
             withdraw_pw_desc: '6 ký tự số',
             join_code: 'Mã đăng ký',
             join_code_placeholder: 'Nhập mã đăng ký',
+            join_code_desc: 'Nhập mã đăng ký của bạn',
             join_code_btn: 'Thẩm định',
             button: 'Đăng ký tài khoản',
             already: 'Đã đăng ký?',
@@ -785,9 +787,9 @@ function updateContent() {
   document.getElementById('join-nick').nextElementSibling.innerHTML = i18next.t('join.nick_placeholder');
   document.getElementById('join-nick-btn').innerHTML = i18next.t('join.nick_btn');
   document.getElementById('join-nick-desc').innerHTML = i18next.t('join.nick_desc');
-  document.getElementById('join-name').innerHTML = i18next.t('join.name');
-  document.getElementById('join-name').nextElementSibling.innerHTML = i18next.t('join.name_placeholder');
-  document.getElementById('join-name-desc').innerHTML = i18next.t('join.name_desc');
+  // document.getElementById('join-name').innerHTML = i18next.t('join.name');
+  // document.getElementById('join-name').nextElementSibling.innerHTML = i18next.t('join.name_placeholder');
+  // document.getElementById('join-name-desc').innerHTML = i18next.t('join.name_desc');
   document.getElementById('join-phone-num').innerHTML = i18next.t('join.phone_num');
   document.getElementById('join-phone-num').nextElementSibling.innerHTML = i18next.t('join.phone_placeholder');
   document.getElementById('join-phone-btn').innerHTML = i18next.t('join.phone_btn');
@@ -805,6 +807,7 @@ function updateContent() {
   document.getElementById('join-withdraw-pw-desc').innerHTML = i18next.t('join.withdraw_pw_desc');
   document.getElementById('join-code').innerHTML = i18next.t('join.join_code');
   document.getElementById('join-code').nextElementSibling.innerHTML = i18next.t('join.join_code_placeholder');
+  document.getElementById('join-code-desc').innerHTML = i18next.t('join.join_code_desc');
   document.getElementById('join-code-btn').innerHTML = i18next.t('join.join_code_btn');
   document.getElementById('join-btn').innerHTML = i18next.t('join.button');
   document.getElementById('join-already').innerHTML = i18next.t('join.already');
