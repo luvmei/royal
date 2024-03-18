@@ -187,7 +187,13 @@ router.post('/agent/exchange', function (req, res) {
     params.agentType = req.user[0].type;
     params.type = '포인트전환';
     params.balance = req.user[0].balance;
-    exchangePoint(res, params);
+    params.afterPoint = req.user[0].point - req.body.reqPoint;
+    
+    if (params.afterPoint < 0) {
+      res.send({ error: true, msg: '포인트가 부족합니다' });
+    } else {
+      exchangePoint(res, params);
+    }
   }
 });
 

@@ -9,7 +9,14 @@
       agent_info_view
     <where>
       <if test="node_id != undefined">
-        AND node_id LIKE CONCAT(#{node_id},'%')
+        <choose>
+          <when test="isBronze == true">
+            node_id = #{node_id}
+          </when>
+          <otherwise>
+            node_id LIKE CONCAT(#{node_id},'.%')
+          </otherwise>
+        </choose>
       </if>
     </where>
   </select>
@@ -21,9 +28,16 @@
       agent_asset_view
     <where>
       <if test="node_id != undefined">
-        AND node_id LIKE CONCAT(#{node_id},'%')
+        <choose>
+          <when test="isBronze == true">
+            node_id = #{node_id}
+          </when>
+          <otherwise>
+            node_id LIKE CONCAT(#{node_id},'.%')
+          </otherwise>
+        </choose>
       </if>
-    </where>;
+    </where>
   </select>
 
   <select id="agentCommission">
@@ -33,9 +47,16 @@
       agent_commission_view
     <where>
       <if test="node_id != undefined">
-        AND node_id LIKE CONCAT(#{node_id},'%')
+        <choose>
+          <when test="isBronze == true">
+            node_id = #{node_id}
+          </when>
+          <otherwise>
+            node_id LIKE CONCAT(#{node_id},'.%')
+          </otherwise>
+        </choose>
       </if>
-    </where>;
+    </where>
   </select>
 
    <select id="agentBetting">
@@ -45,9 +66,16 @@
       agent_betting_view
     <where>
       <if test="node_id != undefined">
-        AND node_id LIKE CONCAT(#{node_id},'%')
+        <choose>
+          <when test="isBronze == true">
+            node_id = #{node_id}
+          </when>
+          <otherwise>
+            node_id LIKE CONCAT(#{node_id},'.%')
+          </otherwise>
+        </choose>
       </if>
-    </where>;
+    </where>
   </select>
 
   <select id="agentConnect">
@@ -59,9 +87,16 @@
       SUBSTRING(접속일시, 1, 10) 
       BETWEEN #{startDate} AND #{endDate}
       <if test="node_id != undefined">
-        AND node_id LIKE CONCAT(#{node_id},'%')
+        <choose>
+          <when test="isBronze == true">
+            node_id = #{node_id}
+          </when>
+          <otherwise>
+            node_id LIKE CONCAT(#{node_id},'.%')
+          </otherwise>
+        </choose>
       </if>
-    </where>;
+    </where>
   </select>
 
   <select id="agentBlock">
@@ -73,9 +108,16 @@
       <!-- SUBSTRING(차단일시, 1, 10) 
       BETWEEN #{startDate} AND #{endDate} -->
       <if test="node_id != undefined">
-        AND node_id LIKE CONCAT(#{node_id},'%')
+        <choose>
+          <when test="isBronze == true">
+            node_id = #{node_id}
+          </when>
+          <otherwise>
+            node_id LIKE CONCAT(#{node_id},'.%')
+          </otherwise>
+        </choose>
       </if>
-    </where>;
+    </where>
   </select>
 
 // 에이전트 중복체크

@@ -209,7 +209,7 @@ async function checkXssAttack(req, res, next) {
   }
 }
 
-functioncontainsSpecialCharacters(input, isPassword) {
+function containsSpecialCharacters(input, isPassword) {
   if (isPassword) {
     const alphanumericRegex = /^[a-zA-Z0-9]+$/;
     const specialCharactersPassword = /[!@#$%^*+=-]/;

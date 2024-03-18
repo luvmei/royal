@@ -75,7 +75,7 @@ $('#incomeHeadquarters').DataTable({
     [100, 200, 300, -1],
     [100, 200, 300, 'ALL'],
   ],
-  order: [[0, 'desc']],
+  order: [[1, 'desc']],
   columnDefs: [
     {
       target: 0,

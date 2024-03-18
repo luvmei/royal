@@ -43,7 +43,14 @@
       SUBSTR(이벤트발생일시, 1, 10) 
       BETWEEN #{startDate} AND #{endDate}
       <if test="node_id != undefined">
-        AND node_id = #{node_id}
+        <choose>
+          <when test="isBronze == true">
+            AND node_id = #{node_id}
+          </when>
+          <otherwise>
+            AND node_id LIKE CONCAT(#{node_id}, '.%')
+          </otherwise>
+        </choose>
       </if>
     </where>;
   </select> 
@@ -73,7 +80,14 @@
       SUBSTR(event_date, 1, 16) BETWEEN #{startDate} AND #{endDate}
       AND d.category = 'live-sport'
       <if test="node_id != undefined">
-        AND node_id LIKE CONCAT(#{node_id},'%')
+        <choose>
+          <when test="isBronze == true">
+            AND node_id = #{node_id}
+          </when>
+          <otherwise>
+            AND node_id LIKE CONCAT(#{node_id}, '.%')
+          </otherwise>
+        </choose>
       </if>
       <if test="searchValue != null and searchValue != ''">
         AND (
@@ -118,7 +132,14 @@
       SUBSTR(event_date, 1, 16) BETWEEN #{startDate} AND #{endDate}
       AND d.category = 'casino'
       <if test="node_id != undefined">
-        AND node_id LIKE CONCAT(#{node_id},'%')
+        <choose>
+          <when test="isBronze == true">
+            AND node_id = #{node_id}
+          </when>
+          <otherwise>
+            AND node_id LIKE CONCAT(#{node_id}, '.%')
+          </otherwise>
+        </choose>
       </if>
       <if test="searchValue != null and searchValue != ''">
         AND (
@@ -163,7 +184,14 @@
       BETWEEN #{startDate} AND #{endDate}
       AND d.category = 'slot'
       <if test="node_id != undefined">
-        AND node_id LIKE CONCAT(#{node_id},'%')
+        <choose>
+          <when test="isBronze == true">
+            AND node_id = #{node_id}
+          </when>
+          <otherwise>
+            AND node_id LIKE CONCAT(#{node_id}, '.%')
+          </otherwise>
+        </choose>
       </if>
       <if test="searchValue != null and searchValue != ''">
         AND (
@@ -194,7 +222,14 @@
       event_date BETWEEN #{startDate} AND #{endDate}
       AND d.category = #{type}
       <if test="node_id != undefined">
-        AND node_id LIKE CONCAT(#{node_id},'%')
+        <choose>
+          <when test="isBronze == true">
+            AND node_id = #{node_id}
+          </when>
+          <otherwise>
+            AND node_id LIKE CONCAT(#{node_id}, '.%')
+          </otherwise>
+        </choose>
       </if>
       <if test="searchValue != null and searchValue != ''">
         AND (
@@ -223,7 +258,14 @@
       BETWEEN #{startDate} AND #{endDate}
       AND s.type = #{type}
       <if test="node_id != undefined">
-        AND node_id LIKE CONCAT(#{node_id},'%')
+        <choose>
+          <when test="isBronze == true">
+            AND node_id = #{node_id}
+          </when>
+          <otherwise>
+            AND node_id LIKE CONCAT(#{node_id}, '.%')
+          </otherwise>
+        </choose>
       </if>
     </where>
   </select> 
@@ -237,7 +279,14 @@
       SUBSTR(결과수신시간, 1, 16) 
       BETWEEN #{startDate} AND #{endDate}
       <if test="node_id != undefined">
-        AND node_id LIKE CONCAT(#{node_id},'%')
+        <choose>
+          <when test="isBronze == true">
+            AND node_id = #{node_id}
+          </when>
+          <otherwise>
+            AND node_id LIKE CONCAT(#{node_id}, '.%')
+          </otherwise>
+        </choose>
       </if>
     </where>;
   </select>
@@ -252,7 +301,14 @@
       BETWEEN #{startDate} AND #{endDate}
       AND 베팅타입 = 'sp'
       <if test="node_id != undefined">
-        AND node_id LIKE CONCAT(#{node_id},'%')
+        <choose>
+          <when test="isBronze == true">
+            AND node_id = #{node_id}
+          </when>
+          <otherwise>
+            AND node_id LIKE CONCAT(#{node_id}, '.%')
+          </otherwise>
+        </choose>
       </if>
       <if test="searchValue != null and searchValue != ''">
         AND (
@@ -283,7 +339,14 @@
       BETWEEN #{startDate} AND #{endDate}
       AND 베팅타입 = 'c'
       <if test="node_id != undefined">
-        AND node_id LIKE CONCAT(#{node_id},'%')
+        <choose>
+          <when test="isBronze == true">
+            AND node_id = #{node_id}
+          </when>
+          <otherwise>
+            AND node_id LIKE CONCAT(#{node_id}, '.%')
+          </otherwise>
+        </choose>
       </if>
       <if test="searchValue != null and searchValue != ''">
         AND (
@@ -330,7 +393,14 @@
       BETWEEN #{startDate} AND #{endDate}
       AND 베팅타입 = 's'
       <if test="node_id != undefined">
-        AND node_id LIKE CONCAT(#{node_id},'%')
+        <choose>
+          <when test="isBronze == true">
+            AND node_id = #{node_id}
+          </when>
+          <otherwise>
+            AND node_id LIKE CONCAT(#{node_id}, '.%')
+          </otherwise>
+        </choose>
       </if>
       <if test="searchValue != null and searchValue != ''">
         AND (

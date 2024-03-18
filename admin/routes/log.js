@@ -12,39 +12,49 @@ router.post('/balance', (req, res) => {
   req.body.node_id = req.user[0].node_id;
   req.body.type = req.user[0].type;
   req.body.id = req.user[0].id;
-  getData(res, 'getBalanceLog', req.body);
+  getData(req, res, 'getBalanceLog');
 });
 
 router.post('/point', (req, res) => {
   req.body.node_id = req.user[0].node_id;
-  getData(res, 'getPointLog', req.body);
+  getData(req, res, 'getPointLog');
 });
 
 router.post('/detail', (req, res) => {
   req.body.node_id = req.user[0].node_id;
   if (req.body.type == 'sport') {
-    getDetailLog(res, 'getSportDetailLog', req.body);
+    getDetailLog(req, res, 'getSportDetailLog');
   } else if (req.body.type == 'casino') {
-    getDetailLog(res, 'getCasinoDetailLog', req.body);
+    getDetailLog(req, res, 'getCasinoDetailLog');
   } else if (req.body.type == 'slot') {
-    getDetailLog(res, 'getSlotDetailLog', req.body);
+    getDetailLog(req, res, 'getSlotDetailLog');
   }
 });
 
 router.post('/summary', (req, res) => {
   req.body.node_id = req.user[0].node_id;
   if (req.body.type == 'sport') {
-    getSummaryLog(res, 'getSportSummaryLog', req.body);
+    getSummaryLog(req, res, 'getSportSummaryLog');
   } else if (req.body.type == 'casino') {
-    getSummaryLog(res, 'getCasinoSummaryLog', req.body);
+    getSummaryLog(req, res, 'getCasinoSummaryLog');
   } else if (req.body.type == 'slot') {
-    getSummaryLog(res, 'getSlotSummaryLog', req.body);
+    getSummaryLog(req, res, 'getSlotSummaryLog');
   }
 });
 // #endregion
 
 // #region 로그 관련 함수
-async function getData(res, type, params = {}) {
+async function getData(req, res, type) {
+  let params = req.body;
+
+  if (req.user[0].node_id) {
+    params.node_id = req.user[0].node_id;
+  }
+
+  if (req.user[0].type == 3) {
+    params.isBronze = true;
+  }
+
   let conn = await pool.getConnection();
   //todo params.node_id 정보 필요
   let getLogData = mybatisMapper.getStatement('log', type, params, sqlFormat);
@@ -61,8 +71,19 @@ async function getData(res, type, params = {}) {
   }
 }
 
-async function getDetailLog(res, type, params = {}) {
+async function getDetailLog(req, res, type) {
+  let params = req.body;
+
+  if (req.user[0].node_id) {
+    params.node_id = req.user[0].node_id;
+  }
+
+  if (req.user[0].type == 3) {
+    params.isBronze = true;
+  }
+
   let conn = await pool.getConnection();
+
   params.pageSize = params.length;
   params.offset = params.start;
   params.searchValue = params.search.value;
@@ -71,7 +92,7 @@ async function getDetailLog(res, type, params = {}) {
 
   let getLogData = mybatisMapper.getStatement('log', type, params, sqlFormat);
   let getLogDataCount = mybatisMapper.getStatement('log', 'getTotalDetailRecordsCount', params, sqlFormat);
-  
+
   try {
     let result = await conn.query(getLogData);
 
@@ -94,8 +115,19 @@ async function getDetailLog(res, type, params = {}) {
   }
 }
 
-async function getSummaryLog(res, type, params = {}) {
+async function getSummaryLog(req, res, type) {
+  let params = req.body;
+
+  if (req.user[0].node_id) {
+    params.node_id = req.user[0].node_id;
+  }
+
+  if (req.user[0].type == 3) {
+    params.isBronze = true;
+  }
+
   let conn = await pool.getConnection();
+
   params.pageSize = params.length;
   params.offset = params.start;
   params.searchValue = params.search.value;

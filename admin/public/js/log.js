@@ -55,10 +55,7 @@ let balanceLog = $('#balanceLog').DataTable({
     { data: '브론즈' },
   ],
   pageLength: 100,
-  lengthMenu: [
-    [100, 200, 300, -1],
-    [100, 200, 300, 'ALL'],
-  ],
+  lengthMenu: [100, 300, 500],
   order: [[0, 'desc']],
   createdRow: function (row, data, dataIndex) {
     if (dataIndex > 0) {
@@ -246,10 +243,7 @@ let pointLog = $('#pointLog').DataTable({
     [6, 'desc'],
   ],
   pageLength: 100,
-  lengthMenu: [
-    [100, 200, 300, -1],
-    [100, 200, 300, 'ALL'],
-  ],
+  lengthMenu: [100, 300, 500],
   createdRow: function (row, data, dataIndex) {
     if (clientType == 9) {
       if (data.고유번호 % 2 == 1) {
@@ -718,8 +712,8 @@ let detailSprotLog = $('#detailSportBettingLog').DataTable({
     { data: '이후보유금', responsivePriority: 4 },
     { data: 'node_id' },
   ],
-  pageLength: 300,
-  lengthMenu: [300, 500, 1000],
+  pageLength: 100,
+  lengthMenu: [100, 300, 500],
   order: [[0, 'desc']],
   createdRow: function (row, data, dataIndex) {
     if (data.내역타입 == 'bet') {
@@ -890,10 +884,11 @@ let detailCasinoLog = $('#detailCasinoBettingLog').DataTable({
     { data: '이후보유금', responsivePriority: 4 },
     { data: 'node_id' },
   ],
-  pageLength: 300,
-  lengthMenu: [300, 500, 1000],
+  pageLength: 100,
+  lengthMenu: [100, 300, 500],
   order: [
-    [0, 'desc'],[4, 'desc']
+    [0, 'desc'],
+    [4, 'desc'],
   ],
   createdRow: function (row, data, dataIndex) {
     if (data.내역타입 == 'bet') {
@@ -1064,9 +1059,12 @@ let detailSlotLog = $('#detailSlotBettingLog').DataTable({
     { data: '이후보유금', responsivePriority: 4 },
     { data: 'node_id' },
   ],
-  pageLength: 300,
-  lengthMenu: [300, 500, 1000],
-  order: [[0, 'desc'], [4, 'desc']],
+  pageLength: 100,
+  lengthMenu: [100, 300, 500],
+  order: [
+    [0, 'desc'],
+    [4, 'desc'],
+  ],
   createdRow: function (row, data, dataIndex) {
     if (data.내역타입 == 'bet') {
       $(row).addClass('bg-mistyred');
@@ -1441,10 +1439,7 @@ let summarySportLog = $('#summarySportBettingLog').DataTable({
     { data: 'node_id' },
   ],
   pageLength: 100,
-  lengthMenu: [
-    [100, 200, 300, -1],
-    [100, 200, 300, 'ALL'],
-  ],
+  lengthMenu: [100, 300, 500],
   order: [[0, 'desc']],
   columnDefs: [
     {
@@ -1664,10 +1659,7 @@ let summaryCasinoLog = $('#summaryCasinoBettingLog').DataTable({
     { data: 'node_id' },
   ],
   pageLength: 100,
-  lengthMenu: [
-    [100, 200, 300, -1],
-    [100, 200, 300, 'ALL'],
-  ],
+  lengthMenu: [100, 300, 500],
   order: [[0, 'desc']],
   columnDefs: [
     {
@@ -1893,8 +1885,8 @@ let summarySlotLog = $('#summarySlotBettingLog').DataTable({
     { data: '브론즈' },
     { data: 'node_id' },
   ],
-  pageLength: 300,
-  lengthMenu: [300, 500, 1000],
+  pageLength: 100,
+  lengthMenu: [100, 300, 500],
   order: [[0, 'desc']],
   columnDefs: [
     {

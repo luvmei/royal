@@ -10,33 +10,27 @@ const userRouter = require('./user');
 
 // #region 테이블 전송
 router.post('/info', (req, res) => {
-  let params = { node_id: req.user[0].node_id };
-  getData(res, 'agentInfo', params);
+  getData(req, res, 'agentInfo');
 });
 
 router.post('/asset', (req, res) => {
-  let params = { node_id: req.user[0].node_id };
-  getData(res, 'agentAsset', params);
+  getData(req, res, 'agentAsset');
 });
 
 router.post('/commission', (req, res) => {
-  let params = { node_id: req.user[0].node_id };
-  getData(res, 'agentCommission', params);
+  getData(req, res, 'agentCommission');
 });
 
 router.post('/betting', (req, res) => {
-  let params = { node_id: req.user[0].node_id };
-  getData(res, 'agentBetting', params);
+  getData(req, res, 'agentBetting');
 });
 
 router.post('/connect', (req, res) => {
-  req.body.node_id = req.user[0].node_id;
-  getData(res, 'agentConnect', req.body);
+  getData(req, res, 'agentConnect');
 });
 
 router.post('/block', (req, res) => {
-  req.body.node_id = req.user[0].node_id;
-  getData(res, 'agentBlock', req.body);
+  getData(req ,res, 'agentBlock');
 });
 // #endregion
 
@@ -93,11 +87,22 @@ async function countUser(res, params) {
 // #endregion
 
 // #region 에이전트 관련 함수
-async function getData(res, sqlType, params = {}) {
+async function getData(req, res, sqlType) {
+  let params = req.body
+  
+  if(req.user[0].node_id){
+    params.node_id = req.user[0].node_id;
+  }  
+  
+  if (params.node_id && params.node_id.split('.').length === 4) {
+    params.isBronze = true;
+  }
+
   let conn = await pool.getConnection();
   //todo params.node_id 정보 필요
 
   let agentData = mybatisMapper.getStatement('agent', sqlType, params, sqlFormat);
+
   try {
     let result = await conn.query(agentData);
     if (sqlType === 'agentInfo' || sqlType === 'agentAsset' || sqlType === 'agentBetting') {

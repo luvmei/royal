@@ -6,10 +6,19 @@
     SELECT
       *
     FROM
-      user_info_view          
+      user_info_view
+    <where>
       <if test="node_id != undefined">
-        WHERE node_id LIKE CONCAT(#{node_id},'%')
+        <choose>
+          <when test="isBronze == true">
+            node_id = #{node_id}
+          </when>
+          <otherwise>
+            node_id LIKE CONCAT(#{node_id},'.%')
+          </otherwise>
+        </choose>
       </if>
+    </where>
   </select>
 
   <select id="userInfoOnline">
@@ -20,7 +29,14 @@
     WHERE
       가입코드 != ''
       <if test="node_id != undefined">
-        AND node_id LIKE CONCAT(#{node_id},'%')
+        <choose>
+          <when test="isBronze == true">
+            AND node_id = #{node_id}
+          </when>
+          <otherwise>
+            AND node_id LIKE CONCAT(#{node_id}, '.%')
+          </otherwise>
+        </choose>
       </if>
   </select>
   
@@ -32,7 +48,14 @@
     WHERE
       가입코드 = ''
       <if test="node_id != undefined">
-        AND node_id LIKE CONCAT(#{node_id},'%')
+        <choose>
+          <when test="isBronze == true">
+            AND node_id = #{node_id}
+          </when>
+          <otherwise>
+            AND node_id LIKE CONCAT(#{node_id}, '.%')
+          </otherwise>
+        </choose>
       </if>
   </select>
 
@@ -47,9 +70,16 @@
       user_asset_view
     <where>
       <if test="node_id != undefined">
-        AND node_id LIKE CONCAT(#{node_id},'%')
+        <choose>
+          <when test="isBronze == true">
+            node_id = #{node_id}
+          </when>
+          <otherwise>
+            node_id LIKE CONCAT(#{node_id}, '.%')
+          </otherwise>
+        </choose>
       </if>
-    </where>;
+    </where>
   </select>
 
   <select id='userCommission'>
@@ -59,7 +89,14 @@
       user_commission_view
     <where>
       <if test="node_id != undefined">
-        AND node_id LIKE CONCAT(#{node_id},'%')
+        <choose>
+          <when test="isBronze == true">
+            node_id = #{node_id}
+          </when>
+          <otherwise>
+            node_id LIKE CONCAT(#{node_id}, '.%')
+          </otherwise>
+        </choose>
       </if>
     </where>;
   </select>
@@ -71,7 +108,14 @@
       user_betting_view
     <where>
       <if test="node_id != undefined">
-        AND node_id LIKE CONCAT(#{node_id},'%')
+        <choose>
+          <when test="isBronze == true">
+            node_id = #{node_id}
+          </when>
+          <otherwise>
+            node_id LIKE CONCAT(#{node_id}, '.%')
+          </otherwise>
+        </choose>
       </if>
     </where>;
   </select>
@@ -85,7 +129,14 @@
       SUBSTRING(접속일시, 1, 10) 
       BETWEEN #{startDate} AND #{endDate}
       <if test="node_id != undefined">
-        AND node_id LIKE CONCAT(#{node_id},'%')
+        <choose>
+          <when test="isBronze == true">
+            AND node_id = #{node_id}
+          </when>
+          <otherwise>
+            AND node_id LIKE CONCAT(#{node_id}, '.%')
+          </otherwise>
+        </choose>
       </if>
     </where>;
   </select>
@@ -99,7 +150,14 @@
     <!-- SUBSTRING(차단일시, 1, 10) 
       BETWEEN #{startDate} AND #{endDate} -->
       <if test="node_id != undefined">
-        AND node_id LIKE CONCAT(#{node_id},'%')
+        <choose>
+          <when test="isBronze == true">
+            node_id = #{node_id}
+          </when>
+          <otherwise>
+            node_id LIKE CONCAT(#{node_id}, '.%')
+          </otherwise>
+        </choose>
       </if>
     </where>;
   </select>

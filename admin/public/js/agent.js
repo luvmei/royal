@@ -197,10 +197,7 @@ let agentInfo = $('#agentInfo').DataTable({
     { data: '예금주' },
   ],
   paging: false,
-  lengthMenu: [
-    [100, 300, 500, -1],
-    [100, 300, 500, 'All'],
-  ],
+  lengthMenu: [100, 300, 500],
   order: [[1, 'asc']],
   createdRow: function (row, data, dataIndex) {
     if (data.상태 != '차단') {
@@ -270,7 +267,7 @@ let agentInfo = $('#agentInfo').DataTable({
       target: 4,
       render: function (data) {
         return `<div class="btn-group" role="group" aria-label="Basic example">
-        <button type='button' class='btn btn-sm btn-outline-dark '>${data}</button>        
+        <button type='button' class='btn btn-sm btn-outline-dark id-btn'>${data}</button>        
         </div>`;
       },
     },

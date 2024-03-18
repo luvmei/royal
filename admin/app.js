@@ -866,6 +866,8 @@ async function updateUserBalanceInDB(params) {
 }
 
 const updateUserBalances = async () => {
+  await checkOnlineUsers();
+
   if (onlineUsers.length != 0) {
     onlineUsers = await filterUsers(onlineUsers);
     await Promise.all(
@@ -879,6 +881,7 @@ const updateUserBalances = async () => {
         }
       })
     );
+
     if (onlineUsers.length != 0) {
       updateCombineAssets();
     }
@@ -906,7 +909,10 @@ async function updateAllUserBalance() {
       console.error('오류발생:', username, error);
     }
   }
-  await updateUserAssetInfo(userAssetParams);
+
+  if (userAssetParams.length !== 0) {
+    await updateUserAssetInfo(userAssetParams);
+  }
 }
 
 // #endregion
