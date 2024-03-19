@@ -10,7 +10,7 @@
     <where>
       <if test="node_id != undefined">
         <choose>
-          <when test="isBronze == true">
+          <when test="agentType == 3">
             node_id = #{node_id}
           </when>
           <otherwise>
@@ -29,7 +29,7 @@
     <where>
       <if test="node_id != undefined">
         <choose>
-          <when test="isBronze == true">
+          <when test="agentType == 3">
             node_id = #{node_id}
           </when>
           <otherwise>
@@ -48,7 +48,7 @@
     <where>
       <if test="node_id != undefined">
         <choose>
-          <when test="isBronze == true">
+          <when test="agentType == 3">
             node_id = #{node_id}
           </when>
           <otherwise>
@@ -67,7 +67,7 @@
     <where>
       <if test="node_id != undefined">
         <choose>
-          <when test="isBronze == true">
+          <when test="agentType == 3">
             node_id = #{node_id}
           </when>
           <otherwise>
@@ -88,7 +88,7 @@
       BETWEEN #{startDate} AND #{endDate}
       <if test="node_id != undefined">
         <choose>
-          <when test="isBronze == true">
+          <when test="agentType == 3">
             node_id = #{node_id}
           </when>
           <otherwise>
@@ -109,7 +109,7 @@
       BETWEEN #{startDate} AND #{endDate} -->
       <if test="node_id != undefined">
         <choose>
-          <when test="isBronze == true">
+          <when test="agentType == 3">
             node_id = #{node_id}
           </when>
           <otherwise>

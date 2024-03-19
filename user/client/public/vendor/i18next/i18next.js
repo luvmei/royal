@@ -625,7 +625,7 @@ i18next.init(
             pw_btn: 'Kiểm tra',
             pw_desc: 'Tiếng Anh, 6 đến 16 ký tự số',
             nick: 'tên nick',
-            nick_placeholder: 'Tên hiển thị trong game',
+            nick_placeholder: 'Nick Name',
             nick_btn: 'kiểm tra hai lần',
             nick_desc: 'Tiếng Hàn, tiếng Anh, số, 2 ~ 8 ký tự',
             name_placeholder: 'Nhập tên thật',

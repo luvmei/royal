@@ -1222,7 +1222,6 @@ $('#agentBlock').DataTable({
     },
     dataSrc: '',
   },
-  dom: '<"dateInput float-start dateWidth me-2">lfrtip',
   columns: [
     { data: 'IDX' },
     { data: '차단일시', responsivePriority: 1 },

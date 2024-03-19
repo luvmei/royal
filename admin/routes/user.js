@@ -10,44 +10,55 @@ const bcrypt = require('bcrypt');
 const crypto = require('../cryptojs');
 const parser = require('ua-parser-js');
 const api = require(`../public/js/api/${process.env.API_TYPE}`);
+
 // #region 테이블 전송
 router.post('/info', (req, res) => {
-  let params = req.body;
-  if (req.user && req.user[0] && req.user[0].node_id) {
-    params.nodeId = req.user[0].node_id;
-  } else {
-    params.nodeId = null;
-  }
-  getData(res, req.body.table, params);
+  req.body.agentType = req.user[0].type;
+  req.body.node_id = req.user[0].node_id;
+  req.body.sqlType = req.body.table;
+  getData(res, req.body);
 });
 
 router.post('/asset', (req, res) => {
-  let params = { node_id: req.user[0].node_id };
-  getData(res, 'userAsset', params);
+  req.body.agentType = req.user[0].type;
+  req.body.node_id = req.user[0].node_id;
+  req.body.sqlType = 'userAsset';
+  getData(res, req.body);
 });
 
 router.post('/commission', (req, res) => {
-  let params = { node_id: req.user[0].node_id };
-  getData(res, 'userCommission', params);
+  req.body.agentType = req.user[0].type;
+  req.body.node_id = req.user[0].node_id;
+  req.body.sqlType = 'userCommission';
+  getData(res, req.body);
 });
 
 router.post('/betting', (req, res) => {
-  let params = { node_id: req.user[0].node_id };
-  getData(res, 'userBetting', params);
+  req.body.agentType = req.user[0].type;
+  req.body.node_id = req.user[0].node_id;
+  req.body.sqlType = 'userBetting';
+  getData(res, req.body);
 });
 
 router.post('/connect', (req, res) => {
+  req.body.agentType = req.user[0].type;
   req.body.node_id = req.user[0].node_id;
-  getData(res, 'userConnect', req.body);
+  req.body.sqlType = 'userConnect';
+  getData(res, req.body);
 });
 
 router.post('/block', (req, res) => {
+  req.body.agentType = req.user[0].type;
   req.body.node_id = req.user[0].node_id;
-  getData(res, 'userBlock', req.body);
+  req.body.sqlType = 'userBlock';
+  getData(res, req.body);
 });
 
 router.post('/confirm', (req, res) => {
-  getData(res, 'userConfirm');
+  req.body.agentType = req.user[0].type;
+  req.body.node_id = req.user[0].node_id;
+  req.body.sqlType = 'userConfirm';
+  getData(res, req.body);
 });
 // #endregion
 
@@ -546,33 +557,26 @@ async function changeAdminPassword(req, res) {
 // #endregion
 
 // #region 유저 관련 함수
-async function getData(res, type, params = {}) {
-  if (params.nodeId) {
-    params.node_id = params.nodeId;
-  }
-
-  if (params.node_id && params.node_id.split('.').length === 4) {
-    params.isBronze = true;
-  }
-
+async function getData(res, params = {}) {
   let conn = await pool.getConnection();
-  let getData = mybatisMapper.getStatement('user', type, params, sqlFormat);
+  let getData = mybatisMapper.getStatement('user', params.sqlType, params, sqlFormat);
+
   try {
     let result = await conn.query(getData);
     if (
-      type == 'userInfoTotal' ||
-      type == 'userInfoLocal' ||
-      type == 'userInfoOnline' ||
-      type == 'userAsset' ||
-      type == 'userInfoDate' ||
-      type == 'userBetting' ||
-      type == 'userConfirm'
+      params.sqlType == 'userInfoTotal' ||
+      params.sqlType == 'userInfoLocal' ||
+      params.sqlType == 'userInfoOnline' ||
+      params.sqlType == 'userAsset' ||
+      params.sqlType == 'userInfoDate' ||
+      params.sqlType == 'userBetting' ||
+      params.sqlType == 'userConfirm'
     ) {
       result = JSONbig.stringify(result);
       result = JSONbig.parse(result);
     }
 
-    if (type == 'userInfoDate') {
+    if (params.sqlType == 'userInfoDate') {
       result = result[0];
     }
     res.send(result);

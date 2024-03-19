@@ -11,35 +11,45 @@ const cron = require('node-cron');
 
 // #region 테이블 전송
 router.post('/depowith', function (req, res) {
-  if (req.user && req.user[0] && req.user[0].node_id) {
-    req.body.node_id = req.user[0].node_id;
-  }
-  getData(res, 'depositwithdraw', req.body);
+  req.user[0].sqlType = 'depositwithdraw';
+  req.user[0].startDate = req.body.startDate;
+  req.user[0].endDate = req.body.endDate;
+  getData(res, req.user[0]);
 });
 
 router.post('/deposit', function (req, res) {
-  req.body.node_id = req.user[0].node_id;
-  getData(res, 'deposit', req.body);
+  req.user[0].sqlType = 'deposit';
+  req.user[0].startDate = req.body.startDate;
+  req.user[0].endDate = req.body.endDate;;
+  getData(res, req.user[0]);
 });
 
 router.post('/withdraw', function (req, res) {
-  req.body.node_id = req.user[0].node_id;
-  getData(res, 'withdraw', req.body);
+  req.user[0].sqlType = 'withdraw';
+  req.user[0].startDate = req.body.startDate;
+  req.user[0].endDate = req.body.endDate;
+  getData(res, req.user[0]);
 });
 
 router.post('/give', function (req, res) {
-  req.body.node_id = req.user[0].node_id;
-  getData(res, 'give', req.body);
+  req.user[0].sqlType = 'give';
+  req.user[0].startDate = req.body.startDate;
+  req.user[0].endDate = req.body.endDate;
+  getData(res, req.user[0]);
 });
 
 router.post('/take', function (req, res) {
-  req.body.node_id = req.user[0].node_id;
-  getData(res, 'take', req.body);
+  req.user[0].sqlType = 'take';
+  req.user[0].startDate = req.body.startDate;
+  req.user[0].endDate = req.body.endDate;
+  getData(res, req.user[0]);
 });
 
 router.post('/givetake', function (req, res) {
-  req.body.node_id = req.user[0].node_id;
-  getData(res, 'giveTake', req.body);
+  req.user[0].sqlType = 'giveTake';
+  req.user[0].startDate = req.body.startDate;
+  req.user[0].endDate = req.body.endDate;
+  getData(res, req.user[0]);
 });
 // #endregion
 
@@ -188,7 +198,7 @@ router.post('/agent/exchange', function (req, res) {
     params.type = '포인트전환';
     params.balance = req.user[0].balance;
     params.afterPoint = req.user[0].point - req.body.reqPoint;
-    
+
     if (params.afterPoint < 0) {
       res.send({ error: true, msg: '포인트가 부족합니다' });
     } else {
@@ -389,9 +399,11 @@ function capitalize(string) {
 // #endregion
 
 // #region 입출금 관련 함수
-async function getData(res, type, params = {}) {
+async function getData(res, params) {
+  params.agentType = params.type;
+
   let conn = await pool.getConnection();
-  let getData = mybatisMapper.getStatement('bank', type, params, sqlFormat);
+  let getData = mybatisMapper.getStatement('bank', params.sqlType, params, sqlFormat);
 
   try {
     let result = await conn.query(getData);
@@ -640,6 +652,7 @@ async function getDepositSums(id) {
     if (conn) conn.release();
   }
 }
+
 
 function getWeeklyRange() {
   const now = new Date();

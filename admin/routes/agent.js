@@ -10,27 +10,35 @@ const userRouter = require('./user');
 
 // #region 테이블 전송
 router.post('/info', (req, res) => {
-  getData(req, res, 'agentInfo');
+  req.user[0].sqlType = 'agentInfo';
+  getData(res, req.user[0]);
 });
 
 router.post('/asset', (req, res) => {
-  getData(req, res, 'agentAsset');
+  req.user[0].sqlType = 'agentAsset';
+  getData(res, req.user[0]);
 });
 
 router.post('/commission', (req, res) => {
-  getData(req, res, 'agentCommission');
+  req.user[0].sqlType = 'agentCommission';
+  getData(res, req.user[0]);
 });
 
 router.post('/betting', (req, res) => {
-  getData(req, res, 'agentBetting');
+  req.user[0].sqlType = 'agentBetting';
+  getData(res, req.user[0]);
 });
 
 router.post('/connect', (req, res) => {
-  getData(req, res, 'agentConnect');
+  req.user[0].sqlType = 'agentConnect';
+  req.user[0].startDate = req.body.startDate;
+  req.user[0].endDate = req.body.endDate;
+  getData(res, req.user[0]);
 });
 
 router.post('/block', (req, res) => {
-  getData(req ,res, 'agentBlock');
+  req.user[0].sqlType = 'agentBlock';
+  getData(res, req.user[0]);
 });
 // #endregion
 
@@ -87,25 +95,15 @@ async function countUser(res, params) {
 // #endregion
 
 // #region 에이전트 관련 함수
-async function getData(req, res, sqlType) {
-  let params = req.body
-  
-  if(req.user[0].node_id){
-    params.node_id = req.user[0].node_id;
-  }  
-  
-  if (params.node_id && params.node_id.split('.').length === 4) {
-    params.isBronze = true;
-  }
-
+async function getData(res, params) {
+  params.agentType = params.type;
   let conn = await pool.getConnection();
-  //todo params.node_id 정보 필요
 
-  let agentData = mybatisMapper.getStatement('agent', sqlType, params, sqlFormat);
+  let agentData = mybatisMapper.getStatement('agent', params.sqlType, params, sqlFormat);
 
   try {
     let result = await conn.query(agentData);
-    if (sqlType === 'agentInfo' || sqlType === 'agentAsset' || sqlType === 'agentBetting') {
+    if (params.sqlType === 'agentInfo' || params.sqlType === 'agentAsset' || params.sqlType === 'agentBetting') {
       result = JSONbig.stringify(result);
     }
     res.send(result);

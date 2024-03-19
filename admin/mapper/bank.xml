@@ -28,8 +28,15 @@
     <where>
       SUBSTR(입금신청일시, 1, 10) 
       BETWEEN #{startDate} AND #{endDate}
-      <if test="node_id != undefined">
-        AND node_id LIKE CONCAT(#{node_id},'%')
+       <if test="node_id != undefined">
+        <choose>
+          <when test="agentType == 3">
+            AND node_id = #{node_id}
+          </when>
+          <otherwise>
+            AND node_id LIKE CONCAT(#{node_id},'.%')
+          </otherwise>
+        </choose>
       </if>
     </where>;
   </select>
@@ -43,7 +50,14 @@
       SUBSTR(출금신청일시, 1, 10) 
       BETWEEN #{startDate} AND #{endDate}
       <if test="node_id != undefined">
-        AND node_id LIKE CONCAT(#{node_id},'%')
+        <choose>
+          <when test="agentType == 3">
+            AND node_id = #{node_id}
+          </when>
+          <otherwise>
+            AND node_id LIKE CONCAT(#{node_id},'.%')
+          </otherwise>
+        </choose>
       </if>
     </where>; 
   </select>
@@ -57,7 +71,14 @@
       SUBSTR(지급일시, 1, 10) 
       BETWEEN #{startDate} AND #{endDate}
       <if test="node_id != undefined">
-        AND node_id LIKE CONCAT(#{node_id},'%')
+        <choose>
+          <when test="agentType == 3">
+            AND node_id = #{node_id}
+          </when>
+          <otherwise>
+            AND node_id LIKE CONCAT(#{node_id},'.%')
+          </otherwise>
+        </choose>
       </if>
     </where>; 
   </select>
@@ -71,7 +92,14 @@
       SUBSTR(회수일시, 1, 10) 
       BETWEEN #{startDate} AND #{endDate}
       <if test="node_id != undefined">
-        AND node_id LIKE CONCAT(#{node_id},'%')
+        <choose>
+          <when test="agentType == 3">
+            AND node_id = #{node_id}
+          </when>
+          <otherwise>
+            AND node_id LIKE CONCAT(#{node_id},'.%')
+          </otherwise>
+        </choose>
       </if>
     </where>; 
   </select>
@@ -85,7 +113,14 @@
       SUBSTR(지급일시, 1, 10) 
       BETWEEN #{startDate} AND #{endDate}
       <if test="node_id != undefined">
-        AND node_id LIKE CONCAT(#{node_id},'%')
+        <choose>
+          <when test="agentType == 3">
+            AND node_id = #{node_id}
+          </when>
+          <otherwise>
+            AND node_id LIKE CONCAT(#{node_id},'.%')
+          </otherwise>
+        </choose>
       </if>
     </where>;
   </select>
