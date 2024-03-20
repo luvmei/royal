@@ -13,6 +13,8 @@ router.post('/headquarters', (req, res) => {
 
 router.post('/agent', (req, res) => {
   req.body.node_id = req.user[0].node_id;
+  req.body.agentType = req.user[0].type;
+
   if (req.body.type == 'depoWith') {
     getData(res, 'agentDepoWith', req.body);
   } else if (req.body.type == 'betwin') {
@@ -35,9 +37,9 @@ router.post('/detail', (req, res) => {
 });
 
 router.post('/user', (req, res) => {
-  if(req.body.type == 'depoWith') {
+  if (req.body.type == 'depoWith') {
     getData(res, 'userDepoWith', req.body);
-  } else if(req.body.type == 'betwin') {
+  } else if (req.body.type == 'betwin') {
     getData(res, 'userBetWin', req.body);
   }
 });

@@ -8,24 +8,27 @@ const JSONbig = require('json-bigint');
 const userRouter = require('./user');
 
 // #region 테이블 전송
-router.post('/balance', (req, res) => {
+function handleLogRequest(req, res, sqlType = null) {
   req.body.id = req.user[0].id;
   req.body.agentType = req.user[0].type;
-  req.body.sqlType = 'getBalanceLog';
   req.body.node_id = req.user[0].node_id;
+  req.body.sqlType = sqlType;
+
   getData(res, req.body);
+}
+
+router.post('/balance', (req, res) => {
+  handleLogRequest(req, res, 'getBalanceLog');
 });
 
 router.post('/point', (req, res) => {
-  req.body.id = req.user[0].id;
-  req.body.agentType = req.user[0].type;
-  req.body.sqlType = 'getPointLog';
-  req.body.node_id = req.user[0].node_id;
-  getData(res, req.body);
+  handleLogRequest(req, res, 'getPointLog');
 });
 
 router.post('/detail', (req, res) => {
   req.body.node_id = req.user[0].node_id;
+  req.body.agentType = req.user[0].type;
+
   if (req.body.type == 'sport') {
     getDetailLog(req, res, 'getSportDetailLog');
   } else if (req.body.type == 'casino') {
@@ -52,9 +55,6 @@ async function getData(res, params) {
   let conn = await pool.getConnection();
   let getLogData = mybatisMapper.getStatement('log', params.sqlType, params, sqlFormat);
 
-  console.log('파라미터', params);
-  console.log('쿼리', getLogData);
-
   try {
     let result = await conn.query(getLogData);
     result = JSONbig.stringify(result);
@@ -70,14 +70,6 @@ async function getData(res, params) {
 
 async function getDetailLog(req, res, type) {
   let params = req.body;
-
-  if (req.user[0].node_id) {
-    params.node_id = req.user[0].node_id;
-  }
-
-  if (req.user[0].type == 3) {
-    params.isBronze = true;
-  }
 
   let conn = await pool.getConnection();
 
