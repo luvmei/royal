@@ -9,36 +9,39 @@ const moment = require('moment-timezone');
 const userRouter = require('./user');
 
 // #region 테이블 전송
-router.post('/info', (req, res) => {
-  req.user[0].sqlType = 'agentInfo';
+function handleAgentRequest(req, res, sqlType, dates = false) {
+  req.user[0].sqlType = sqlType;
+  
+  if (dates) {
+    req.user[0].startDate = req.body.startDate;
+    req.user[0].endDate = req.body.endDate;
+  }
+
   getData(res, req.user[0]);
+}
+
+router.post('/info', (req, res) => {
+  handleAgentRequest(req, res, 'agentInfo');
 });
 
 router.post('/asset', (req, res) => {
-  req.user[0].sqlType = 'agentAsset';
-  getData(res, req.user[0]);
+  handleAgentRequest(req, res, 'agentAsset');
 });
 
 router.post('/commission', (req, res) => {
-  req.user[0].sqlType = 'agentCommission';
-  getData(res, req.user[0]);
+  handleAgentRequest(req, res, 'agentCommission');
 });
 
 router.post('/betting', (req, res) => {
-  req.user[0].sqlType = 'agentBetting';
-  getData(res, req.user[0]);
+  handleAgentRequest(req, res, 'agentBetting');
 });
 
 router.post('/connect', (req, res) => {
-  req.user[0].sqlType = 'agentConnect';
-  req.user[0].startDate = req.body.startDate;
-  req.user[0].endDate = req.body.endDate;
-  getData(res, req.user[0]);
+  handleAgentRequest(req, res, 'agentConnect', true);
 });
 
 router.post('/block', (req, res) => {
-  req.user[0].sqlType = 'agentBlock';
-  getData(res, req.user[0]);
+  handleAgentRequest(req, res, 'agentBlock');
 });
 // #endregion
 

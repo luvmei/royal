@@ -60,7 +60,7 @@
   </select>
 
   <select id="userInfoDate">
-    CALL getUserInfoDateView(#{startDate}, #{endDate}, #{nodeId})
+    CALL getUserInfoDateView(#{startDate}, #{endDate}, #{node_id})
   </select>  
 
   <select id='userAsset'>

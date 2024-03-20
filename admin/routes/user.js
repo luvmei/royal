@@ -12,53 +12,40 @@ const parser = require('ua-parser-js');
 const api = require(`../public/js/api/${process.env.API_TYPE}`);
 
 // #region 테이블 전송
-router.post('/info', (req, res) => {
+function handleUserRequest(req, res, sqlType = null) {
   req.body.agentType = req.user[0].type;
   req.body.node_id = req.user[0].node_id;
-  req.body.sqlType = req.body.table;
+  req.body.sqlType = sqlType || req.body.table;
+
   getData(res, req.body);
+}
+
+router.post('/info', (req, res) => {
+  handleUserRequest(req, res);
 });
 
 router.post('/asset', (req, res) => {
-  req.body.agentType = req.user[0].type;
-  req.body.node_id = req.user[0].node_id;
-  req.body.sqlType = 'userAsset';
-  getData(res, req.body);
+  handleUserRequest(req, res, 'userAsset');
 });
 
 router.post('/commission', (req, res) => {
-  req.body.agentType = req.user[0].type;
-  req.body.node_id = req.user[0].node_id;
-  req.body.sqlType = 'userCommission';
-  getData(res, req.body);
+  handleUserRequest(req, res, 'userCommission');
 });
 
 router.post('/betting', (req, res) => {
-  req.body.agentType = req.user[0].type;
-  req.body.node_id = req.user[0].node_id;
-  req.body.sqlType = 'userBetting';
-  getData(res, req.body);
+  handleUserRequest(req, res, 'userBetting');
 });
 
 router.post('/connect', (req, res) => {
-  req.body.agentType = req.user[0].type;
-  req.body.node_id = req.user[0].node_id;
-  req.body.sqlType = 'userConnect';
-  getData(res, req.body);
+  handleUserRequest(req, res, 'userConnect');
 });
 
 router.post('/block', (req, res) => {
-  req.body.agentType = req.user[0].type;
-  req.body.node_id = req.user[0].node_id;
-  req.body.sqlType = 'userBlock';
-  getData(res, req.body);
+  handleUserRequest(req, res, 'userBlock');
 });
 
 router.post('/confirm', (req, res) => {
-  req.body.agentType = req.user[0].type;
-  req.body.node_id = req.user[0].node_id;
-  req.body.sqlType = 'userConfirm';
-  getData(res, req.body);
+  handleUserRequest(req, res, 'userConfirm');
 });
 // #endregion
 
@@ -558,6 +545,10 @@ async function changeAdminPassword(req, res) {
 
 // #region 유저 관련 함수
 async function getData(res, params = {}) {
+  if (params.sqlType === 'userInfoDate' && params.noed_id == undefined) {
+    params.node_id = null;
+  }
+  
   let conn = await pool.getConnection();
   let getData = mybatisMapper.getStatement('user', params.sqlType, params, sqlFormat);
 

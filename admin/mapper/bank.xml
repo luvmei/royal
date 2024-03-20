@@ -28,7 +28,7 @@
     <where>
       SUBSTR(입금신청일시, 1, 10) 
       BETWEEN #{startDate} AND #{endDate}
-       <if test="node_id != undefined">
+      <if test="node_id != undefined">
         <choose>
           <when test="agentType == 3">
             AND node_id = #{node_id}

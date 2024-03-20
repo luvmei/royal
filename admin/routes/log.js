@@ -9,15 +9,19 @@ const userRouter = require('./user');
 
 // #region 테이블 전송
 router.post('/balance', (req, res) => {
-  req.body.node_id = req.user[0].node_id;
-  req.body.type = req.user[0].type;
   req.body.id = req.user[0].id;
-  getData(req, res, 'getBalanceLog');
+  req.body.agentType = req.user[0].type;
+  req.body.sqlType = 'getBalanceLog';
+  req.body.node_id = req.user[0].node_id;
+  getData(res, req.body);
 });
 
 router.post('/point', (req, res) => {
+  req.body.id = req.user[0].id;
+  req.body.agentType = req.user[0].type;
+  req.body.sqlType = 'getPointLog';
   req.body.node_id = req.user[0].node_id;
-  getData(req, res, 'getPointLog');
+  getData(res, req.body);
 });
 
 router.post('/detail', (req, res) => {
@@ -44,24 +48,17 @@ router.post('/summary', (req, res) => {
 // #endregion
 
 // #region 로그 관련 함수
-async function getData(req, res, type) {
-  let params = req.body;
-
-  if (req.user[0].node_id) {
-    params.node_id = req.user[0].node_id;
-  }
-
-  if (req.user[0].type == 3) {
-    params.isBronze = true;
-  }
-
+async function getData(res, params) {
   let conn = await pool.getConnection();
-  //todo params.node_id 정보 필요
-  let getLogData = mybatisMapper.getStatement('log', type, params, sqlFormat);
+  let getLogData = mybatisMapper.getStatement('log', params.sqlType, params, sqlFormat);
+
+  console.log('파라미터', params);
+  console.log('쿼리', getLogData);
 
   try {
     let result = await conn.query(getLogData);
     result = JSONbig.stringify(result);
+
     res.send(result);
   } catch (e) {
     console.log(e);

@@ -10,46 +10,35 @@ const api = require(`../public/js/api/${process.env.API_TYPE}`);
 const cron = require('node-cron');
 
 // #region 테이블 전송
-router.post('/depowith', function (req, res) {
-  req.user[0].sqlType = 'depositwithdraw';
+function handleBankRequest(req, res, sqlType) {
+  req.user[0].sqlType = sqlType;
   req.user[0].startDate = req.body.startDate;
   req.user[0].endDate = req.body.endDate;
   getData(res, req.user[0]);
+}
+
+router.post('/depowith', function (req, res) {
+  handleBankRequest(req, res, 'depositwithdraw');
 });
 
 router.post('/deposit', function (req, res) {
-  req.user[0].sqlType = 'deposit';
-  req.user[0].startDate = req.body.startDate;
-  req.user[0].endDate = req.body.endDate;;
-  getData(res, req.user[0]);
+  handleBankRequest(req, res, 'deposit');
 });
 
 router.post('/withdraw', function (req, res) {
-  req.user[0].sqlType = 'withdraw';
-  req.user[0].startDate = req.body.startDate;
-  req.user[0].endDate = req.body.endDate;
-  getData(res, req.user[0]);
+  handleBankRequest(req, res, 'withdraw');
 });
 
 router.post('/give', function (req, res) {
-  req.user[0].sqlType = 'give';
-  req.user[0].startDate = req.body.startDate;
-  req.user[0].endDate = req.body.endDate;
-  getData(res, req.user[0]);
+  handleBankRequest(req, res, 'give');
 });
 
 router.post('/take', function (req, res) {
-  req.user[0].sqlType = 'take';
-  req.user[0].startDate = req.body.startDate;
-  req.user[0].endDate = req.body.endDate;
-  getData(res, req.user[0]);
+  handleBankRequest(req, res, 'take');
 });
 
 router.post('/givetake', function (req, res) {
-  req.user[0].sqlType = 'giveTake';
-  req.user[0].startDate = req.body.startDate;
-  req.user[0].endDate = req.body.endDate;
-  getData(res, req.user[0]);
+  handleBankRequest(req, res, 'giveTake');
 });
 // #endregion
 
