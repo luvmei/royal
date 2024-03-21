@@ -490,12 +490,12 @@ function checkCode() {
       }
     });
   } else {
-    code_isCheck = true;
     code_button.innerHTML = '가입코드 확인';
     code_desc.style.color = failColor;
     code_desc.innerHTML = '가입코드 확인을 해주세요';
     code_button.style.boxShadow = 'inset 0 0 5px 3px #ffc107';
-    code_isValid = true;
+    code_isValid = false;
+    code_isCheck = false;
   }
 }
 // #endregion

@@ -27,6 +27,8 @@ router.post('/agent', (req, res) => {
 });
 
 router.post('/detail', (req, res) => {
+  req.body.agentType = req.user[0].type;
+
   if (req.body.type == 'depowith') {
     getDetailIncome(res, 'detailIncomeDepoWith', req.body);
   } else if (req.body.type == 'betwin') {
@@ -66,6 +68,7 @@ async function getDetailIncome(res, type, params = {}) {
   let conn = await pool.getConnection();
   let getDetailIncome = mybatisMapper.getStatement('income', type, params, sqlFormat);
   try {
+
     let result = await conn.query(getDetailIncome);
     result = JSONbig.stringify(result);
     result = JSON.parse(result);

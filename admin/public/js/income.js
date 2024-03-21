@@ -1022,6 +1022,10 @@ let incomeAgentBetWin = $('#incomeAgentBetWin').DataTable({
 
           losing = Math.floor(losing);
 
+          if (losing == -0) {
+            losing = 0;
+          }
+
           if (losing >= 0) {
             return `<div class="text-primary">${losing.toLocaleString('ko-KR')}</div>`;
           } else {
