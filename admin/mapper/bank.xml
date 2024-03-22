@@ -195,6 +195,11 @@
   </update>
 
 // 승인 관련
+  <select id='checkBonusState'>
+    SELECT bonusState
+    FROM setting
+  </select>
+  
   <select id='updateAssetDepositConfirm'>
     UPDATE user_asset_info AS a
     SET a.balance = a.balance + ${reqMoney} + ${bonusMoney},   

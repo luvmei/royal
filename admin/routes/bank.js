@@ -479,27 +479,43 @@ async function confirmDepositRequest(res, params) {
   let log;
   let conn = await pool.getConnection();
 
-  switch (params.bonusType) {
-    case '0':
-      params.confirmStatus = '입금승인';
-      params.bonusType = 0;
-      break;
-    case '1':
-      params.confirmStatus = '입금승인(매일 첫충전)';
-      params.bonusType = 3;
-      break;
-    case '2':
-      params.confirmStatus = '입금승인(가입 첫충전)';
-      params.bonusType = 4;
-      break;
-    case '3':
-      params.confirmStatus = '입금승인(재충전)';
-      params.bonusType = 3;
-      break;
-    case '4':
-      params.confirmStatus = '입금승인(가입 재충전)';
-      params.bonusType = 4;
+try {
+  let bonusStateSql = mybatisMapper.getStatement('bank', 'checkBonusState', params, sqlFormat);
+  let bonusStateResult = await conn.query(bonusStateSql);
+  let bonusState = bonusStateResult[0].bonusState;
+
+  if (bonusState === 1) {
+    switch (params.bonusType) {
+      case '0':
+        params.confirmStatus = '입금승인';
+        params.bonusType = 0;
+        break;
+      case '1':
+        params.confirmStatus = '입금승인(매일 첫충전)';
+        params.bonusType = 3;
+        break;
+      case '2':
+        params.confirmStatus = '입금승인(가입 첫충전)';
+        params.bonusType = 4;
+        break;
+      case '3':
+        params.confirmStatus = '입금승인(재충전)';
+        params.bonusType = 3;
+        break;
+      case '4':
+        params.confirmStatus = '입금승인(가입 재충전)';
+        params.bonusType = 4;
+    }
+  } else {
+    params.confirmStatus = '입금승인';
+    params.bonusType = 0;
   }
+} catch (error) {
+  console.error(error);
+} finally {
+  if (conn) conn.release();
+}
+
 
   params.타입 = '입금';
   params.transactionId = 'D' + makeTransactionId();
@@ -511,6 +527,7 @@ async function confirmDepositRequest(res, params) {
   updateBonus = mybatisMapper.getStatement('bank', 'updateBonus', params, sqlFormat);
 
   let apiResult;
+
   if (params.type == 4) {
     apiResult = await api.requestAsset(params);
 
@@ -641,7 +658,6 @@ async function getDepositSums(id) {
     if (conn) conn.release();
   }
 }
-
 
 function getWeeklyRange() {
   const now = new Date();

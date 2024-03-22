@@ -936,10 +936,10 @@ http.listen(process.env.ADMIN_PORT, '0.0.0.0', () => {
   const midnight = new Date(now.getFullYear(), now.getMonth(), now.getDate() + 1, 0, 0, 0);
   const timeUntilMidnight = midnight - now - 1000;
 
-  setTimeout(updateUserBalances, timeUntilMidnight);
-  setInterval(updateUserBalances, 1000 * 5);
-  setInterval(updateAllUserBalance, 1000 * 20);
-  setInterval(logOnlineUsersAndRequestDetails, 1000 * 90);
+  // setTimeout(updateUserBalances, timeUntilMidnight);
+  // setInterval(updateUserBalances, 1000 * 5);
+  // setInterval(updateAllUserBalance, 1000 * 20);
+  // setInterval(logOnlineUsersAndRequestDetails, 1000 * 90);
 
   // setInterval(checkClientConnections, 1000 * 5);
 
