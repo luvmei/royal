@@ -227,8 +227,7 @@
 
   <select id='updateAssetWithdrawConfirm'>
     UPDATE user_asset_info AS a
-    SET a.balance = a.balance - ${reqMoney},
-        a.recent_withdraw = ${reqMoney},        
+    SET a.recent_withdraw = ${reqMoney},        
         a.today_withdraw = a.today_withdraw + ${reqMoney},
         a.total_withdraw = a.total_withdraw + ${reqMoney}
     WHERE  a.user_id = (SELECT user_id
@@ -608,6 +607,13 @@
                     WHERE id = #{id});
   </select>
 
+  <update id='updateAgentBalanceForWithdraw'>
+    UPDATE user_asset_info
+    SET balance = balance - ${reqMoney}
+    WHERE user_id = (SELECT user_id
+                    FROM user 
+                    WHERE id = #{id});  
+  </update>
 // 지급, 회수 관련
   <select id='getGiveIdx'>
     SELECT COUNT(*) AS recent_id

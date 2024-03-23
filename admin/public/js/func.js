@@ -1073,6 +1073,15 @@ $('#depositConfirm').on('click', function () {
       $('#deposit, #depositWithdraw, #dashboardBank,#dashboardWait, #dashboardAgentBank').DataTable().ajax.reload(null, false);
       getNavModalData();
       initPopover();
+
+      let agentConfirmModalText = document.getElementById('confirm-text');      
+      if (result) {
+        agentConfirmModalText.innerHTML = `<h4>입금승인 완료</h4>`;
+      } else {
+        agentConfirmModalText.innerHTML = `<h4>입금승인 실패 - API 네트워크 지연</h4>
+      <h5>잠시 후 다시 요청해주세요</h5>`;
+      }
+      $('#agentConfirmModal').modal('show');
     })
     .fail(function (err) {
       console.log('전송오류');
@@ -1152,7 +1161,10 @@ $('#depositConfirmCancel').on('click', function () {
       getNavModalData();
       initPopover();
       countNotification();
-      console.log(result);
+
+      let agentConfirmModalText = document.getElementById('confirm-text');
+      agentConfirmModalText.innerHTML = result;
+      $('#agentConfirmModal').modal('show');
     })
     .fail(function (err) {
       console.log('전송오류');

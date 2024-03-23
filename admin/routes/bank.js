@@ -55,12 +55,7 @@ router.post('/withdraw/status', function (req, res) {
 
 //? 유저 입금승인
 router.post('/deposit/confirm', function (req, res) {
-  let result = confirmDepositRequest(res, req.body);
-  if (result) {
-    res.send('입금이 처리되었습니다');
-  } else {
-    res.send('입금이 처리되지 않았습니다');
-  }
+  confirmDepositRequest(res, req.body);
 });
 
 //? 유저 출금승인
@@ -299,6 +294,14 @@ async function giveTakeBalance(res, params) {
     if (params.senderType === 9) {
       if (params.receiverType === 4) {
         apiResult = await api.requestAsset(params);
+
+        if (apiResult.status !== 200) {
+          let errMsg = `${params.receiverId} 회원에게 ${params.type}실패`;
+          console.log(errMsg);
+          res.send(errMsg);
+          return;
+        }
+
       } else {
         console.log(`${params.receiverId} 에이전트에게 ${params.type}합니다.`);
       }
@@ -312,6 +315,13 @@ async function giveTakeBalance(res, params) {
       if (bankState[0].bank_req_state == 'n') {
         if (params.receiverType === 4) {
           apiResult = await api.requestAsset(params);
+          
+          if (apiResult.status !== 200) {
+            let errMsg = `${params.receiverId} 회원에게 ${params.type}실패`;
+            console.log(errMsg);
+            res.send(errMsg);
+            return;
+          }          
         } else {
           console.log(`${params.receiverId} 에이전트에게 ${params.type}합니다.`);
         }
@@ -479,43 +489,42 @@ async function confirmDepositRequest(res, params) {
   let log;
   let conn = await pool.getConnection();
 
-try {
-  let bonusStateSql = mybatisMapper.getStatement('bank', 'checkBonusState', params, sqlFormat);
-  let bonusStateResult = await conn.query(bonusStateSql);
-  let bonusState = bonusStateResult[0].bonusState;
+  try {
+    let bonusStateSql = mybatisMapper.getStatement('bank', 'checkBonusState', params, sqlFormat);
+    let bonusStateResult = await conn.query(bonusStateSql);
+    let bonusState = bonusStateResult[0].bonusState;
 
-  if (bonusState === 1) {
-    switch (params.bonusType) {
-      case '0':
-        params.confirmStatus = '입금승인';
-        params.bonusType = 0;
-        break;
-      case '1':
-        params.confirmStatus = '입금승인(매일 첫충전)';
-        params.bonusType = 3;
-        break;
-      case '2':
-        params.confirmStatus = '입금승인(가입 첫충전)';
-        params.bonusType = 4;
-        break;
-      case '3':
-        params.confirmStatus = '입금승인(재충전)';
-        params.bonusType = 3;
-        break;
-      case '4':
-        params.confirmStatus = '입금승인(가입 재충전)';
-        params.bonusType = 4;
+    if (bonusState === 1) {
+      switch (params.bonusType) {
+        case '0':
+          params.confirmStatus = '입금승인';
+          params.bonusType = 0;
+          break;
+        case '1':
+          params.confirmStatus = '입금승인(매일 첫충전)';
+          params.bonusType = 3;
+          break;
+        case '2':
+          params.confirmStatus = '입금승인(가입 첫충전)';
+          params.bonusType = 4;
+          break;
+        case '3':
+          params.confirmStatus = '입금승인(재충전)';
+          params.bonusType = 3;
+          break;
+        case '4':
+          params.confirmStatus = '입금승인(가입 재충전)';
+          params.bonusType = 4;
+      }
+    } else {
+      params.confirmStatus = '입금승인';
+      params.bonusType = 0;
     }
-  } else {
-    params.confirmStatus = '입금승인';
-    params.bonusType = 0;
+  } catch (error) {
+    console.error(error);
+  } finally {
+    if (conn) conn.release();
   }
-} catch (error) {
-  console.error(error);
-} finally {
-  if (conn) conn.release();
-}
-
 
   params.타입 = '입금';
   params.transactionId = 'D' + makeTransactionId();
@@ -527,21 +536,19 @@ try {
   updateBonus = mybatisMapper.getStatement('bank', 'updateBonus', params, sqlFormat);
 
   let apiResult;
-
   if (params.type == 4) {
     apiResult = await api.requestAsset(params);
 
     if (apiResult.status !== 200) {
-      let errMsg = `HL API error: ${apiResult.data.message}`;
-      res.send(errMsg);
+      let errMsg = `입금승인 실패: ${apiResult.response.data.message}`;
+      console.log(errMsg);
+      res.send(false);
       return;
     }
 
     if (api == 'hl') {
       params.transactionId = apiResult.data.transaction_id;
     }
-
-    console.log(`[${params.타입}] API 요청 성공`);
   }
 
   if (params.type != 4 || (params.type == 4 && apiResult.status == 200)) {
@@ -553,6 +560,7 @@ try {
       await conn.query(confirmTime);
       await conn.query(log);
       await conn.commit();
+
       if (params.타입 == '입금') {
         await conn.query(updateBonus);
         let confirmMsg = await updateEventState(params.id);
@@ -576,7 +584,7 @@ try {
       console.log(`${params.타입}승인 성공`);
       params.bankState = 'n';
       updateReqstate(params);
-      return true;
+      res.send(true);
     } catch (e) {
       console.log(e);
       console.log(`${params.타입}승인 실패`);
@@ -585,7 +593,7 @@ try {
       if (conn) conn.release();
     }
   } else {
-    socket.emit('error', `${params.타입}신청API 응답오류`);
+    socket.emit('error', `${params.타입}신청 응답오류`);
     res.send(`${params.타입}요청 실패`);
   }
 }
@@ -729,7 +737,6 @@ async function cancelConfirm(res, params, type) {
   let memo;
   let log;
   let conn = await pool.getConnection();
-  console.log('캔슬', params);
 
   if (type == 'deposit') {
     params.requestType = '입금';
@@ -754,7 +761,13 @@ async function cancelConfirm(res, params, type) {
 
   if (params.userType == 4) {
     apiResult = await api.requestAsset(params);
-    console.log(apiResult.data);
+
+    if (apiResult.status !== 200) {
+      let errMsg = `${params.타입}승인취소 실패: ${apiResult.response.data.message}`;
+      console.log(errMsg);
+      res.send(errMsg);
+      return;
+    }
   }
 
   if (params.userType != 4 || (params.userType == 4 && apiResult.status == 200)) {
@@ -774,6 +787,7 @@ async function cancelConfirm(res, params, type) {
     } catch (e) {
       console.log(e);
       console.log(`${params.타입}승인취소 실패`);
+      res.send(`${params.타입}승인취소 성공`);
       return done(e);
     } finally {
       if (conn) return conn.release();
@@ -797,7 +811,7 @@ async function cancelRequest(res, params, type) {
   } else if (type == 'cancelWithdraw') {
     params.타입 = '출금';
     status = mybatisMapper.getStatement('bank', 'updateWithdrawCancel', params, sqlFormat);
-    // asset = mybatisMapper.getStatement('bank', 'rollbackWithdrawRequestBalance', params, sqlFormat);
+    asset = mybatisMapper.getStatement('bank', 'rollbackWithdrawRequestBalance', params, sqlFormat);
     memo = mybatisMapper.getStatement('bank', 'insertWithdrawMemo', params, sqlFormat);
     confirmTime = mybatisMapper.getStatement('bank', 'confirmWithdrawTime', params, sqlFormat);
   }
@@ -824,11 +838,12 @@ async function cancelRequest(res, params, type) {
         } else {
           console.log('출금취소API 응답오류');
           res.send(`[${params.타입}취소] 실패 / API 응답오류`);
+          return;
         }
       } else {
         await conn.beginTransaction();
         await conn.query(status);
-        // await conn.query(asset);
+        await conn.query(asset);
         await conn.query(memo);
         await conn.query(confirmTime);
         await conn.commit();
@@ -1152,11 +1167,16 @@ async function insertRequestQuery(res, type, params) {
 
     if (bankState[0].bank_req_state == 'n') {
       params.bankState = 'y';
-      updateReqstate(params); // Assuming this is a synchronous function. If it's not, you should await it.
+      updateReqstate(params);
 
       let sqlType = type == 'deposit' ? 'insertReqDeposit' : 'insertReqWithdraw';
       let insertReqSql = mybatisMapper.getStatement('bank', sqlType, params, sqlFormat);
       await conn.query(insertReqSql);
+
+      if (type == 'withdraw') {
+        let updateBalance = mybatisMapper.getStatement('bank', 'updateAgentBalanceForWithdraw', params, sqlFormat);
+        await conn.query(updateBalance);
+      }
 
       if (type == 'deposit') {
         console.log(`입금신청: ${params.agentType} / ${params.id} / ${params.reqMoney} 원`);
@@ -1176,7 +1196,7 @@ async function insertRequestQuery(res, type, params) {
         });
       }
 
-      await conn.commit(); // Commit transaction
+      await conn.commit();
     } else {
       res.send({
         request: 'fail',

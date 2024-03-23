@@ -215,7 +215,7 @@ async function requestAsset(params) {
   }
 
   let postData = {
-    username: params.id,
+    username: params.id, 
     amount: parseInt(params.reqMoney) + parseInt(params.bonusMoney || 0),
   };
 
@@ -229,6 +229,7 @@ async function requestAsset(params) {
   try {
     let result = await axios(config);
     await updateUserBalance(params.id);
+
     if (params.senderId) {
       console.log(
         `[${params.type}완료] 신청: ${params.senderId} / 대상: ${params.id} / 금액: ${parseInt(params.reqMoney + params.reqBonus).toLocaleString('ko-KR')}`
@@ -236,11 +237,17 @@ async function requestAsset(params) {
     } else {
       console.log(`[${params.타입}완료] 대상: ${params.id} / 금액: ${parseInt(params.reqMoney + params.reqBonus).toLocaleString('ko-KR')}`);
     }
+
     return result;
   } catch (error) {
-    console.log(error.response.data.message);
+    if (error.response && error.response.status === 422) {
+      console.log('에러 메세지:', error.response.data.message);
+      createUser(params);
+    } else {
+      console.log('API 요청 실패:', error.response.data.message);
+    }
     console.log(`${params.타입 || params.type}처리 실패: ID: ${params.id}`);
-    createUser(params);
+    return error;
   }
 }
 
