@@ -10,13 +10,11 @@
           </div>
           <div class="modal-body text-black">
             <div class="form-floating mb-3">
-              <input type="text" class="form-control login-input" id="login-id" placeholder="아이디" name="id"
-                maxlength="20" autocomplete="off" required />
+              <input type="text" class="form-control login-input" id="login-id" placeholder="아이디" name="id" maxlength="20" autocomplete="off" required />
               <label for="login-id">아이디</label>
             </div>
             <div class="form-floating mb-2">
-              <input type="password" class="form-control login-input" id="login-pw" placeholder="비밀번호" name="pw"
-                autocomplete="off" required />
+              <input type="password" class="form-control login-input" id="login-pw" placeholder="비밀번호" name="pw" autocomplete="off" required />
               <label for="login-pw">비밀번호</label>
             </div>
             <div class="login-message">
@@ -24,9 +22,8 @@
             </div>
             <% if (!isLogin) { %>
             <div class="input-group my-3">
-              <img src="/user/captcha" class="captcha-img bg-white rounded-start" alt="CAPTCHA" onclick="loadCaptcha()">
-              <input type="text" class="form-control captcha-input" placeholder="이미지 클릭 시 새로고침" name="captcha"
-                maxlength="3" required />
+              <img src="/user/captcha" class="captcha-img bg-white rounded-start" alt="CAPTCHA" onclick="loadCaptcha()" />
+              <input type="text" class="form-control captcha-input" placeholder="이미지 클릭 시 새로고침" name="captcha" maxlength="3" required />
             </div>
             <% } %>
             <div class="d-flex justify-content-end">
@@ -63,8 +60,17 @@
               <div class="col-12 col-lg-4">
                 <div class="input-group">
                   <div class="form-floating">
-                    <input type="text" class="form-control" id="join-id" name="id" placeholder="아이디" minlength="6"
-                      maxlength="12" autocomplete="off" required />
+                    <input
+                      type="text"
+                      class="form-control"
+                      id="join-id"
+                      name="id"
+                      placeholder="아이디"
+                      minlength="6"
+                      maxlength="12"
+                      autocomplete="off"
+                      required
+                    />
                     <label for="join-id">아이디</label>
                   </div>
                   <button class="btn" type="button" id="join-id-btn">중복확인</button>
@@ -74,8 +80,17 @@
               <div class="col-12 col-lg-4">
                 <div class="input-group">
                   <div class="form-floating">
-                    <input type="password" class="form-control" id="join-pw" name="pw" placeholder="비밀번호" minlength="8"
-                      maxlength="16" autocomplete="off" required />
+                    <input
+                      type="password"
+                      class="form-control"
+                      id="join-pw"
+                      name="pw"
+                      placeholder="비밀번호"
+                      minlength="8"
+                      maxlength="16"
+                      autocomplete="off"
+                      required
+                    />
                     <label for="join-pw">비밀번호</label>
                   </div>
                   <button class="btn" type="button" id="join-pw-btn">비밀번호 확인</button>
@@ -85,8 +100,17 @@
               <div class="col-12 col-lg-4">
                 <div class="input-group">
                   <div class="form-floating">
-                    <input type="text" class="form-control" id="join-nick" name="nickname" placeholder="닉네임"
-                      minlength="2" autocomplete="off" maxlength="8" required />
+                    <input
+                      type="text"
+                      class="form-control"
+                      id="join-nick"
+                      name="nickname"
+                      placeholder="닉네임"
+                      minlength="2"
+                      autocomplete="off"
+                      maxlength="8"
+                      required
+                    />
                     <label for="join-nick">닉네임</label>
                   </div>
                   <button class="btn" type="button" id="join-nick-btn">중복확인</button>
@@ -96,8 +120,17 @@
               <div class="col-12 col-lg-4 d-none">
                 <div class="input-group">
                   <div class="form-floating">
-                    <input type="text" class="form-control" id="join-name" name="name" placeholder="이름" minlength="2"
-                      maxlength="20" autocomplete="off" required />
+                    <input
+                      type="text"
+                      class="form-control"
+                      id="join-name"
+                      name="name"
+                      placeholder="이름"
+                      minlength="2"
+                      maxlength="20"
+                      autocomplete="off"
+                      required
+                    />
                     <label for="join-name">이름</label>
                   </div>
                 </div>
@@ -106,8 +139,17 @@
               <div class="col-12 col-lg-4">
                 <div class="input-group">
                   <div class="form-floating">
-                    <input type="text" class="form-control" id="join-phone-num" name="phone" placeholder="전화번호"
-                      minlength="10" autocomplete="off" maxlength="11" required />
+                    <input
+                      type="text"
+                      class="form-control"
+                      id="join-phone-num"
+                      name="phone"
+                      placeholder="전화번호"
+                      minlength="10"
+                      autocomplete="off"
+                      maxlength="11"
+                      required
+                    />
                     <label for="join-phone-num">전화번호</label>
                   </div>
                   <button class="btn d-none" type="button" id="join-phone-btn">중복확인</button>
@@ -142,16 +184,34 @@
               </div>
               <div class="col-lg-4">
                 <div class="form-floating">
-                  <input type="text" class="form-control" id="join-account-num" name="bank_num" placeholder="계좌번호"
-                    minlength="11" maxlength="14" autocomplete="off" required />
+                  <input
+                    type="text"
+                    class="form-control"
+                    id="join-account-num"
+                    name="bank_num"
+                    placeholder="계좌번호"
+                    minlength="11"
+                    maxlength="14"
+                    autocomplete="off"
+                    required
+                  />
                   <label for="join-account-num">계좌번호</label>
                 </div>
                 <div class="description" id="join-account-num-desc">( - ) 없이 숫자만 입력</div>
               </div>
               <div class="col-lg-4">
                 <div class="form-floating">
-                  <input type="text" class="form-control" id="join-account-holder" name="bank_owner" placeholder="예금주"
-                    minlength="3" maxlength="30" autocomplete="off" required />
+                  <input
+                    type="text"
+                    class="form-control"
+                    id="join-account-holder"
+                    name="bank_owner"
+                    placeholder="예금주"
+                    minlength="3"
+                    maxlength="30"
+                    autocomplete="off"
+                    required
+                  />
                   <label for="join-account-holder">예금주</label>
                 </div>
                 <div class="description" id="join-account-holder-desc">실명만 가능</div>
@@ -159,8 +219,16 @@
               <div class="<%= recommend == 0 ? 'col-lg-4' : 'col-lg-4' %>">
                 <div class="input-group">
                   <div class="form-floating">
-                    <input type="password" class="form-control" id="join-withdraw-pw" name="bank_pw"
-                      placeholder="출금 비밀번호" maxlength="6" autocomplete="off" required />
+                    <input
+                      type="password"
+                      class="form-control"
+                      id="join-withdraw-pw"
+                      name="bank_pw"
+                      placeholder="출금 비밀번호"
+                      maxlength="6"
+                      autocomplete="off"
+                      required
+                    />
                     <label for="join-withdraw-pw">출금 비밀번호</label>
                   </div>
                   <button class="btn" type="button" id="join-withdraw-pw-btn">비밀번호 확인</button>
@@ -170,8 +238,17 @@
               <div class="<%= recommend == 0 ? 'col-lg-4' : 'col-lg-4' %>">
                 <div class="input-group">
                   <div class="form-floating">
-                    <input type="text" class="form-control" id="join-code" name="join_code" placeholder="가입코드"
-                      minlength="4" maxlength="20" autocomplete="off" required />
+                    <input
+                      type="text"
+                      class="form-control"
+                      id="join-code"
+                      name="join_code"
+                      placeholder="가입코드"
+                      minlength="4"
+                      maxlength="20"
+                      autocomplete="off"
+                      required
+                    />
                     <label for="join-code">가입코드</label>
                   </div>
                   <button class="btn" type="button" id="join-code-btn">가입코드 확인</button>
@@ -181,8 +258,16 @@
               <div class="col-lg-4 <%= recommend == 0 ? 'd-none' : '' %>">
                 <div class="input-group">
                   <div class="form-floating">
-                    <input type="text" class="form-control" id="join-recommend" name="recommend" placeholder="추천인ID"
-                      minlength="4" maxlength="12" autocomplete="off" />
+                    <input
+                      type="text"
+                      class="form-control"
+                      id="join-recommend"
+                      name="recommend"
+                      placeholder="추천인ID"
+                      minlength="4"
+                      maxlength="12"
+                      autocomplete="off"
+                    />
                     <label for="join-recommend">추천인코드</label>
                   </div>
                   <button class="btn" type="button" id="join-recommend-btn">추천인 확인</button>
@@ -263,8 +348,7 @@
                   <button type="button" class="btn btn-light" data-won="50">50<span name="deposit-man">만</span></button>
                 </div>
                 <div class="col-3">
-                  <button type="button" class="btn btn-light" data-won="100">100<span
-                      name="deposit-man">만</span></button>
+                  <button type="button" class="btn btn-light" data-won="100">100<span name="deposit-man">만</span></button>
                 </div>
                 <div class="col-3">
                   <button id="deposit-modify" type="button" class="btn" data-won="0">정정</button>
@@ -281,8 +365,15 @@
                   <span name="deposit-won">원</span>
                 </div>
                 <div class="col-5">
-                  <button id="deposit-history" type="button" class="btn btn-outline-warning history"
-                    data-bs-target="#depositHistoryModal" data-bs-toggle="modal">입금내역 확인</button>
+                  <button
+                    id="deposit-history"
+                    type="button"
+                    class="btn btn-outline-warning history"
+                    data-bs-target="#depositHistoryModal"
+                    data-bs-toggle="modal"
+                  >
+                    입금내역 확인
+                  </button>
                 </div>
                 <div class="col-5 text-end ms-auto">
                   <button id="deposit-submit" type="button" class="btn">입금 신청</button>
@@ -317,14 +408,8 @@
           </table>
         </div>
         <div class="modal-footer pe-0">
-          <button class="btn asset-success float-end" style="font-size: 0.9rem;" data-bs-target="#userInfoModal"
-            data-bs-toggle="modal">
-            회원정보
-          </button>
-          <button class="btn asset-primary float-end ms-1" style="font-size: 0.9rem;" data-bs-target="#depositModal"
-            data-bs-toggle="modal">
-            입금신청
-          </button>
+          <button class="btn asset-success float-end" style="font-size: 0.9rem" data-bs-target="#userInfoModal" data-bs-toggle="modal">회원정보</button>
+          <button class="btn asset-primary float-end ms-1" style="font-size: 0.9rem" data-bs-target="#depositModal" data-bs-toggle="modal">입금신청</button>
         </div>
       </div>
     </div>
@@ -392,38 +477,47 @@
                   <button type="button" class="btn btn-light" data-won="5">5<span name="withdraw-man">만</span></button>
                 </div>
                 <div class="col-3">
-                  <button type="button" class="btn btn-light" data-won="10">10<span
-                      name="withdraw-man">만</span></button>
+                  <button type="button" class="btn btn-light" data-won="10">10<span name="withdraw-man">만</span></button>
                 </div>
                 <div class="col-3">
-                  <button type="button" class="btn btn-light" data-won="30">30<span
-                      name="withdraw-man">만</span></button>
+                  <button type="button" class="btn btn-light" data-won="30">30<span name="withdraw-man">만</span></button>
                 </div>
                 <div class="col-3">
-                  <button type="button" class="btn btn-light" data-won="50">50<span
-                      name="withdraw-man">만</span></button>
+                  <button type="button" class="btn btn-light" data-won="50">50<span name="withdraw-man">만</span></button>
                 </div>
                 <div class="col-3">
-                  <button type="button" class="btn btn-light" data-won="100">100<span
-                      name="withdraw-man">만</span></button>
+                  <button type="button" class="btn btn-light" data-won="100">100<span name="withdraw-man">만</span></button>
                 </div>
                 <div class="col-3">
                   <button type="button" class="btn" id="withdraw-modify">정정</button>
                 </div>
                 <div class="col-7" id="withdraw-after-text">출금 후 보유금</div>
-                <div class="col-5 text-end"><span id="withdraw-after-money"></span><span name="withdraw-won"> 원</span>
-                </div>
+                <div class="col-5 text-end"><span id="withdraw-after-money"></span><span name="withdraw-won"> 원</span></div>
                 <hr class="my-2" />
                 <div class="col-12">
                   <div class="input-group">
                     <span class="input-group-text" id="withdraw-holder">출금 비밀번호</span>
-                    <input id="withdraw-password" type="password" class="form-control" maxlength="6" autocomplete="off"
-                      value="" placeholder="숫자 6자리 입력" />
+                    <input
+                      id="withdraw-password"
+                      type="password"
+                      class="form-control"
+                      maxlength="6"
+                      autocomplete="off"
+                      value=""
+                      placeholder="숫자 6자리 입력"
+                    />
                   </div>
                 </div>
                 <div class="col-5">
-                  <button type="button" id="withdraw-history" class="btn btn-outline-warning history"
-                    data-bs-target="#withdrawHistoryModal" data-bs-toggle="modal">출금내역 확인</button>
+                  <button
+                    type="button"
+                    id="withdraw-history"
+                    class="btn btn-outline-warning history"
+                    data-bs-target="#withdrawHistoryModal"
+                    data-bs-toggle="modal"
+                  >
+                    출금내역 확인
+                  </button>
                 </div>
                 <div class="col-5 text-end ms-auto">
                   <button type="button" class="btn" id="withdraw-submit">출금 신청</button>
@@ -456,14 +550,8 @@
           </table>
         </div>
         <div class="modal-footer pe-0">
-          <button class="btn asset-success float-end" style="font-size: 0.9rem;" data-bs-target="#userInfoModal"
-            data-bs-toggle="modal">
-            회원정보
-          </button>
-          <button class="btn asset-danger float-end ms-1" style="font-size: 0.9rem;" data-bs-target="#withdrawModal"
-            data-bs-toggle="modal">
-            출금신청
-          </button>
+          <button class="btn asset-success float-end" style="font-size: 0.9rem" data-bs-target="#userInfoModal" data-bs-toggle="modal">회원정보</button>
+          <button class="btn asset-danger float-end ms-1" style="font-size: 0.9rem" data-bs-target="#withdrawModal" data-bs-toggle="modal">출금신청</button>
         </div>
       </div>
     </div>
@@ -587,8 +675,7 @@
                 <button type="button" class="btn btn-light" data-won="50">50<span name="withdraw-man">만</span></button>
               </div>
               <div class="col-3 d-none">
-                <button type="button" class="btn btn-light" data-won="100">100<span
-                    name="withdraw-man">만</span></button>
+                <button type="button" class="btn btn-light" data-won="100">100<span name="withdraw-man">만</span></button>
               </div>
               <div class="col-3 d-none">
                 <button type="button" class="btn" id="reward-modify">정정</button>
@@ -605,8 +692,15 @@
                 <span name="withdraw-won"> 원</span>
               </div>
               <div class="col-5">
-                <button type="button" class="btn btn-outline-warning history mt-3" id="reward-history"
-                  data-bs-target="#rewardHistoryModal" data-bs-toggle="modal">전환내역 확인</button>
+                <button
+                  type="button"
+                  class="btn btn-outline-warning history mt-3"
+                  id="reward-history"
+                  data-bs-target="#rewardHistoryModal"
+                  data-bs-toggle="modal"
+                >
+                  전환내역 확인
+                </button>
               </div>
               <div class="col-5 text-end ms-auto">
                 <button type="button" class="btn mt-3" id="reward-submit">전환 신청</button>
@@ -636,14 +730,8 @@
           </table>
         </div>
         <div class="modal-footer pe-0">
-          <button class="btn asset-success float-end" style="font-size: 0.9rem;" data-bs-target="#userInfoModal"
-            data-bs-toggle="modal">
-            회원정보
-          </button>
-          <button class="btn asset-danger float-end ms-1" style="font-size: 0.9rem;" data-bs-target="#rewardModal"
-            data-bs-toggle="modal">
-            콤프전환신청
-          </button>
+          <button class="btn asset-success float-end" style="font-size: 0.9rem" data-bs-target="#userInfoModal" data-bs-toggle="modal">회원정보</button>
+          <button class="btn asset-danger float-end ms-1" style="font-size: 0.9rem" data-bs-target="#rewardModal" data-bs-toggle="modal">콤프전환신청</button>
         </div>
       </div>
     </div>
@@ -666,10 +754,7 @@
           </table>
         </div>
         <div class="modal-footer pe-0">
-          <button class="btn asset-success float-end" style="font-size: 0.9rem;" data-bs-target="#userInfoModal"
-            data-bs-toggle="modal">
-            회원정보
-          </button>
+          <button class="btn asset-success float-end" style="font-size: 0.9rem" data-bs-target="#userInfoModal" data-bs-toggle="modal">회원정보</button>
         </div>
       </div>
     </div>
@@ -684,18 +769,15 @@
           </div>
           <div class="modal-body text-black mt-3">
             <div class="form-floating mb-3">
-              <input type="text" class="form-control" id="beforeChange" placeholder="변경전" name="beforeChange"
-                required />
+              <input type="text" class="form-control" id="beforeChange" placeholder="변경전" name="beforeChange" required />
               <label for="beforeChange"></label>
             </div>
             <div class="form-floating mb-2">
-              <input type="text" class="form-control" id="setChange" placeholder="변경내용" name="setChange"
-                autocomplete="off" required />
+              <input type="text" class="form-control" id="setChange" placeholder="변경내용" name="setChange" autocomplete="off" required />
               <label for="setChange"></label>
             </div>
             <div class="form-floating mb-2">
-              <input type="text" class="form-control" id="setChangeCheck" placeholder="변경내용확인" name="setChangeCheck"
-                autocomplete="off" required />
+              <input type="text" class="form-control" id="setChangeCheck" placeholder="변경내용확인" name="setChangeCheck" autocomplete="off" required />
               <label for="setChangeCheck"></label>
             </div>
             <div class="description" id="setting-desc"></div>
@@ -717,96 +799,68 @@
         </div>
         <div class="modal-body text-white">
           <div class="userInfoTable row">
-            <div class="col-4 type">
-              <i class="fa-solid fa-ranking-star"></i> 레벨
-            </div>
+            <div class="col-4 type"><i class="fa-solid fa-ranking-star"></i> 레벨</div>
             <div class="col-8 value">
               <span id="userLevel"></span>
             </div>
-            <div class="col-4 type">
-              <i class="fa-solid fa-user"></i>아이디
-            </div>
+            <div class="col-4 type"><i class="fa-solid fa-user"></i>아이디</div>
             <div class="col-8 value">
               <span id="userId"></span>
             </div>
-            <div class="col-4 type">
-              <i class="fa-solid fa-lock"></i>비밀번호
-            </div>
+            <div class="col-4 type"><i class="fa-solid fa-lock"></i>비밀번호</div>
             <div class="col-8 value">
               <button type="button" class="btn btn-sm btn-warning" id="requestQna">변경요청</button>
             </div>
-            <div class="col-4 type">
-              <i class="fa-regular fa-id-card"></i>이름
-            </div>
+            <div class="col-4 type"><i class="fa-regular fa-id-card"></i>이름</div>
             <div class="col-8 value">
               <span id="userName"></span>
             </div>
-            <div class="col-4 type">
-              <i class="fa-solid fa-star"></i>닉네임
-            </div>
+            <div class="col-4 type"><i class="fa-solid fa-star"></i>닉네임</div>
             <div class="col-8 value">
               <span id="userNick"></span>
             </div>
-            <div class="col-4 type">
-              <i class="fa-solid fa-phone"></i>전화번호
-            </div>
+            <div class="col-4 type"><i class="fa-solid fa-phone"></i>전화번호</div>
             <div class="col-8 value">
               <span id="userPhone"></span>
             </div>
-            <div class="col-4 type">
-              <i class="fa-solid fa-sack-dollar"></i>보유금
-            </div>
+            <div class="col-4 type"><i class="fa-solid fa-sack-dollar"></i>보유금</div>
             <div class="col-8 value">
               <span id="userBalance"></span>
               <span name="deposit-won">원</span>
             </div>
-            <div class="col-4 type">
-              <i class="fa-solid fa-p"></i>포인트
-            </div>
-            <div class="col-8 value">
-              <span id="userPoint"></span>P
-            </div>
-            <div class="col-4 type">
-              <i class="fa-solid fa-money-check-dollar"></i>계좌정보
-            </div>
+            <div class="col-4 type"><i class="fa-solid fa-p"></i>포인트</div>
+            <div class="col-8 value"><span id="userPoint"></span>P</div>
+            <div class="col-4 type"><i class="fa-solid fa-money-check-dollar"></i>계좌정보</div>
             <div class="col-8 value">
               <button type="button" class="btn btn-sm btn-warning" id="requestAccount">변경요청</button>
             </div>
-            <div class="col-4 type bankInfo">
-              은행
-            </div>
+            <div class="col-4 type bankInfo">은행</div>
             <div class="col-8 value">
               <span id="userBank"></span>
             </div>
-            <div class="col-4 type bankInfo">
-              계좌번호
-            </div>
+            <div class="col-4 type bankInfo">계좌번호</div>
             <div class="col-8 value">
               <span id="userAccount"></span>
             </div>
-            <div class="col-4 type bankInfo">
-              예금주
-            </div>
+            <div class="col-4 type bankInfo">예금주</div>
             <div class="col-8 value">
               <span id="userOwner"></span>
             </div>
           </div>
           <div class="row g-2 m-0 p-0">
             <div class="col-4 mt-2">
-              <button type="button" class="btn asset-success historyBtn w-100" data-bs-target="#depositHistoryModal"
-                data-bs-toggle="modal">입금내역</button>
+              <button type="button" class="btn asset-success historyBtn w-100" data-bs-target="#depositHistoryModal" data-bs-toggle="modal">입금내역</button>
             </div>
             <div class="col-4 mt-2">
-              <button type="button" class="btn asset-danger historyBtn w-100" data-bs-target="#withdrawHistoryModal"
-                data-bs-toggle="modal">출금내역</button>
+              <button type="button" class="btn asset-danger historyBtn w-100" data-bs-target="#withdrawHistoryModal" data-bs-toggle="modal">출금내역</button>
             </div>
             <div class="col-4 mt-2">
-              <button type="button" class="btn asset-primary historyBtn w-100" data-bs-target="#rewardHistoryModal"
-                data-bs-toggle="modal">콤프전환내역</button>
+              <button type="button" class="btn asset-primary historyBtn w-100" data-bs-target="#rewardHistoryModal" data-bs-toggle="modal">콤프전환내역</button>
             </div>
             <div class="col-6 mt-2 d-none">
-              <button type="button" class="btn asset-warning historyBtn w-100" data-bs-target="#recommendHistoryModal"
-                data-bs-toggle="modal">추천인내역</button>
+              <button type="button" class="btn asset-warning historyBtn w-100" data-bs-target="#recommendHistoryModal" data-bs-toggle="modal">
+                추천인내역
+              </button>
             </div>
           </div>
         </div>
@@ -821,8 +875,7 @@
           <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Close"></button>
         </div>
         <div class="modal-body">
-          <div class="list-group" id="lotteryList">
-          </div>
+          <div class="list-group" id="lotteryList"></div>
         </div>
       </div>
     </div>
@@ -835,8 +888,7 @@
           <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Close"></button>
         </div>
         <div class="modal-body">
-          <div class="list-group" id="lotteryDetail">
-          </div>
+          <div class="list-group" id="lotteryDetail"></div>
         </div>
         <div class="modal-footer">
           <button class="btn btn-sm btn-warning" data-bs-target="#lotteryListModal" data-bs-toggle="modal">회차정보</button>
@@ -846,7 +898,7 @@
   </div>
   <% if (isLogin) { %>
   <div class="question modal fade" id="noticeModal" tabindex="-1">
-    <div class="modal-dialog modal-dialog-centered modal-lg" style="max-width: 1200px;">
+    <div class="modal-dialog modal-dialog-centered modal-lg" style="max-width: 1200px">
       <div class="modal-content">
         <div class="modal-header">
           <h1 class="modal-title fs-5 fw-bold py-1" id="questionListModaltitle">공지사항</h1>
@@ -880,22 +932,19 @@
             <div class="row g-2">
               <div class="col-2">
                 <div class="form-floating">
-                  <input type="text" class="form-control" id="readNoticeType" placeholder="title" value="" name="title"
-                    disabled required />
+                  <input type="text" class="form-control" id="readNoticeType" placeholder="title" value="" name="title" disabled required />
                   <label for="noticeType">종류</label>
                 </div>
               </div>
               <div class="col-10">
                 <div class="form-floating">
-                  <input type="text" class="form-control" id="readNoticeTitle" placeholder="title" value="" name="title"
-                    disabled required />
+                  <input type="text" class="form-control" id="readNoticeTitle" placeholder="title" value="" name="title" disabled required />
                   <label for="noticeTitle">제목</label>
                 </div>
               </div>
               <div class="col-12 mt-3">
                 <label for="noticeContent" class="form-label">내용입력</label>
-                <textarea class="form-control" id="readNoticeContent" rows="10" name="content" disabled
-                  required></textarea>
+                <textarea class="form-control" id="readNoticeContent" rows="10" name="content" disabled required></textarea>
               </div>
               <div class="col-12 mt-3">
                 <button type="button" class="btn asset-dark float-end me-2" data-bs-dismiss="modal">닫기</button>
@@ -929,10 +978,7 @@
           </table>
         </div>
         <div class="modal-footer">
-          <button class="btn btn-sm btn-warning ms-auto" style="font-size: 0.9rem" data-bs-target="#reqQuestionModal"
-            data-bs-toggle="modal">
-            문의하기
-          </button>
+          <button class="btn btn-sm btn-warning ms-auto" style="font-size: 0.9rem" data-bs-target="#reqQuestionModal" data-bs-toggle="modal">문의하기</button>
         </div>
       </div>
     </div>
@@ -947,8 +993,7 @@
           <form id="reqQuestionForm" class="p-2">
             <div class="row g-2">
               <div class="col-12 d-none">
-                <input type="text" class="form-control" id="questionCategory" placeholder="category" value="question"
-                  name="category" required />
+                <input type="text" class="form-control" id="questionCategory" placeholder="category" value="question" name="category" required />
               </div>
               <div class="col-3">
                 <div class="form-floating">
@@ -964,15 +1009,13 @@
               </div>
               <div class="col-9">
                 <div class="form-floating">
-                  <input type="text" class="form-control" id="questionTitle" placeholder="title" value="" name="title"
-                    required />
+                  <input type="text" class="form-control" id="questionTitle" placeholder="title" value="" name="title" required />
                   <label for="questionTitle">제목</label>
                 </div>
               </div>
               <div class="col-12 mt-3">
                 <label for="questionContent" class="form-label text-white">문의 할 내용</label>
-                <textarea class="form-control" id="questionContent" rows="10" name="content" spellcheck="false"
-                  required></textarea>
+                <textarea class="form-control" id="questionContent" rows="10" name="content" spellcheck="false" required></textarea>
               </div>
               <div class="col-12 mt-3">
                 <button type="submit" class="btn btn-warning float-end px-3" id="sendQuestionBtn">작성하기</button>
@@ -1005,13 +1048,11 @@
                 <textarea class="form-control" id="viewQuestionContent" rows="5" name="content" readonly></textarea>
               </div>
               <div class="col-12 mt-4">
-                <label for="viewQuestionAnswer" class="form-label text-white" id="viewQuestionLabel">답변
-                  내용</label>
+                <label for="viewQuestionAnswer" class="form-label text-white" id="viewQuestionLabel">답변 내용</label>
                 <textarea class="form-control" id="viewQuestionAnswer" rows="8" name="content" readonly></textarea>
               </div>
               <div class="col-12 mt-3">
-                <button type="button" class="btn btn-secondary float-end me-2" data-bs-target="#questionModal"
-                  data-bs-toggle="modal">확인</button>
+                <button type="button" class="btn btn-secondary float-end me-2" data-bs-target="#questionModal" data-bs-toggle="modal">확인</button>
               </div>
             </div>
           </div>
@@ -1025,8 +1066,7 @@
       <div class="modal-content">
         <div class="modal-header">
           <h1 class="modal-title fs-5 fw-bold py-1" id="messageListModaltitle">받은 메세지</h1>
-          <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Close"
-            id="messageModalCloser"></button>
+          <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Close" id="messageModalCloser"></button>
         </div>
         <div class="modal-body px-4 rounded-3">
           <table id="messageList" class="display" style="width: 100%">
@@ -1069,8 +1109,7 @@
                 <textarea class="form-control" id="viewMessageContent" rows="15" name="content" readonly></textarea>
               </div>
               <div class="col-12 mt-3">
-                <button type="button" class="btn btn-secondary float-end me-2" data-bs-target="#messageModal"
-                  data-bs-toggle="modal">확인</button>
+                <button type="button" class="btn btn-secondary float-end me-2" data-bs-target="#messageModal" data-bs-toggle="modal">확인</button>
               </div>
             </div>
           </div>
@@ -1086,8 +1125,7 @@
           <h1 class="modal-title fs-5 fw-bold py-1" id="attendanceModalTitle">출석 체크 - 10월</h1>
           <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Close"></button>
         </div>
-        <div class="modal-body" id="attendanceTable">
-        </div>
+        <div class="modal-body" id="attendanceTable"></div>
       </div>
     </div>
   </div>
@@ -1101,10 +1139,8 @@
         </div>
         <div class="modal-body" id="confirm-text"></div>
         <div class="modal-footer d-block">
-          <button type="button" id="notice-confirm-btn" class="btn btn-warning" data-bs-dismiss="modal"
-            tabindex="0">확인</button>
-          <button type="button" id="after-reset" class="btn btn-warning d-none" data-bs-dismiss="modal"
-            tabindex="0">확인</button>
+          <button type="button" id="notice-confirm-btn" class="btn btn-warning" data-bs-dismiss="modal" tabindex="0">확인</button>
+          <button type="button" id="after-reset" class="btn btn-warning d-none" data-bs-dismiss="modal" tabindex="0">확인</button>
         </div>
       </div>
     </div>
@@ -1120,8 +1156,7 @@
           <h3 class="mb-2">라이브 스포츠를 실행하시겠습니까?</h3>
         </div>
         <div class="modal-footer d-block">
-          <button type="button" id="sport-start" class="btn btn-warning" data-bs-dismiss="modal"
-            tabindex="0">시작하기</button>
+          <button type="button" id="sport-start" class="btn btn-warning" data-bs-dismiss="modal" tabindex="0">시작하기</button>
           <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">닫기</button>
         </div>
       </div>
@@ -1152,8 +1187,7 @@
         <div class="modal-footer d-block">
           <button type="button" class="btn btn-danger d-none" id="deleteAllMessageBtn">전체 삭제</button>
           <button type="button" class="btn btn-warning d-none" id="readAllMessageBtn">모두 읽기</button>
-          <button type="button" class="btn btn-secondary" data-bs-dismiss="modal" aria-label="Close"
-            id="returnMessageBtn">확인</button>
+          <button type="button" class="btn btn-secondary" data-bs-dismiss="modal" aria-label="Close" id="returnMessageBtn">확인</button>
         </div>
       </div>
     </div>
@@ -1169,10 +1203,8 @@
           <h3>로그아웃 하시겠습니까?</h3>
         </div>
         <div class="modal-footer d-block">
-          <button type="button" id="notice-logout-btn" class="btn btn-danger" data-bs-dismiss="modal"
-            tabindex="0">로그아웃</button>
-          <button type="button" id="notice-cancel-btn" class="btn btn-secondary" data-bs-dismiss="modal"
-            tabindex="0">취소</button>
+          <button type="button" id="notice-logout-btn" class="btn btn-danger" data-bs-dismiss="modal" tabindex="0">로그아웃</button>
+          <button type="button" id="notice-cancel-btn" class="btn btn-secondary" data-bs-dismiss="modal" tabindex="0">취소</button>
         </div>
       </div>
     </div>
@@ -1188,10 +1220,7 @@
           <h3>로그인 후 이용해주세요</h3>
         </div>
         <div class="modal-footer d-block">
-          <button type="button" class="btn btn-warning" data-bs-toggle="modal" data-bs-target="#loginModal"
-            tabindex="-1">
-            로그인
-          </button>
+          <button type="button" class="btn btn-warning" data-bs-toggle="modal" data-bs-target="#loginModal" tabindex="-1">로그인</button>
         </div>
       </div>
     </div>
@@ -1311,7 +1340,7 @@
           <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Close"></button>
         </div>
         <div class="modal-body" id="noticePopupBody">
-          <img src="" class="" id="noticePopupImage">
+          <img src="" class="" id="noticePopupImage" />
           <div id="noticePopupContent"></div>
         </div>
         <div class="modal-footer">

@@ -105,6 +105,7 @@ async function getData(res, params) {
   let agentData = mybatisMapper.getStatement('agent', params.sqlType, params, sqlFormat);
 
   try {
+    console.log('에이전트 데이터 요청', agentData)
     let result = await conn.query(agentData);
     if (params.sqlType === 'agentInfo' || params.sqlType === 'agentAsset' || params.sqlType === 'agentBetting') {
       result = JSONbig.stringify(result);

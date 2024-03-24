@@ -14,7 +14,7 @@
             node_id = #{node_id}
           </when>
           <otherwise>
-            node_id LIKE CONCAT(#{node_id},'.%')
+            node_id = #{node_id} OR node_id LIKE CONCAT(#{node_id},'.%')
           </otherwise>
         </choose>
       </if>

@@ -61,7 +61,11 @@ if (clientId) {
       <h3>메세지가 도착했습니다</h3>
       `);
       audio = new Audio('../../public/mp3/message.mp3');
+    } else if (data.type === 'cancelDeposit' || data.type === 'cancelWithdraw') {
+      $('#confirm-text').html(`${data.msg}`);
     }
+
+
     $('#confirmModal').modal('show');
     audio.play();
   });

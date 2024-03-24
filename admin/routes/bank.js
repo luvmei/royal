@@ -301,7 +301,6 @@ async function giveTakeBalance(res, params) {
           res.send(errMsg);
           return;
         }
-
       } else {
         console.log(`${params.receiverId} 에이전트에게 ${params.type}합니다.`);
       }
@@ -315,13 +314,13 @@ async function giveTakeBalance(res, params) {
       if (bankState[0].bank_req_state == 'n') {
         if (params.receiverType === 4) {
           apiResult = await api.requestAsset(params);
-          
+
           if (apiResult.status !== 200) {
             let errMsg = `${params.receiverId} 회원에게 ${params.type}실패`;
             console.log(errMsg);
             res.send(errMsg);
             return;
-          }          
+          }
         } else {
           console.log(`${params.receiverId} 에이전트에게 ${params.type}합니다.`);
         }
@@ -802,18 +801,21 @@ async function cancelRequest(res, params, type) {
   let status;
   let memo;
   let conn = await pool.getConnection();
+  let confirmMsg;
 
   if (type == 'cancelDeposit') {
     params.타입 = '입금';
     status = mybatisMapper.getStatement('bank', 'updateDepositCancel', params, sqlFormat);
     memo = mybatisMapper.getStatement('bank', 'insertDepositMemo', params, sqlFormat);
     confirmTime = mybatisMapper.getStatement('bank', 'confirmDepositTime', params, sqlFormat);
+    confirmMsg = `<h3 class="mb-4">신청하신 입금요청이 취소되었습니다</h3>`;
   } else if (type == 'cancelWithdraw') {
     params.타입 = '출금';
     status = mybatisMapper.getStatement('bank', 'updateWithdrawCancel', params, sqlFormat);
     asset = mybatisMapper.getStatement('bank', 'rollbackWithdrawRequestBalance', params, sqlFormat);
     memo = mybatisMapper.getStatement('bank', 'insertWithdrawMemo', params, sqlFormat);
     confirmTime = mybatisMapper.getStatement('bank', 'confirmWithdrawTime', params, sqlFormat);
+    confirmMsg = `<h3 class="mb-4">신청하신 출금요청이 취소되었습니다</h3>`;
   }
 
   try {
@@ -823,6 +825,8 @@ async function cancelRequest(res, params, type) {
       await conn.query(memo);
       await conn.query(confirmTime);
       await conn.commit();
+
+      socket.emit('to_user', { id: params.id, type: 'cancelDeposit', msg: confirmMsg });
     } else if (type == 'cancelWithdraw') {
       if (params.userType == 4) {
         params.type = '출금취소';
@@ -831,10 +835,12 @@ async function cancelRequest(res, params, type) {
         if (apiResult.status == 200) {
           await conn.beginTransaction();
           await conn.query(status);
-          // await conn.query(asset);
+          await conn.query(asset);
           await conn.query(memo);
           await conn.query(confirmTime);
           await conn.commit();
+
+          socket.emit('to_user', { id: params.id, type: 'cancelWithdraw', msg: confirmMsg });
         } else {
           console.log('출금취소API 응답오류');
           res.send(`[${params.타입}취소] 실패 / API 응답오류`);
@@ -849,6 +855,7 @@ async function cancelRequest(res, params, type) {
         await conn.commit();
       }
     }
+
     socket.emit('checkIcon', type);
     console.log(`[${params.타입}취소] 성공`);
     params.bankState = 'n';

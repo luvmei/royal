@@ -186,7 +186,7 @@ router.post('/reward', function (req, res) {
     time: getCurrentTime(),
     type: '포인트 전환',
   };
-  if(params.point != params.reqPoint){
+  if (params.point != params.reqPoint) {
     res.send(`포인트 전환이 실패하였습니다 (포인트 불일치)`);
   }
   exchangeReward(res, params);

@@ -63,68 +63,6 @@ router.post('/start', async (req, res) => {
   if (!req.user) {
     res.send({ msg: '로그인이 필요합니다', isLogin: false });
   } else {
-    // #region 파싱 스위칭
-    // let { dbBalance, sdBalance, dgBalance } = await checkAndSyncUserBalance(req.user[0].id);
-    // let userPtype = await checkUserPtype(req);
-    // console.log('============================');
-    // console.log('Before 디비: ', dbBalance);
-    // console.log('Before 에스디: ', sdBalance);
-    // console.log('Before 드래곤: ', dgBalance);
-
-    // if (req.body.gameId == '6529' && req.body.provider == '에볼루션') {
-    //   if (userPtype == 0) {
-    //     // dbBalance와 sdBalance가 같고, dgBalance가 0이어야 한다.
-    //     if (dbBalance !== sdBalance && sdBalance == 0) {
-    //       console.log('밸런스 스위칭: DG > SD ');
-    //       // dbBalance와 sdBalance가 같지 않으면, sdBalance를 dbBalance로 업데이트 해준다.
-    //       let updatedBalance = await sd.depositBalance(req.user[0].id, dbBalance);
-    //       console.log('After 에스디: ', updatedBalance);
-    //     }
-    //     if (dgBalance !== 0) {
-    //       // dgBalance가 0이 아니면 0으로 업데이트 해준다.
-    //       await dg.withdrawAllBalance(req.user[0].id);
-    //       console.log('After 드래곤: ', 0);
-    //     }
-
-    //     await sd.requestGameUrl(req, res);
-    //     console.log('에스디 에볼루션 접속');
-    //     console.log('============================');
-    //   } else if (userPtype == 1) {
-    //     // dbBalance와 dgBalance가 같고, sdBalance가 0이어야 한다.
-    //     if (dbBalance !== dgBalance && dgBalance == 0) {
-    //       console.log('밸런스 스위칭: SD > DG ');
-    //       // dbBalance와 dgBalance가 같지 않으면, dgBalance를 dbBalance로 업데이트 해준다.
-    //       let updatedBalance = await dg.depositBalance(req.user[0].id, dbBalance);
-    //       console.log('After 드래곤: ', updatedBalance);
-    //     }
-    //     if (sdBalance !== 0) {
-    //       // sdBalance가 0이 아니면 0으로 업데이트 해준다.
-    //       await sd.withdrawAllBalance(req.user[0].id);
-    //       console.log('After 에스디: ', 0);
-    //     }
-
-    //     await dg.requestGameUrl(req, res);
-    //     console.log('드래곤 에볼루션 접속');
-    //     console.log('============================');
-    //   }
-    // } else {
-    //   // dbBalance와 sdBalance가 같고, dgBalance가 0이어야 한다.
-    //   if (dbBalance !== sdBalance && sdBalance == 0) {
-    //     // dbBalance와 sdBalance가 같지 않으면, sdBalance를 dbBalance로 업데이트 해준다.
-    //     let updatedBalance = await sd.depositBalance(req.user[0].id, dbBalance);
-    //     console.log('After 에스디: ', updatedBalance);
-    //   }
-    //   if (dgBalance !== 0) {
-    //     // dgBalance가 0이 아니면 0으로 업데이트 해준다.
-    //     await dg.withdrawAllBalance(req.user[0].id);
-    //     console.log('After 드래곤: ', 0);
-    //   }
-
-    //   console.log('에스디 슬롯 접속');
-    //   console.log('에볼루션 아님');
-    //   await sd.requestGameUrl(req, res);
-    // }
-    // #endregion
     await api.requestGameUrl(req, res);
   }
 });

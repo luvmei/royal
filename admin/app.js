@@ -592,6 +592,10 @@ async function updateNotification(type) {
     type = 'requestWithdraw';
   } else if (type == 'confirmDepositAttendant') {
     type = 'confirmDeposit';
+  } else if (type == 'cancelDeposit') {
+    type = 'cancelDeposit';
+  } else if (type == 'confirmWithdraw') {
+    type = 'confirmWithdraw';
   }
 
   let sql = mybatisMapper.getStatement('socket', type, {}, sqlFormat);
@@ -936,10 +940,10 @@ http.listen(process.env.ADMIN_PORT, '0.0.0.0', () => {
   const midnight = new Date(now.getFullYear(), now.getMonth(), now.getDate() + 1, 0, 0, 0);
   const timeUntilMidnight = midnight - now - 1000;
 
-  // setTimeout(updateUserBalances, timeUntilMidnight);
-  // setInterval(updateUserBalances, 1000 * 5);
-  // setInterval(updateAllUserBalance, 1000 * 20);
-  // setInterval(logOnlineUsersAndRequestDetails, 1000 * 90);
+  setTimeout(updateUserBalances, timeUntilMidnight);
+  setInterval(updateUserBalances, 1000 * 5);
+  setInterval(updateAllUserBalance, 1000 * 20);
+  setInterval(logOnlineUsersAndRequestDetails, 1000 * 90);
 
   // setInterval(checkClientConnections, 1000 * 5);
 
