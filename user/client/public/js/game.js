@@ -941,10 +941,20 @@ function sendGameStartRequest(gameId, provider) {
   })
     .done(function (result) {
       spinnerToggle();
+      let isMobile = window.matchMedia('only screen and (max-width: 768px)').matches;
+
+      console.log(isMobile);
+
       if (result.isLogin === true) {
         if (result.url !== '') {
-          window.open(result.url, '', 'width=' + window.screen.width + ', height=' + window.screen.height + ', top=0, left=0');
-        } else if (result.url === '') {
+          if (isMobile) {
+            $('#gameLinkModal .modal-title').html(result.provider);
+            $('#gameStartLink').attr('href', result.url);
+            $('#gameLinkModal').modal('show');
+          } else {
+            window.open(result.url, '', 'width=' + window.screen.width + ', height=' + window.screen.height + ', top=0, left=0');
+          }
+        } else {
           $('#slotModal').modal('hide');
           document.querySelector('#alertModal .modal-body').innerHTML = `<div class='fs-5'>현재 점검 중인 게임입니다</div>`;
           $('#alertModal').modal('show');
@@ -958,6 +968,13 @@ function sendGameStartRequest(gameId, provider) {
       console.log(err);
     });
 }
+
+document.getElementById('gameStartLink').addEventListener('click', function () {
+  setTimeout(() => {
+    $('#gameStartLink').attr('href', '');
+    $('#gameLinkModal').modal('hide');
+  }, 3000);
+});
 
 if (document.getElementById('nav-sport-tab')) {
   document.getElementById('nav-sport-tab').addEventListener('click', async function () {

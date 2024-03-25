@@ -68,7 +68,6 @@ async function getDetailIncome(res, type, params = {}) {
   let conn = await pool.getConnection();
   let getDetailIncome = mybatisMapper.getStatement('income', type, params, sqlFormat);
   try {
-
     let result = await conn.query(getDetailIncome);
     result = JSONbig.stringify(result);
     result = JSON.parse(result);

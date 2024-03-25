@@ -24,7 +24,7 @@ async function requestGameUrl(req, res) {
 
   await axios(config)
     .then((result) => {
-      res.send({ url: result.data.link, isLogin: true });
+      res.send({ url: result.data.link, isLogin: true, provider: req.body.provider });
     })
     .catch((error) => {
       console.log(error.response.data);

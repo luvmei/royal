@@ -195,8 +195,6 @@ async function insertAgentInfo(req, res, data) {
 
   countAgent = Number(countAgent[0].count);
 
-  console.log('에이전트 생성 파라미터', params);
-
   let insertAgentInfo = mybatisMapper.getStatement('agent', 'insertAgentInfo', params, sqlFormat);
   let insertAssetInfo = mybatisMapper.getStatement('agent', 'insertAssetInfo', {}, sqlFormat);
   let insertCommissionInfo = mybatisMapper.getStatement('agent', 'insertCommisionInfo', params, sqlFormat);
@@ -215,14 +213,19 @@ async function insertAgentInfo(req, res, data) {
     } else {
       await conn.query(insertAgent);
     }
-    insertNodeId(params);
-    makeAgentHierarchy(params);
+    setTimeout(() => {
+      insertNodeId(params, conn);
+      setTimeout(() => {
+        makeAgentHierarchy(params, conn);
+      }, 1000);
+    }, 2000);
     // userRouter.createUserApi(params);
     await conn.commit();
     console.log(`[에이전트 추가 성공] [${agentType}] ${params.id}(${params.nickname})`);
     res.send({ agentType: agentType, isAdmin: req.user[0].type });
   } catch (e) {
     console.log(`에러메시지: ${e}`);
+    console.log('파트너 추가 실패 롤백됨');
     await conn.rollback();
     throw err;
   } finally {

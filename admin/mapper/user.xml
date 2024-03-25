@@ -11,10 +11,10 @@
       <if test="node_id != undefined">
         <choose>
           <when test="agentType == 3">
-            node_id = #{node_id}
+            AND node_id = #{node_id}
           </when>
           <otherwise>
-            node_id = #{node_id} OR node_id LIKE CONCAT(#{node_id},'.%')
+            AND (node_id = #{node_id} OR node_id LIKE CONCAT(#{node_id},'.%'))
           </otherwise>
         </choose>
       </if>
@@ -34,7 +34,7 @@
             AND node_id = #{node_id}
           </when>
           <otherwise>
-            AND node_id LIKE CONCAT(#{node_id}, '.%')
+            AND (node_id = #{node_id} OR node_id LIKE CONCAT(#{node_id},'.%'))
           </otherwise>
         </choose>
       </if>
@@ -53,7 +53,7 @@
             AND node_id = #{node_id}
           </when>
           <otherwise>
-            AND node_id LIKE CONCAT(#{node_id}, '.%')
+            AND (node_id = #{node_id} OR node_id LIKE CONCAT(#{node_id},'.%'))
           </otherwise>
         </choose>
       </if>
@@ -72,10 +72,10 @@
       <if test="node_id != undefined">
         <choose>
           <when test="agentType == 3">
-            node_id = #{node_id}
+            AND node_id = #{node_id}
           </when>
           <otherwise>
-            node_id LIKE CONCAT(#{node_id}, '.%')
+            AND (node_id = #{node_id} OR node_id LIKE CONCAT(#{node_id},'.%'))
           </otherwise>
         </choose>
       </if>
@@ -91,10 +91,10 @@
       <if test="node_id != undefined">
         <choose>
           <when test="agentType == 3">
-            node_id = #{node_id}
+            AND node_id = #{node_id}
           </when>
           <otherwise>
-            node_id LIKE CONCAT(#{node_id}, '.%')
+            AND (node_id = #{node_id} OR node_id LIKE CONCAT(#{node_id},'.%'))
           </otherwise>
         </choose>
       </if>
@@ -110,14 +110,14 @@
       <if test="node_id != undefined">
         <choose>
           <when test="agentType == 3">
-            node_id = #{node_id}
+            AND node_id = #{node_id}
           </when>
           <otherwise>
-            node_id LIKE CONCAT(#{node_id}, '.%')
+            AND (node_id = #{node_id} OR node_id LIKE CONCAT(#{node_id},'.%'))
           </otherwise>
         </choose>
       </if>
-    </where>;
+    </where>
   </select>
 
   <select id='userConnect'>
@@ -126,19 +126,18 @@
     FROM 
       user_connect_view    
     <where>
-      SUBSTRING(접속일시, 1, 10) 
-      BETWEEN #{startDate} AND #{endDate}
+      SUBSTRING(접속일시, 1, 10) BETWEEN #{startDate} AND #{endDate}
       <if test="node_id != undefined">
         <choose>
           <when test="agentType == 3">
             AND node_id = #{node_id}
           </when>
           <otherwise>
-            AND node_id LIKE CONCAT(#{node_id}, '.%')
+            AND (node_id = #{node_id} OR node_id LIKE CONCAT(#{node_id},'.%'))
           </otherwise>
         </choose>
       </if>
-    </where>;
+    </where>
   </select>
   
   <select id='userBlock'>
@@ -152,14 +151,14 @@
       <if test="node_id != undefined">
         <choose>
           <when test="agentType == 3">
-            node_id = #{node_id}
+            AND node_id = #{node_id}
           </when>
           <otherwise>
-            node_id LIKE CONCAT(#{node_id}, '.%')
+            AND (node_id = #{node_id} OR node_id LIKE CONCAT(#{node_id},'.%'))
           </otherwise>
         </choose>
       </if>
-    </where>;
+    </where>
   </select>
 
   <select id='insertUserHierarchy'>
@@ -188,7 +187,6 @@
         #{b_nick}
       )
   </select>
-
 
 // 승인관련
   <select id='userConfirm'>
@@ -613,6 +611,13 @@
     WHERE
       id = #{id};
   </select>
+
+  <update id="updateUserAssetInfo">
+    UPDATE user_asset_info
+    SET balance = #{balance}
+    WHERE user_id = #{user_id}
+      AND balance != #{balance}
+  </update>
 
   <insert id="upsertUserAssetInfoTune">
     INSERT INTO user_asset_info (user_id, balance)

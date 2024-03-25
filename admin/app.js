@@ -828,9 +828,13 @@ async function updateUserAssetInfo(userAssetParams) {
   let conn;
   try {
     conn = await pool.getConnection();
-
-    let sql = mybatisMapper.getStatement('user', 'upsertUserAssetInfoTune', { userAssetParams: userAssetParams }, sqlFormat);
-    await conn.query(sql);
+    await conn.beginTransaction();
+    const updatePromises = userAssetParams.map((userAsset) => {
+      let sql = mybatisMapper.getStatement('user', 'updateUserAssetInfo', userAsset, sqlFormat);
+      return conn.query(sql);
+    });
+    await Promise.all(updatePromises);
+    await conn.commit();
   } catch (error) {
     if (conn) await conn.rollback(); // 오류 발생 시 트랜잭션 롤백
     console.error('Batch update of user asset info failed:', error);

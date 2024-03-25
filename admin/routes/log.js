@@ -41,6 +41,7 @@ router.post('/detail', (req, res) => {
 router.post('/summary', (req, res) => {
   req.body.node_id = req.user[0].node_id;
   req.body.agentType = req.user[0].type;
+  
   if (req.body.type == 'sport') {
     getSummaryLog(req, res, 'getSportSummaryLog');
   } else if (req.body.type == 'casino') {

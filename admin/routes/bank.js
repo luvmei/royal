@@ -71,10 +71,8 @@ router.post('/withdraw/confirm', function (req, res) {
 //? 일괄 출금승인
 router.post('/withdraw/batchconfirm', async function (req, res) {
   let resultArr = [];
-  console.log(req.body.selectedData);
 
   for (const object of req.body.selectedData) {
-    console.log(object.currentStatus);
     if (object.currentStatus === '출금승인' || object.currentStatus === '신청취소' || object.currentStatus === '출금신청') {
       continue;
     } else if (object.currentStatus === '출금대기') {
@@ -107,7 +105,6 @@ router.post('/deposit/cancel', function (req, res) {
 
 //? 승인 후 출금 취소
 router.post('/withdraw/confirmcancel', function (req, res) {
-  console.log(req.body);
   cancelConfirm(res, req.body, 'withdraw');
 });
 
@@ -760,7 +757,6 @@ async function cancelConfirm(res, params, type) {
 
   if (params.userType == 4) {
     apiResult = await api.requestAsset(params);
-
     if (apiResult.status !== 200) {
       let errMsg = `${params.타입}승인취소 실패: ${apiResult.response.data.message}`;
       console.log(errMsg);
@@ -1006,32 +1002,6 @@ cron.schedule('0 0 * * *', () => {
 // #endregion
 
 // #region API 관련 함수
-// async function checkAndSyncUserBalance(user) {
-//   let dbResult = await getUserBalanceFromDB(user);
-//   let sdApiResult = await sd.updateUserBalance(user);
-//   let dgApiResult = await dg.updateUserBalance(user);
-
-//   return {
-//     dbBalance: dbResult,
-//     sdBalance: sdApiResult.balance,
-//     dgBalance: dgApiResult.balance,
-//   };
-// }
-
-// async function syncUserBalance(user) {
-//   let maxApiBalance = await getMaxApiBalance(user);
-//   let params = { id: user, balance: maxApiBalance };
-
-//   await updateUserBalanceInDB(params, 'updateUserBalance');
-// }
-
-// async function getMaxApiBalance(user) {
-//   let sdBalance = await sd.updateUserBalance(user);
-//   let dgBalance = await dg.updateUserBalance(user);
-
-//   return Math.max(sdBalance.balance, dgBalance.balance);
-// }
-
 async function getUserBalanceFromDB(user) {
   let result = await executeDBQuery('getUserBalance', { id: user });
   return 'dbBalance', result[0].balance;
@@ -1085,67 +1055,6 @@ async function requestBankNum(res, params) {
     if (conn) return conn.release();
   }
 }
-
-// async function insertRequestQuery(res, type, params) {
-//   console.log('insertRequestQuery', params);
-//   switch (params.agentType) {
-//     case 0:
-//       params.agentType = '플래티넘';
-//       break;
-//     case 1:
-//       params.agentType = '골드';
-//       break;
-//     case 2:
-//       params.agentType = '실버';
-//       break;
-//     case 3:
-//       params.agentType = '브론즈';
-//       break;
-//   }
-
-//   let conn = await pool.getConnection();
-//   let sqlType = type == 'deposit' ? 'insertReqDeposit' : 'insertReqWithdraw';
-//   let insertReqSql = mybatisMapper.getStatement('bank', sqlType, params, sqlFormat);
-//   let checkBankState = mybatisMapper.getStatement('bank', 'checkBankState', params, sqlFormat);
-
-//   try {
-//     let bankState = await conn.query(checkBankState);
-//     console.log(bankState[0].bank_req_state);
-//     if (bankState[0].bank_req_state == 'n') {
-//       params.bankState = 'y';
-//       updateReqstate(params);
-//       if (type == 'deposit') {
-//         await conn.query(insertReqSql);
-//         console.log(`입금신청: ${params.agentType} / ${params.id} / ${params.reqMoney} 원`);
-//         res.send({
-//           request: 'success',
-//           msg: '입금신청완료',
-//           type: 'requestAgentDeposit',
-//           userId: params.id,
-//         });
-//       } else if (type == 'withdraw') {
-//         await conn.query(insertReqSql);
-//         console.log(`출금신청: ${params.id} / ${params.reqMoney} 원`);
-//         res.send({
-//           request: 'success',
-//           msg: '출금신청완료',
-//           type: 'requestAgentWithdraw',
-//           userId: params.id,
-//         });
-//       }
-//     } else {
-//       res.send({
-//         request: 'fail',
-//         msg: '이전 신청이 처리 중입니다',
-//       });
-//     }
-//   } catch (e) {
-//     console.log(e);
-//     return done(e);
-//   } finally {
-//     if (conn) return conn.release();
-//   }
-// }
 
 async function insertRequestQuery(res, type, params) {
   switch (params.agentType) {

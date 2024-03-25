@@ -48,11 +48,11 @@
             AND node_id = #{node_id}
           </when>
           <otherwise>
-            AND node_id LIKE CONCAT(#{node_id}, '.%')
+            AND (node_id = #{node_id} OR node_id LIKE CONCAT(#{node_id},'.%'))
           </otherwise>
         </choose>
       </if>
-    </where>;
+    </where>
   </select> 
 
   <select id='getSportDetailLog'>
@@ -85,7 +85,7 @@
             AND node_id = #{node_id}
           </when>
           <otherwise>
-            AND node_id LIKE CONCAT(#{node_id}, '.%')
+            AND (node_id = #{node_id} OR node_id LIKE CONCAT(#{node_id},'.%'))
           </otherwise>
         </choose>
       </if>
@@ -137,7 +137,7 @@
             AND node_id = #{node_id}
           </when>
           <otherwise>
-            AND node_id LIKE CONCAT(#{node_id}, '.%')
+            AND (node_id = #{node_id} OR node_id LIKE CONCAT(#{node_id},'.%'))
           </otherwise>
         </choose>
       </if>
@@ -189,7 +189,7 @@
             AND node_id = #{node_id}
           </when>
           <otherwise>
-            AND node_id LIKE CONCAT(#{node_id}, '.%')
+            AND (node_id = #{node_id} OR node_id LIKE CONCAT(#{node_id},'.%'))
           </otherwise>
         </choose>
       </if>
@@ -227,7 +227,7 @@
             AND node_id = #{node_id}
           </when>
           <otherwise>
-            AND node_id LIKE CONCAT(#{node_id}, '.%')
+            AND (node_id = #{node_id} OR node_id LIKE CONCAT(#{node_id},'.%'))
           </otherwise>
         </choose>
       </if>
@@ -263,7 +263,7 @@
             AND node_id = #{node_id}
           </when>
           <otherwise>
-            AND node_id LIKE CONCAT(#{node_id}, '.%')
+            AND (node_id = #{node_id} OR node_id LIKE CONCAT(#{node_id},'.%'))
           </otherwise>
         </choose>
       </if>
@@ -284,7 +284,7 @@
             AND node_id = #{node_id}
           </when>
           <otherwise>
-            AND node_id LIKE CONCAT(#{node_id}, '.%')
+            AND (node_id = #{node_id} OR node_id LIKE CONCAT(#{node_id},'.%'))
           </otherwise>
         </choose>
       </if>
@@ -306,7 +306,7 @@
             AND node_id = #{node_id}
           </when>
           <otherwise>
-            AND node_id LIKE CONCAT(#{node_id}, '.%')
+            AND (node_id = #{node_id} OR node_id LIKE CONCAT(#{node_id},'.%'))
           </otherwise>
         </choose>
       </if>
@@ -344,7 +344,7 @@
             AND node_id = #{node_id}
           </when>
           <otherwise>
-            AND node_id LIKE CONCAT(#{node_id}, '.%')
+            AND (node_id = #{node_id} OR node_id LIKE CONCAT(#{node_id},'.%'))
           </otherwise>
         </choose>
       </if>
@@ -398,7 +398,7 @@
             AND node_id = #{node_id}
           </when>
           <otherwise>
-            AND node_id LIKE CONCAT(#{node_id}, '.%')
+            AND (node_id = #{node_id} OR node_id LIKE CONCAT(#{node_id},'.%'))
           </otherwise>
         </choose>
       </if>
