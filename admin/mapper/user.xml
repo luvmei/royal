@@ -46,7 +46,7 @@
     FROM
       user_info_view
     WHERE
-      가입코드 = ''
+      가입코드 != ''
       <if test="node_id != undefined">
         <choose>
           <when test="agentType == 3">
@@ -207,20 +207,19 @@
       u.join_ip           AS '가입IP',
       u.join_date         AS '가입일자',
       u.state             AS '상태',
-      h.p_nick            AS 플래티넘,
-      h.g_nick            AS 골드,
-	    h.s_nick            AS 실버,
-      h.b_nick            AS 브론즈,
-      (SELECT COUNT(*) FROM user WHERE join_ip = u.join_ip) AS 'IPCount'
-    FROM user             AS u
-    LEFT JOIN user        AS a
-    ON u.upper_agt = a.user_id
-    JOIN user 			  AS u2
-    ON u.upper_agt = u2.user_id 
-    JOIN hierarchy        AS h
-    ON u2.user_id = h.user_id 
+      h.p_id              AS 플래티넘,
+      h.g_id              AS 골드,
+	    h.s_id              AS 실버,
+      h.b_id              AS 브론즈,
+      (SELECT COUNT(*) FROM user WHERE join_ip = u.join_ip) AS 'IPCount',
+      (SELECT COUNT(*) FROM user WHERE bank_owner = u.bank_owner) AS 'ownerCount',
+      (SELECT COUNT(*) FROM user WHERE bank_num = u.bank_num) AS 'bankNumCount'
+    FROM user AS u
+    LEFT JOIN user AS a ON u.upper_agt = a.user_id
+    JOIN user AS u2 ON u.upper_agt = u2.user_id 
+    JOIN user_hierarchy_view AS h ON u2.user_id = h.user_id 
     WHERE
-      u.state = '승인대기'    
+      u.state = '승인대기'  
   </select>  
 
   <select id='confirmUserJoin'>

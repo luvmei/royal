@@ -5,7 +5,7 @@ const pool = mariadb.createPool({
   database: process.env.DB_NAME,
   user: process.env.DB_USER,
   password: process.env.DB_PW,
-  connectionLimit: 50,
+  connectionLimit: 30,
 });
 
 let sqlFormat = { language: 'sql', indent: '  ' };

@@ -96,7 +96,34 @@ let userInfoTotal = $('#userInfoTotal').DataTable({
       target: 4,
       width: 300,
       render: function (data, type, row) {
-        return `<button type='button' class='btn btn-sm btn-outline-dark asset-danger ms-2' style='cursor: default'>${row.플래티넘}</button><button type='button' class='btn btn-sm btn-outline-dark ms-2 asset-warning' style='cursor: default'>${row.골드}</button><button type='button' class='btn btn-sm btn-outline-dark ms-2 asset-success' style='cursor: default'>${row.실버}</button><button type='button' class='btn btn-sm btn-outline-dark ms-2 asset-primary' style='cursor: default'>${row.브론즈}</button>`;
+        if (clientType === 9) {
+          let result = `<button type='button' class='btn btn-sm btn-outline-dark asset-danger ms-2' style='cursor: default'>${row.p_id}</button>`;
+
+          if (row.g_id !== null) {
+            result += `<button type='button' class='btn btn-sm btn-outline-dark ms-2 asset-warning' style='cursor: default'>${row.g_id}</button>`;
+          }
+
+          if (row.s_id !== null) {
+            result += `<button type='button' class='btn btn-sm btn-outline-dark ms-2 asset-success' style='cursor: default'>${row.s_id}</button>`;
+          }
+
+          if (row.b_id !== null) {
+            result += `<button type='button' class='btn btn-sm btn-outline-dark ms-2 asset-primary' style='cursor: default'>${row.b_id}</button>`;
+          }
+
+          return result;
+        } else {
+          switch (row.타입) {
+            case 4:
+              return `<button type='button' class='btn btn-sm btn-outline-dark asset-primary ms-2' style='cursor: default'>${row.b_id}</button>`;
+            case 3:
+              return `<button type='button' class='btn btn-sm btn-outline-dark asset-success ms-2' style='cursor: default'>${row.s_id}</button>`;
+            case 2:
+              return `<button type='button' class='btn btn-sm btn-outline-dark asset-warning ms-2' style='cursor: default'>${row.g_id}</button>`;
+            case 1:
+              return `<button type='button' class='btn btn-sm btn-outline-dark asset-danger ms-2' style='cursor: default'>${row.p_id}</button>`;
+          }
+        }
       },
     },
     {
@@ -464,6 +491,7 @@ let userInfoLocal = $('#userInfoLocal').DataTable({
     { data: '총 출금', className: 'desktop' },
     { data: '총 입출금', className: 'desktop' },
     { data: '총 베팅', className: 'desktop' },
+    
     { data: '총 당첨', className: 'desktop' },
     { data: '총 당첨율', className: 'desktop' },
     { data: '가입일자', className: 'desktop' },
@@ -631,46 +659,46 @@ let userInfoLocal = $('#userInfoLocal').DataTable({
     initPopover();
     // #endregion
 
-    // #region 가입IP 및 최근접속IP 중복처리
-    let api = this.api();
-    let connIpMap = {};
-    let joinIpMap = {};
+    // // #region 가입IP 및 최근접속IP 중복처리
+    // let api = this.api();
+    // let connIpMap = {};
+    // let joinIpMap = {};
 
-    api.rows().every(function () {
-      let data = this.data();
-      let recentConnIP = data['최근 접속IP'];
-      let joinIP = data['가입IP'];
+    // api.rows().every(function () {
+    //   let data = this.data();
+    //   let recentConnIP = data['최근 접속IP'];
+    //   let joinIP = data['가입IP'];
 
-      if (!connIpMap[recentConnIP]) {
-        connIpMap[recentConnIP] = [];
-      }
-      connIpMap[recentConnIP].push(this.index());
+    //   if (!connIpMap[recentConnIP]) {
+    //     connIpMap[recentConnIP] = [];
+    //   }
+    //   connIpMap[recentConnIP].push(this.index());
 
-      if (!joinIpMap[joinIP]) {
-        joinIpMap[joinIP] = [];
-      }
-      joinIpMap[joinIP].push(this.index());
-    });
+    //   if (!joinIpMap[joinIP]) {
+    //     joinIpMap[joinIP] = [];
+    //   }
+    //   joinIpMap[joinIP].push(this.index());
+    // });
 
-    Object.keys(connIpMap).forEach(function (ip) {
-      if (connIpMap[ip].length > 1) {
-        connIpMap[ip].forEach(function (rowIndex) {
-          let row = api.row(rowIndex).node();
-          $(row).find('td').eq(15).addClass('asset-danger');
-        });
-      }
-    });
+    // Object.keys(connIpMap).forEach(function (ip) {
+    //   if (connIpMap[ip].length > 1) {
+    //     connIpMap[ip].forEach(function (rowIndex) {
+    //       let row = api.row(rowIndex).node();
+    //       $(row).find('td').eq(15).addClass('asset-danger');
+    //     });
+    //   }
+    // });
 
-    Object.keys(joinIpMap).forEach(function (ip) {
-      if (joinIpMap[ip].length > 1) {
-        // 중복된 '가입IP'가 있는 경우
-        joinIpMap[ip].forEach(function (rowIndex) {
-          let row = api.row(rowIndex).node();
-          $(row).find('td').eq(13).addClass('asset-danger');
-        });
-      }
-    });
-    // #endregion
+    // Object.keys(joinIpMap).forEach(function (ip) {
+    //   if (joinIpMap[ip].length > 1) {
+    //     // 중복된 '가입IP'가 있는 경우
+    //     joinIpMap[ip].forEach(function (rowIndex) {
+    //       let row = api.row(rowIndex).node();
+    //       $(row).find('td').eq(13).addClass('asset-danger');
+    //     });
+    //   }
+    // });
+    // // #endregion
   },
 });
 
@@ -1587,6 +1615,16 @@ $('#userJoinConfirm').DataTable({
     if (data.IPCount && data.IPCount > 1) {
       $('td:eq(11)', row).addClass('asset-danger');
       $('td:eq(11)', row).html(`${data.가입IP}<br>가입 이력있는 IP`);
+    }
+
+    if (data.ownerCount && data.ownerCount > 1) {
+      $('td:eq(6)', row).addClass('asset-danger');
+      $('td:eq(6)', row).html(`${data.예금주}<br>가입 이력있는 예금주`);
+    }
+
+    if (data.bankNumCount && data.bankNumCount > 1) {
+      $('td:eq(5)', row).addClass('asset-danger');
+      $('td:eq(5)', row).html(`${data.계좌번호}<br>가입 이력있는 계좌번호`);
     }
   },
   columnDefs: [
