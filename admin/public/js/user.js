@@ -97,31 +97,31 @@ let userInfoTotal = $('#userInfoTotal').DataTable({
       width: 300,
       render: function (data, type, row) {
         if (clientType === 9) {
-          let result = `<button type='button' class='btn btn-sm btn-outline-dark asset-danger ms-2' style='cursor: default'>${row.p_id}</button>`;
+          let result = `<button type='button' class='btn btn-sm btn-outline-dark asset-danger ms-2' style='cursor: default'>${row.플래티넘}</button>`;
 
-          if (row.g_id !== null) {
-            result += `<button type='button' class='btn btn-sm btn-outline-dark ms-2 asset-warning' style='cursor: default'>${row.g_id}</button>`;
+          if (row.골드 !== null) {
+            result += `<button type='button' class='btn btn-sm btn-outline-dark ms-2 asset-warning' style='cursor: default'>${row.골드}</button>`;
           }
 
-          if (row.s_id !== null) {
-            result += `<button type='button' class='btn btn-sm btn-outline-dark ms-2 asset-success' style='cursor: default'>${row.s_id}</button>`;
+          if (row.실버 !== null) {
+            result += `<button type='button' class='btn btn-sm btn-outline-dark ms-2 asset-success' style='cursor: default'>${row.실버}</button>`;
           }
 
-          if (row.b_id !== null) {
-            result += `<button type='button' class='btn btn-sm btn-outline-dark ms-2 asset-primary' style='cursor: default'>${row.b_id}</button>`;
+          if (row.브론즈 !== null) {
+            result += `<button type='button' class='btn btn-sm btn-outline-dark ms-2 asset-primary' style='cursor: default'>${row.브론즈}</button>`;
           }
 
           return result;
         } else {
           switch (row.타입) {
             case 4:
-              return `<button type='button' class='btn btn-sm btn-outline-dark asset-primary ms-2' style='cursor: default'>${row.b_id}</button>`;
+              return `<button type='button' class='btn btn-sm btn-outline-dark asset-primary ms-2' style='cursor: default'>${row.브론즈}</button>`;
             case 3:
-              return `<button type='button' class='btn btn-sm btn-outline-dark asset-success ms-2' style='cursor: default'>${row.s_id}</button>`;
+              return `<button type='button' class='btn btn-sm btn-outline-dark asset-success ms-2' style='cursor: default'>${row.실버}</button>`;
             case 2:
-              return `<button type='button' class='btn btn-sm btn-outline-dark asset-warning ms-2' style='cursor: default'>${row.g_id}</button>`;
+              return `<button type='button' class='btn btn-sm btn-outline-dark asset-warning ms-2' style='cursor: default'>${row.골드}</button>`;
             case 1:
-              return `<button type='button' class='btn btn-sm btn-outline-dark asset-danger ms-2' style='cursor: default'>${row.p_id}</button>`;
+              return `<button type='button' class='btn btn-sm btn-outline-dark asset-danger ms-2' style='cursor: default'>${row.플래티넘}</button>`;
           }
         }
       },

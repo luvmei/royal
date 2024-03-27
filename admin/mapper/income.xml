@@ -425,16 +425,16 @@
         Sum(s_roll) as '슬롯마진롤링',        
         Sum(losing) as '최종루징금',
         Sum(income) as '최종정산금',
-        h.p_nick as '플래티넘',
-        h.g_nick as '골드',
-        h.s_nick as '실버',
-        h.b_nick as '브론즈'
+        h.p_id as '플래티넘',
+        h.g_id as '골드',
+        h.s_id as '실버',
+        h.b_id as '브론즈'
     FROM (SELECT *
         FROM income_user_depowith_view
         UNION
         SELECT *
         FROM income_user_depowith) AS ut
-    JOIN royal.hierarchy AS h
+    JOIN royal.user_hierarchy_view AS h
         ON ut.id = (SELECT id 
                     FROM user 
                     WHERE user_id = h.user_id)
@@ -491,16 +491,16 @@
         Sum(m_slot_rolling) as '슬롯마진롤링',        
         Sum(real_losing) as '최종루징금',
         Sum(real_income) as '최종정산금',
-        h.p_nick as '플래티넘',
-        h.g_nick as '골드',
-        h.s_nick as '실버',
-        h.b_nick as '브론즈'
+        h.p_id as '플래티넘',
+        h.g_id as '골드',
+        h.s_id as '실버',
+        h.b_id as '브론즈'
     FROM (SELECT *
         FROM income_user_betwin_view
         UNION
         SELECT *
         FROM income_user_betwin) AS ut
-    JOIN royal.hierarchy AS h
+    JOIN royal.user_hierarchy_view AS h
         ON ut.id = (SELECT id 
                     FROM user 
                     WHERE user_id = h.user_id)
