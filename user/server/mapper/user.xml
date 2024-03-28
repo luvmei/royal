@@ -24,7 +24,7 @@
   <select id='checkCode'>
     SELECT id
     FROM user
-    WHERE id = #{join_code} AND type != 4  AND state = '정상' LIMIT 1;
+    WHERE id = #{join_code} AND type = 3 AND state = '정상' LIMIT 1;
   </select>
 
   <select id="checkRecommend">

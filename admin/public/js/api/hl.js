@@ -132,6 +132,9 @@ async function getBetHistory() {
 
     newData.forEach((item) => processedBetIds.set(item.id, now));
 
+    // API 응답 내역확인(JSON형식)
+    // console.log(JSON.stringify(newData, null, 2));
+
     const processedData = newData.map((item) => {
       const isTie = item.external?.detail?.data?.result?.outcome === 'Tie';
 
